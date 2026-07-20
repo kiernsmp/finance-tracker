@@ -19,12 +19,13 @@ public class TransactionController {
     }
 
     @PostMapping("/upload")
-    public String uploadCsv(@RequestParam MultipartFile file) {
+    public String uploadCsv(@RequestParam("file") MultipartFile file) {
+        System.out.println("Uploading file: " + file.getOriginalFilename());
+
         transactionService.uploadCsv(file);
-        System.out.println("yoyo");
+        
 
         return "CSV uploaded";
     }
 
-    
 }

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kiernan.finance_tracker_api.dto.TransactionDto;
+import com.kiernan.finance_tracker_api.entity.TransactionEntity;
+import com.kiernan.finance_tracker_api.mappers.TransactionMapper;
 import com.kiernan.finance_tracker_api.repository.*;
 import com.kiernan.finance_tracker_api.parsers.*;
 
@@ -26,10 +28,12 @@ public class TransactionService {
 
         TransactionParser parser = resolveParser(file, "Commbank");
         List<TransactionDto> records = parser.parse(file);
+®
+        TransactionMapper mapper = new TransactionMapper();
+        List<TransactionEntity> entities = mapper.toEntity(records);
 
-        for (var record: records) {
-            System.out.println(record.getAmount());
-        }
+        transactionRepository.saveAll(entities);
+
 
     }
 

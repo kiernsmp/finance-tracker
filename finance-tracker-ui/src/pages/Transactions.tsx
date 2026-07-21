@@ -1,5 +1,5 @@
 import DateFilter from "../components/DateFilter";
-import Table from "../components/TransactionTable";
+import TransactionTable from "../components/TransactionTable";
 import { useTransactions } from "../hooks/useTransactions";
 
 export default function Transactions() {
@@ -17,14 +17,14 @@ export default function Transactions() {
         <h1>Transactions</h1>
         
         <DateFilter
-        startDate={startDate}
-        endDate={endDate}
-        setStartDate={setStartDate}
-        setEndDate={setEndDate}
-        applyFilters={applyFilters}
+            startDate={startDate}
+            endDate={endDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            applyFilters={applyFilters}
         />
         
-        <Table transactions={transactions} />
+        <TransactionTable transactions={transactions} />
         </div>
     );
 }

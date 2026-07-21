@@ -18,8 +18,10 @@ import com.kiernan.finance_tracker_api.dto.TransactionResponseDto;
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
 import com.kiernan.finance_tracker_api.mappers.TransactionMapper;
 import com.kiernan.finance_tracker_api.repository.*;
+
+import java.util.Map;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 
 import com.kiernan.finance_tracker_api.parsers.*;
@@ -27,14 +29,18 @@ import com.kiernan.finance_tracker_api.parsers.*;
 @Service
 public class TransactionService {
 
+    private final KeywordService keywordService;
     private final TransactionRepository transactionRepository;
+    private final CategoryService categoryService;
     private final TransactionMapper mapper;
     private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
     
 
 
-    public TransactionService(TransactionRepository transactionRepository, TransactionMapper mapper) {
+    public TransactionService(TransactionRepository transactionRepository, TransactionMapper mapper, KeywordService keywordService, CategoryService categoryService) {
         this.transactionRepository = transactionRepository;
+        this.keywordService = keywordService;
+        this.categoryService = categoryService;
         this.mapper = mapper;
     }
 
@@ -56,7 +62,10 @@ public class TransactionService {
         }
 
         log.info("Making API call to Database");
-        List<TransactionResponseDto> result = mapper.toResponseDto(response);
+
+        Map<Integer, String> categoryMap = categoryService.getCategoryLookup();
+
+        List<TransactionResponseDto> result = mapper.toResponseDto(response, categoryMap);
         log.info("Successfully retrieved {} records from DB", result.size());
         
         return result;
@@ -69,8 +78,9 @@ public class TransactionService {
 
         List<TransactionEntity> entities = mapper.toEntity(records);
 
-        transactionRepository.saveAll(entities);
+        keywordService.assignCategories(entities);
 
+        transactionRepository.saveAll(entities);
 
     }
 

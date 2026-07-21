@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.xml.crypto.dsig.TransformException;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,10 @@ import com.kiernan.finance_tracker_api.dto.TransactionResponseDto;
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
 import com.kiernan.finance_tracker_api.mappers.TransactionMapper;
 import com.kiernan.finance_tracker_api.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 import com.kiernan.finance_tracker_api.parsers.*;
 
 @Service
@@ -24,6 +29,9 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final TransactionMapper mapper;
+    private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
+    
+
 
     public TransactionService(TransactionRepository transactionRepository, TransactionMapper mapper) {
         this.transactionRepository = transactionRepository;
@@ -47,8 +55,10 @@ public class TransactionService {
             response = transactionRepository.findByDateBetween(startDate, endDate);
         }
 
+        log.info("Making API call to Database");
         List<TransactionResponseDto> result = mapper.toResponseDto(response);
-
+        log.info("Successfully retrieved {} records from DB", result.size());
+        
         return result;
     }
 

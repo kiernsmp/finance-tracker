@@ -9,7 +9,9 @@ export default function Transactions() {
         endDate,
         setStartDate,
         setEndDate,
-        applyFilters
+        applyFilters,
+        categoryList,
+        updateCategory
     } = useTransactions();
     
     return (
@@ -24,7 +26,11 @@ export default function Transactions() {
             applyFilters={applyFilters}
         />
         
-        <TransactionTable transactions={transactions} />
+        <TransactionTable 
+            transactions={transactions} 
+            categoryList={categoryList}
+            updateCategory={updateCategory}
+            />
         </div>
     );
 }

@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @RestController
@@ -19,7 +21,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class TransactionController {
 
     private final TransactionService transactionService;
-    
+    private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
+
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
@@ -30,7 +33,6 @@ public class TransactionController {
 
         transactionService.uploadCsv(file);
         
-
         return "CSV uploaded";
     }
 
@@ -38,7 +40,8 @@ public class TransactionController {
     public List<TransactionResponseDto> getTransactionRecords(
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-
+        log.info("ENTERING GET TRANSACTION RECORDS\n");
+        log.info("Fetching transaction records with startDate={}, endDate={}", startDate, endDate);
         List<TransactionResponseDto> response = transactionService.getTransactionRecords(startDate, endDate);
 
         return response;

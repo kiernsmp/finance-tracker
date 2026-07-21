@@ -2,23 +2,27 @@ package com.kiernan.finance_tracker_api.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
+public class TransactionResponseDto {
 
-public class TransactionDto {
-
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+    private Integer transactionId;
     private LocalDate date;
     private BigDecimal amount;
     private String description;
     private String notes;
+    private Integer categoryId;
 
-    public TransactionDto(String date, String transaction, String description, String notes) {
-        this.date = LocalDate.parse(date, DATE_FORMATTER);
-        this.amount = new BigDecimal(transaction);
+    public TransactionResponseDto(Integer transactionId, LocalDate date, BigDecimal amount, String description, String notes, Integer categoryId) {
+        this.transactionId = transactionId;
+        this.date = date;
+        this.amount = amount;
         this.description = description;
         this.notes = notes;
+        this.categoryId = categoryId;
+    }
+
+    public Integer getTransactionId() {
+        return transactionId;
     }
 
     public LocalDate getDate() {
@@ -36,4 +40,9 @@ public class TransactionDto {
     public String getNotes() {
         return notes;
     }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
 }

@@ -5,6 +5,10 @@ interface TransactionTableProps {
 }
 
 export default function TransactionTable({ transactions }: TransactionTableProps) {
+    const aud = new Intl.NumberFormat("en-AU", {
+        style: "currency",
+        currency: "AUD",
+    });
     return (
     <table>
         <thead>
@@ -27,7 +31,7 @@ export default function TransactionTable({ transactions }: TransactionTableProps
                     })}
                     </td>
                     <td>{transaction.description}</td>
-                    <td>{transaction.amount}</td>
+                    <td>{aud.format(transaction.amount)}</td>
                     <td>{transaction.category}</td>
                     <td>{transaction.notes}</td>
                 </tr>

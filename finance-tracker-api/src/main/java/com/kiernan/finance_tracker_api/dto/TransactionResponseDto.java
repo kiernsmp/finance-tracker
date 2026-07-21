@@ -10,15 +10,15 @@ public class TransactionResponseDto {
     private BigDecimal amount;
     private String description;
     private String notes;
-    private Integer categoryId;
+    private String category;
 
-    public TransactionResponseDto(Integer transactionId, LocalDate date, BigDecimal amount, String description, String notes, Integer categoryId) {
+    public TransactionResponseDto(Integer transactionId, LocalDate date, BigDecimal amount, String description, String notes, String category) {
         this.transactionId = transactionId;
         this.date = date;
         this.amount = amount;
         this.description = description;
         this.notes = notes;
-        this.categoryId = categoryId;
+        this.category = category;
     }
 
     public Integer getTransactionId() {
@@ -41,8 +41,8 @@ public class TransactionResponseDto {
         return notes;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public String getCategory() {
+        return category;
     }
 
 }

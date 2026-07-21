@@ -10,7 +10,6 @@ import com.kiernan.finance_tracker_api.service.*;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

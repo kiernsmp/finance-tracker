@@ -3,6 +3,7 @@ package com.kiernan.finance_tracker_api.mappers;
 import com.kiernan.finance_tracker_api.dto.*;
 import com.kiernan.finance_tracker_api.entity.*;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -30,14 +31,14 @@ public class TransactionMapper {
         return entity;
     }
 
-    public List<TransactionResponseDto> toResponseDto(List<TransactionEntity> entities) {
+    public List<TransactionResponseDto> toResponseDto(List<TransactionEntity> entities, Map<Integer,String> categoryMap) {
         return entities.stream()
-            .map(this::toResponseDto)
+            .map(entity -> this.toResponseDto(entity, categoryMap))
             .collect(Collectors.toList());
     } 
 
 
-    public TransactionResponseDto toResponseDto(TransactionEntity entity) {
+    public TransactionResponseDto toResponseDto(TransactionEntity entity, Map<Integer,String> categoryMap) {
         if (entity == null) {
             return null;
         }
@@ -48,7 +49,7 @@ public class TransactionMapper {
             entity.getAmount(),
             entity.getDescription(),
             entity.getNotes(),
-            entity.getCategoryId()
+            (entity.getCategoryId() == null) ? "?" : categoryMap.getOrDefault(entity.getCategoryId(), "?")
         );
 
     }

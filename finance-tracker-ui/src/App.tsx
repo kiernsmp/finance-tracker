@@ -1,15 +1,24 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import './App.css'
+import Header from "./components/Header";
+import Transactions from "./pages/Transactions";
 import Upload from "./pages/Upload";
 
+
+
+import './App.css'
+
 function App() {
-    const [count, setCount] = useState(0)
 
     return (
-        <div>
-            <Upload />
-        </div>
+        <BrowserRouter>
+        <Header />
+            <Routes>
+                <Route path="/" element={<Navigate to="/transactions" replace /> } />
+                <Route path="/upload" element={<Upload />} />
+                <Route path="/transactions" element={<Transactions />} />
+            </Routes>
+        </BrowserRouter>
 
 
     )

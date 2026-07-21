@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/transactions")
-@CrossOrigin(origins = "http://localhost:5173")
 public class TransactionController {
 
     private final TransactionService transactionService;

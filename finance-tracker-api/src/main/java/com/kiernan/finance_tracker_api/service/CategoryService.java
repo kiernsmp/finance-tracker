@@ -1,5 +1,6 @@
 package com.kiernan.finance_tracker_api.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,10 @@ public class CategoryService {
 
     public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
+    }
+
+    public List<CategoryEntity> getAllCategories() {
+        return categoryRepository.findAll();
     }
 
     public Map<Integer, String> getCategoryLookup() {

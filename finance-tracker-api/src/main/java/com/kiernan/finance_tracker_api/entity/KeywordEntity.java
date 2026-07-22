@@ -20,6 +20,11 @@ public class KeywordEntity {
         // Required by JPA
     }
 
+    public KeywordEntity(String keyword, Integer categoryId) {
+        this.keyword = keyword;
+        this.categoryId = categoryId;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -3,10 +3,9 @@ package com.kiernan.finance_tracker_api.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.stereotype.Service;
-
 import com.kiernan.finance_tracker_api.repository.*;
+import com.kiernan.finance_tracker_api.dto.KeywordRequest;
 import com.kiernan.finance_tracker_api.entity.KeywordEntity;
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
 
@@ -17,6 +16,12 @@ public class KeywordService {
 
     public KeywordService(KeywordRepository keywordRepository) {
         this.keywordRepository = keywordRepository;
+    }
+    
+    public KeywordEntity createKeyword(KeywordRequest request) {
+        KeywordEntity entity = new KeywordEntity(request.getKeyword(), request.getCategoryId());
+
+        return keywordRepository.save(entity);
     }
     
     public void assignCategories(List<TransactionEntity> entities) {

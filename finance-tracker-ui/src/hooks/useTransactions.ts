@@ -14,6 +14,8 @@ export function useTransactions() {
     const [categoryList, setCategoryList] = useState<CategoryOption[]>([]);
     const [appliedStartDate, setAppliedStartDate] = useState("");
     const [appliedEndDate, setAppliedEndDate] = useState("");
+    const [totalIn, setTotalIn] = useState(0);
+    const [totalOut, setTotalOut] = useState(0);
     
     function applyFilters(nextCategoryId?: number): void {
         setAppliedStartDate(startDate);
@@ -63,6 +65,18 @@ export function useTransactions() {
         .catch((error) => console.error(error));
     }, []);
 
+    useEffect(() => {
+        const totalOut = transactions.reduce((sum, transaction) =>
+            transaction.amount < 0 ? sum + transaction.amount : sum, 0);
+        
+        const totalIn = transactions.reduce((sum, transaction) =>
+            transaction.amount > 0 ? sum + transaction.amount : sum, 0);
+
+        setTotalIn(totalIn);
+        setTotalOut(totalOut);
+
+    }, [transactions])
+
     return {
         transactions,
         startDate,
@@ -73,6 +87,8 @@ export function useTransactions() {
         setCategoryId,
         applyFilters,
         categoryList,
-        updateCategory
+        updateCategory,
+        totalIn,
+        totalOut
     };
 }

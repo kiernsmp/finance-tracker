@@ -1,0 +1,119 @@
+# Finance Tracker
+
+Finance Tracker is a two-part application for importing bank transactions, reviewing them in a web UI, and assigning categories to transaction keywords.
+
+## Project Structure
+
+- `finance-tracker-api/` - Spring Boot backend with PostgreSQL persistence.
+- `finance-tracker-ui/` - React + Vite frontend for browsing transactions and uploading CSV files.
+
+## Features
+
+- Upload transaction CSV files into the backend.
+- View transactions in a filterable table.
+- Filter transactions by date range and category.
+- Reclassify transactions and update keyword-to-category mappings.
+- Browse available categories from the API.
+
+## Tech Stack
+
+- Backend: Java 21, Spring Boot, Spring Data JPA, Spring Security, PostgreSQL, Apache Commons CSV.
+- Frontend: React 19, TypeScript, Vite, React Router, Axios, React Select.
+
+## Prerequisites
+
+- Java 21
+- Maven
+- Node.js 20+ recommended
+- PostgreSQL running locally
+
+## Backend Setup
+
+The backend is configured in `finance-tracker-api/src/main/resources/application.properties`.
+
+It expects a local PostgreSQL database named `finance_tracker`. Update the datasource settings there if your local database uses different credentials or a different host.
+
+## Database Schema
+
+The application uses PostgreSQL with the following tables:
+
+- **Users**: Stores user account information.
+- **Transactions**: Stores imported bank transactions linked to users.
+- **Keywords**: Stores keyword rules used for transaction categorisation.
+- **Categories**: Stores available transaction categories.
+
+Relationships:
+- A user has many transactions.
+- A keyword maps to a category.
+- Transactions are assigned categories based on matching keywords.
+
+The API runs on `http://localhost:8080`.
+
+## Frontend Setup
+
+The UI runs on the Vite development server, usually `http://localhost:5173`.
+
+## API Endpoints
+
+### Transactions
+
+- `GET /transactions/records` - Returns transaction records.
+	- Optional query parameters: `startDate`, `endDate`, `categoryId`.
+- `POST /transactions/upload` - Upload a CSV file with form field `file`.
+- `PATCH /transactions/reclassify` - Re-runs transaction reclassification.
+
+### Categories
+
+- `GET /categories/all` - Returns all categories.
+
+### Keywords
+
+- `POST /keywords/add` - Creates or updates a keyword-to-category mapping.
+
+## Frontend Routes
+
+- `/transactions` - Transaction list and filters.
+- `/upload` - CSV upload page.
+- `/` - Redirects to `/transactions`.
+
+## Notes
+
+- The frontend talks directly to the backend at `http://localhost:8080`.
+- If you change the backend port or host, update the API URLs in `finance-tracker-ui/src/api/`.
+- Security auto-configuration is excluded in the backend config, so the API runs without Spring Security login flow by default.
+
+## Typical Workflow
+
+1. Start PostgreSQL.
+2. Start the backend.
+3. Start the frontend.
+4. Open the UI, upload a CSV, then review and categorize transactions.
+
+
+## Current Features
+
+- Upload bank transaction CSV files
+- Parse and store transactions
+- Display transactions in a web interface
+- Categorise transactions using keyword mappings
+- Filter transactions by category
+- Manage categories and keywords
+
+## Roadmap
+### Planned Features
+- [ ] Add dashboard with category breakdowns and spending visualisations
+- [ ] Add transaction filtering by month and uncategorised transactions
+- [ ] Add user authentication and user-specific keyword mappings
+- [ ] Add multi-user functionality
+- [ ] Deploy frontend to Vercel and backend to AWS
+- [ ] Add bank API integration
+
+### Engineering Improvements
+- [ ] Add unit and integration testing
+- [ ] Implement global exception handling
+- [ ] Add structured logging
+- [ ] Improve transaction retrieval performance with pagination and query optimisation
+- [ ] Handle duplicate transaction detection
+- [ ] Add frontend loading and error states
+- [ ] Improve frontend styling and responsiveness
+- [ ] Unique Category Items

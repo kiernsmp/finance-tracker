@@ -13,9 +13,6 @@ import com.kiernan.finance_tracker_api.repository.*;
 import java.util.Comparator;
 import java.util.Map;
 import org.slf4j.Logger;
-
-
-
 import com.kiernan.finance_tracker_api.parsers.*;
 
 @Service
@@ -26,14 +23,16 @@ public class TransactionService {
     private final CategoryService categoryService;
     private final TransactionMapper mapper;
     private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
-    
-
 
     public TransactionService(TransactionRepository transactionRepository, TransactionMapper mapper, KeywordService keywordService, CategoryService categoryService) {
         this.transactionRepository = transactionRepository;
         this.keywordService = keywordService;
         this.categoryService = categoryService;
         this.mapper = mapper;
+    }
+    
+    public void reclassifyCategories() {
+        keywordService.reclassifyCategoryByKeyword();
     }
 
     public List<TransactionResponseDto> getTransactionRecords(LocalDate startDate, LocalDate endDate) {
@@ -57,6 +56,10 @@ public class TransactionService {
                 TransactionEntity::getDate,
                 Comparator.nullsLast(Comparator.naturalOrder())
             ).reversed()
+            .thenComparing(
+                TransactionEntity::getId,
+                Comparator.nullsLast(Comparator.naturalOrder())
+            )
         );
 
         log.info("Making API call to get category lookup table");
@@ -69,20 +72,16 @@ public class TransactionService {
     }
 
     public void uploadCsv(MultipartFile file) {
-
         TransactionParser parser = resolveParser(file, "Commbank");
         List<TransactionRequestDto> records = parser.parse(file);
-
         List<TransactionEntity> entities = mapper.toEntity(records);
 
         keywordService.assignCategories(entities);
-
         transactionRepository.saveAll(entities);
 
     }
 
     private TransactionParser resolveParser(MultipartFile file, String input) {
-        
         if (input.equals("Commbank")) {
             return new CommbankTransactionParser();
         }

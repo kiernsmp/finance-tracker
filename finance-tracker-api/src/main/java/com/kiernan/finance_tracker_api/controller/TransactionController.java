@@ -27,6 +27,13 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+    @PatchMapping("/reclassify")
+    public String reclassifyCategories() {
+        transactionService.reclassifyCategories();
+
+        return "reclassifiedCategories";
+    }
+
     @PostMapping("/upload")
     public String uploadCsv(@RequestParam("file") MultipartFile file) {
         System.out.println("Uploading file: " + file.getOriginalFilename());

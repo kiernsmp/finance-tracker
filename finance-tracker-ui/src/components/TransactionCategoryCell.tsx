@@ -17,12 +17,12 @@ export default function CategorySelect({
         label: category.category
     }));
 
+    const selectedOption = options.find((option) => option.label === currentCategory) ?? null;
+
     return (
         <Select
             options={options}
-            defaultValue={options.find(
-                option => option.label === currentCategory
-            )}
+            value={selectedOption}
             onChange={(selected) => {
                 if (selected) {
                     onChange(selected.value);

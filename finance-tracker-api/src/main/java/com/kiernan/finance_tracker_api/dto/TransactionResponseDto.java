@@ -5,15 +5,15 @@ import java.time.LocalDate;
 
 public class TransactionResponseDto {
 
-    private Integer transactionId;
+    private Integer id;
     private LocalDate date;
     private BigDecimal amount;
     private String description;
     private String notes;
     private String category;
 
-    public TransactionResponseDto(Integer transactionId, LocalDate date, BigDecimal amount, String description, String notes, String category) {
-        this.transactionId = transactionId;
+    public TransactionResponseDto(Integer id, LocalDate date, BigDecimal amount, String description, String notes, String category) {
+        this.id = id;
         this.date = date;
         this.amount = amount;
         this.description = description;
@@ -21,8 +21,8 @@ public class TransactionResponseDto {
         this.category = category;
     }
 
-    public Integer getTransactionId() {
-        return transactionId;
+    public Integer getId() {
+        return id;
     }
 
     public LocalDate getDate() {

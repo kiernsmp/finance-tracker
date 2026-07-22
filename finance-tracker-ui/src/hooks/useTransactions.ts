@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getTransactions } from "../api/transactionApi";
 import type { Transaction } from "../types/Transaction";
 import { getAllCategories } from "../api/categoryApi";
+import { updateKeywordCategory } from "../api/keywordsApi";
 import type { CategoryOption } from "../types/CategoryOption";
 
 export function useTransactions() {
@@ -9,7 +10,6 @@ export function useTransactions() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [categoryList, setCategoryList] = useState<CategoryOption[]>([]);
-    
     const [appliedStartDate, setAppliedStartDate] = useState("");
     const [appliedEndDate, setAppliedEndDate] = useState("");
     
@@ -18,32 +18,27 @@ export function useTransactions() {
         setAppliedEndDate(endDate);
     }
 
-    function updateCategory(transactionId: number, categoryId: number): void {
-        const selectedCategory = categoryList.find(
-            (category) => category.id === categoryId
-        );
+    async function updateCategory(transactionId: number, categoryId: number): Promise<void> {
+        const selectedCategory = categoryList.find((category) => category.id === categoryId);
+        if (!selectedCategory) return;
 
-        if (!selectedCategory) {
-            return;
+        const target = transactions.find((transaction) => transaction.id === transactionId);
+        if (!target) return;
+    
+        try {
+            await updateKeywordCategory(target.description, selectedCategory.id);
+            
+            const filter = {
+                startDate: appliedStartDate || undefined,
+                endDate: appliedEndDate || undefined
+            };
+            const data = await getTransactions(filter);
+            setTransactions(data);
+
+        } catch (error) {
+            console.error(error);
         }
 
-        setTransactions((previousTransactions) =>
-            previousTransactions.map((transaction) => {
-                if (transaction.id !== transactionId) {
-                    return transaction;
-                }
-
-                if (transaction.category === selectedCategory.category) {
-                    return transaction;
-                }
-
-                return {
-                    ...transaction,
-                    category: selectedCategory.category
-                };
-                
-            })
-        );
     }
     
     useEffect(() => {

@@ -7,8 +7,10 @@ export default function Transactions() {
         transactions,
         startDate,
         endDate,
+        categoryId,
         setStartDate,
         setEndDate,
+        setCategoryId,
         applyFilters,
         categoryList,
         updateCategory
@@ -21,8 +23,11 @@ export default function Transactions() {
         <DateFilter
             startDate={startDate}
             endDate={endDate}
+            categoryId={categoryId}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
+            setCategoryId={setCategoryId}
+            categoryList={categoryList}
             applyFilters={applyFilters}
         />
         

@@ -25,10 +25,18 @@ public class CommbankTransactionParser implements TransactionParser {
 
                 for (CSVRecord record : parser) {
                     String[] notes = record.get(2).split("   ", 2);
-                    notes[1] = notes[1].trim().replaceAll(" {2,}",", ");
-                    records.add(
-                        new TransactionRequestDto(record.get(0), record.get(1), notes[0].trim(), notes[1].trim())
-                    );
+
+                    if (notes.length == 2 ) {
+                        notes[1] = notes[1].trim().replaceAll(" {2,}",", ");
+                        records.add(
+                            new TransactionRequestDto(record.get(0), record.get(1), notes[0].trim(), notes[1].trim())
+                        );
+                    }
+                    else {
+                        records.add(
+                            new TransactionRequestDto(record.get(0), record.get(1), notes[0].trim(), null)
+                        );
+                    }
                 }
 
                 return records;

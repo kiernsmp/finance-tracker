@@ -49,7 +49,7 @@ public class TransactionMapper {
             entity.getAmount(),
             entity.getDescription(),
             entity.getNotes(),
-            (entity.getCategoryId() == null) ? "?" : categoryMap.getOrDefault(entity.getCategoryId(), "?")
+            categoryMap.getOrDefault(entity.getCategoryId(), null)
         );
 
     }

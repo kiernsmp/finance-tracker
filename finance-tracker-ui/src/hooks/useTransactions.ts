@@ -15,10 +15,12 @@ export function useTransactions() {
     const [appliedStartDate, setAppliedStartDate] = useState("");
     const [appliedEndDate, setAppliedEndDate] = useState("");
     
-    function applyFilters(nextCategoryId?: number) {
+    function applyFilters(...args: [number | undefined] | [] ) {
         setAppliedStartDate(startDate);
         setAppliedEndDate(endDate);
-        setAppliedCategoryId(nextCategoryId ?? categoryId);
+        
+        const nextCategoryId = arguments.length > 0 ? args[0] : categoryId;
+        setAppliedCategoryId(nextCategoryId);
     }
 
     async function updateCategory(transactionId: number, categoryId: number): Promise<void> {

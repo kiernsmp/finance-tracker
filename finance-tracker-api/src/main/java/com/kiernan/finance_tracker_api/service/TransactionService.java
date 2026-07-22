@@ -10,7 +10,7 @@ import com.kiernan.finance_tracker_api.dto.TransactionResponseDto;
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
 import com.kiernan.finance_tracker_api.mappers.TransactionMapper;
 import com.kiernan.finance_tracker_api.repository.*;
-
+import java.util.Comparator;
 import java.util.Map;
 import org.slf4j.Logger;
 
@@ -36,7 +36,6 @@ public class TransactionService {
         this.mapper = mapper;
     }
 
-
     public List<TransactionResponseDto> getTransactionRecords(LocalDate startDate, LocalDate endDate) {
         List<TransactionEntity> response;
 
@@ -53,13 +52,19 @@ public class TransactionService {
             response = transactionRepository.findByDateBetween(startDate, endDate);
         }
 
-        log.info("Making API call to Database");
+        response.sort(
+            Comparator.comparing(
+                TransactionEntity::getDate,
+                Comparator.nullsLast(Comparator.naturalOrder())
+            ).reversed()
+        );
 
+        log.info("Making API call to get category lookup table");
         Map<Integer, String> categoryMap = categoryService.getCategoryLookup();
 
         List<TransactionResponseDto> result = mapper.toResponseDto(response, categoryMap);
         log.info("Successfully retrieved {} records from DB", result.size());
-        
+
         return result;
     }
 

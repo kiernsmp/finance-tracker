@@ -13,17 +13,38 @@ import com.kiernan.finance_tracker_api.entity.TransactionEntity;
 public class KeywordService {
 
     private final KeywordRepository keywordRepository;
+    private final TransactionRepository transactionRepository;
 
-    public KeywordService(KeywordRepository keywordRepository) {
+    public KeywordService(KeywordRepository keywordRepository, TransactionRepository transactionRepository) {
         this.keywordRepository = keywordRepository;
+        this.transactionRepository = transactionRepository;
     }
     
     public KeywordEntity createKeyword(KeywordRequest request) {
         KeywordEntity entity = new KeywordEntity(request.getKeyword(), request.getCategoryId());
+        KeywordEntity response;
 
-        return keywordRepository.save(entity);
+        List<KeywordEntity> existing = keywordRepository.findByKeyword(entity.getKeyword());
+        if (existing.isEmpty()) {
+            response = keywordRepository.save(entity);
+        }
+        else {
+            KeywordEntity existingKeyword = existing.get(0);
+            existingKeyword.setCategoryId(entity.getCategoryId());
+            response = keywordRepository.save(existingKeyword);
+        }
+        
+        reclassifyCategoryByKeyword();
+        return response;
     }
     
+    public void reclassifyCategoryByKeyword() {
+        List<TransactionEntity> entities = transactionRepository.findAll();
+        assignCategories(entities);
+        
+        transactionRepository.saveAll(entities);
+    }
+
     public void assignCategories(List<TransactionEntity> entities) {
         Map<String, Integer> keywordMap = toKeywordMap(keywordRepository.findAll());
 

@@ -63,10 +63,9 @@ public class KeywordService {
                 entity.setCategoryId(categoryId);
             }
             else {
-                entity.setCategoryId(null);
+                entity.setCategoryId(8);
             }
         }
-        
     }
 
     private Map<String, Integer> toKeywordMap(List<KeywordEntity> keywords) {

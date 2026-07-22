@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import Transactions from "./pages/Transactions";
 import Upload from "./pages/Upload";
+import Dashboard from "./pages/Dashboard";
 
 
 
@@ -15,6 +16,7 @@ function App() {
         <Header />
             <Routes>
                 <Route path="/" element={<Navigate to="/transactions" replace /> } />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/upload" element={<Upload />} />
                 <Route path="/transactions" element={<Transactions />} />
             </Routes>

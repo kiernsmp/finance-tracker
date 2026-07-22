@@ -1,6 +1,7 @@
 import type { KeyboardEvent } from "react";
-import type { CategoryOption } from "../types/CategoryOption";
+import type { CategoryOption } from "../../types/CategoryOption";
 import Select from "react-select";
+
 interface DateFilterProps {
     startDate: string;
     endDate: string;
@@ -72,10 +73,5 @@ export default function DateFilter({
             </label>
         </div>
     )
-
-
-
-
-
 
 }

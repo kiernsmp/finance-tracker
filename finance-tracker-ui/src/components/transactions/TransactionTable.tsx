@@ -1,5 +1,5 @@
-import type { Transaction } from "../types/Transaction";
-import type { CategoryOption } from "../types/CategoryOption";
+import type { Transaction } from "../../types/Transaction";
+import type { CategoryOption } from "../../types/CategoryOption";
 import TransactionCategoryCell from "./TransactionCategoryCell";
 
 

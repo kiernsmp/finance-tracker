@@ -7,6 +7,7 @@ export default function Header() {
             <h3>Financial Tracker</h3>
 
             <nav>
+                <Link to="/dashboard">Dashboard</Link>
                 <Link to="/transactions">Transactions</Link>
                 <Link to="/upload">Upload File</Link>
             </nav>

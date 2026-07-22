@@ -9,13 +9,16 @@ export function useTransactions() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
+    const [appliedCategoryId, setAppliedCategoryId] = useState<number | undefined>(undefined);
     const [categoryList, setCategoryList] = useState<CategoryOption[]>([]);
     const [appliedStartDate, setAppliedStartDate] = useState("");
     const [appliedEndDate, setAppliedEndDate] = useState("");
     
-    function applyFilters() {
+    function applyFilters(nextCategoryId?: number) {
         setAppliedStartDate(startDate);
         setAppliedEndDate(endDate);
+        setAppliedCategoryId(nextCategoryId ?? categoryId);
     }
 
     async function updateCategory(transactionId: number, categoryId: number): Promise<void> {
@@ -30,7 +33,8 @@ export function useTransactions() {
             
             const filter = {
                 startDate: appliedStartDate || undefined,
-                endDate: appliedEndDate || undefined
+                endDate: appliedEndDate || undefined,
+                categoryId: appliedCategoryId
             };
             const data = await getTransactions(filter);
             setTransactions(data);
@@ -44,13 +48,14 @@ export function useTransactions() {
     useEffect(() => {
         const filter = {
             startDate: appliedStartDate || undefined,
-            endDate: appliedEndDate || undefined
+            endDate: appliedEndDate || undefined,
+            categoryId: appliedCategoryId
         };
         
         getTransactions(filter)
         .then((data) => setTransactions(data))
         .catch((error) => console.error(error));
-    }, [appliedStartDate, appliedEndDate]);
+    }, [appliedStartDate, appliedEndDate, appliedCategoryId]);
     
     useEffect(() => {
         getAllCategories()
@@ -62,8 +67,10 @@ export function useTransactions() {
         transactions,
         startDate,
         endDate,
+        categoryId,
         setStartDate,
         setEndDate,
+        setCategoryId,
         applyFilters,
         categoryList,
         updateCategory

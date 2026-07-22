@@ -3,6 +3,7 @@ package com.kiernan.finance_tracker_api.service;
 import java.time.LocalDate;
 import java.util.List;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.kiernan.finance_tracker_api.dto.TransactionRequestDto;
@@ -35,21 +36,24 @@ public class TransactionService {
         keywordService.reclassifyCategoryByKeyword();
     }
 
-    public List<TransactionResponseDto> getTransactionRecords(LocalDate startDate, LocalDate endDate) {
-        List<TransactionEntity> response;
+    public List<TransactionResponseDto> getTransactionRecords(LocalDate startDate, LocalDate endDate, Integer categoryId) {
 
-        if (startDate == null && endDate == null) {
-            response = transactionRepository.findAll();
+        Specification<TransactionEntity> spec = (root, query, cb) -> cb.conjunction();
+
+        if (startDate != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.greaterThanOrEqualTo(root.get("date"), startDate));
         }
-        else if (startDate != null && endDate == null) {
-            response = transactionRepository.findByDateGreaterThanEqual(startDate);
+        if (endDate != null) {
+            spec = spec.and((root, query, cb) ->
+            cb.lessThanOrEqualTo(root.get("date"), endDate));
         }
-        else if (startDate == null && endDate != null) {
-            response = transactionRepository.findByDateLessThanEqual(endDate);
+        if (categoryId != null) {
+            spec = spec.and((root, query, cb) ->
+            cb.equal(root.get("categoryId"), categoryId));
         }
-        else {
-            response = transactionRepository.findByDateBetween(startDate, endDate);
-        }
+
+        List<TransactionEntity> response = transactionRepository.findAll(spec);
 
         response.sort(
             Comparator.comparing(

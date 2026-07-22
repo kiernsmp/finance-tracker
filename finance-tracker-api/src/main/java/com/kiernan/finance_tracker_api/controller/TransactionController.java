@@ -46,10 +46,12 @@ public class TransactionController {
     @GetMapping("/records")
     public List<TransactionResponseDto> getTransactionRecords(
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+        @RequestParam(required = false) Integer categoryId
+    ) {
         log.info("ENTERING GET TRANSACTION RECORDS\n");
-        log.info("Fetching transaction records with startDate={}, endDate={}", startDate, endDate);
-        List<TransactionResponseDto> response = transactionService.getTransactionRecords(startDate, endDate);
+        log.info("Fetching transaction records with startDate={}, endDate={}, categoryId={}", startDate, endDate, categoryId);
+        List<TransactionResponseDto> response = transactionService.getTransactionRecords(startDate, endDate, categoryId);
 
         return response;
     }

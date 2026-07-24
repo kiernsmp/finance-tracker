@@ -1,12 +1,12 @@
-import DateFilter from "../components/transactions/DateFilter";
-import TransactionSummary from "../components/transactions/TransactionSummary";
-import TransactionTable from "../components/transactions/TransactionTable";
-import { calculateTransactionTotals } from "../features/transactions/utils/calculateTransactionTotals";
-import { useCategories } from "../hooks/transactions/useCategories";
-import { useTransactionData } from "../hooks/transactions/useTransactionData";
-import { useTransactionFilters } from "../hooks/transactions/useTransactionFilters";
+import DateFilter from "../components/DateFilter";
+import TransactionSummary from "../features/transactions/components/TransactionSummary";
+import TransactionTable from "../features/transactions/components/TransactionTable";
+import { calculateTransactionTotals } from "../utils/calculateTransactionTotals";
+import { useCategories } from "../features/transactions/hooks/useCategories";
+import { useTransactionData } from "../features/transactions/hooks/useTransactionData";
+import { useTransactionFilters } from "../features/transactions/hooks/useTransactionFilters";
 
-export default function Transactions() {
+export default function TransactionsPage() {
     const {
         appliedFilter,
         setAppliedFilter,

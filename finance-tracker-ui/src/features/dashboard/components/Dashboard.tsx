@@ -1,4 +1,4 @@
-import { useTransactionData } from "../../hooks/transactions/useTransactionData";
+import { useTransactionData } from "../../transactions/hooks/useTransactionData";
 
 const emptyFilter = {};
 

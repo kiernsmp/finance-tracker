@@ -21,7 +21,7 @@ export function useTransactionData(appliedFilter: TransactionFilter) {
         void refreshTransactions();
     }, [refreshTransactions]);
 
-    async function updateCategory(transactionId: number, categoryId: number): Promise<void> {
+    async function updateTransactionCategory(transactionId: number, categoryId: number): Promise<void> {
         const target = transactions.find((transaction) => transaction.id === transactionId);
         if (!target) return;
 
@@ -31,10 +31,10 @@ export function useTransactionData(appliedFilter: TransactionFilter) {
         } catch (error) {
             console.error(error);
         }
-    }/*  */
+    }
 
     return {
         transactions,
-        updateCategory
+        updateTransactionCategory
     };
 }

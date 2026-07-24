@@ -1,37 +1,29 @@
 import DateFilter from "../components/transactions/DateFilter";
 import TransactionSummary from "../components/transactions/TransactionSummary";
 import TransactionTable from "../components/transactions/TransactionTable";
-import { useTransactions } from "../hooks/useTransactions";
+import { calculateTransactionTotals } from "../features/transactions/utils/calculateTransactionTotals";
+import { useCategories } from "../hooks/transactions/useCategories";
+import { useTransactionData } from "../hooks/transactions/useTransactionData";
+import { useTransactionFilters } from "../hooks/transactions/useTransactionFilters";
 
 export default function Transactions() {
     const {
-        transactions,
-        startDate,
-        endDate,
-        categoryId,
-        setStartDate,
-        setEndDate,
-        setCategoryId,
-        applyFilters,
-        categoryList,
-        updateCategory,
-        totalIn,
-        totalOut
-    } = useTransactions();
+        appliedFilter,
+        setAppliedFilter,
+    } = useTransactionFilters();
+
+    const { categoryList } = useCategories();
+    const { transactions, updateTransactionCategory } = useTransactionData(appliedFilter);
+    const { totalIn, totalOut } = calculateTransactionTotals(transactions);
     
     return (
         <div>
         <h1>Transactions</h1>
         
         <DateFilter
-            startDate={startDate}
-            endDate={endDate}
-            categoryId={categoryId}
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-            setCategoryId={setCategoryId}
+            appliedFilter={appliedFilter}
+            setAppliedFilter={setAppliedFilter}
             categoryList={categoryList}
-            applyFilters={applyFilters}
         />
 
         <TransactionSummary 
@@ -42,7 +34,7 @@ export default function Transactions() {
         <TransactionTable 
             transactions={transactions} 
             categoryList={categoryList}
-            updateCategory={updateCategory}
+            updateTransactionCategory={updateTransactionCategory}
             />
         </div>
     );

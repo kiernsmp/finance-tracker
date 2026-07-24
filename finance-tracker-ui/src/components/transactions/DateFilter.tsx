@@ -1,31 +1,34 @@
-import type { KeyboardEvent } from "react";
+import { useState, type KeyboardEvent } from "react";
 import type { CategoryOption } from "../../types/CategoryOption";
+import type { TransactionFilter } from "../../types/TransactionFilter";
 import Select from "react-select";
 
 interface DateFilterProps {
-    startDate: string;
-    endDate: string;
-    categoryId: number | undefined;
-    setStartDate: (date: string) => void;
-    setEndDate: (date: string) => void;
-    setCategoryId: (id: number | undefined) => void;
+    appliedFilter: TransactionFilter;
+    setAppliedFilter: (filter: TransactionFilter) => void;
     categoryList: CategoryOption[];
-    applyFilters: (nextCategoryId?: number) => void;
 }
 
 export default function DateFilter({
-    startDate,
-    endDate,
-    categoryId,
-    setStartDate,
-    setEndDate,
-    setCategoryId,
-    categoryList,
-    applyFilters
+    appliedFilter,
+    setAppliedFilter,
+    categoryList
 }: DateFilterProps) {
+    const [startDate, setStartDate] = useState(appliedFilter.startDate ?? "");
+    const [endDate, setEndDate] = useState(appliedFilter.endDate ?? "");
+    const [categoryId, setCategoryId] = useState<number | undefined>(appliedFilter.categoryId);
+
+    function commitFilter(nextCategoryId = categoryId) {
+        setAppliedFilter({
+            startDate: startDate || undefined,
+            endDate: endDate || undefined,
+            categoryId: nextCategoryId
+        });
+    }
+
     function handleEnterApply(event: KeyboardEvent<HTMLInputElement>) {
         if (event.key === "Enter") {
-            applyFilters();
+            commitFilter();
         }
     }
 
@@ -39,39 +42,39 @@ export default function DateFilter({
     return (
         <div>
             <label>Category: </label>
-                <Select 
-                    options={categoryOptions}
-                    value={selected}
-                    isClearable
-                    onChange={(option) => {
-                        const nextCategoryId = option ? option.value : undefined;
-                        setCategoryId(nextCategoryId);
-                        applyFilters(nextCategoryId);
-                    }}
-                />
-            
+            <Select
+                options={categoryOptions}
+                value={selected}
+                isClearable
+                onChange={(option) => {
+                    const nextCategoryId = option ? option.value : undefined;
+                    setCategoryId(nextCategoryId);
+                    commitFilter(nextCategoryId);
+                }}
+            />
+
             <label>
                 Start Date:
-                <input 
+                <input
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    onBlur={() => applyFilters()}
+                    onBlur={() => commitFilter()}
                     onKeyDown={handleEnterApply}
                 />
             </label>
 
             <label>
                 End Date:
-                <input 
+                <input
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    onBlur={() => applyFilters()}
+                    onBlur={() => commitFilter()}
                     onKeyDown={handleEnterApply}
                 />
             </label>
         </div>
-    )
+    );
 
 }

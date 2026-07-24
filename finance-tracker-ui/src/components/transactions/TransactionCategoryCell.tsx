@@ -6,7 +6,8 @@ interface Props {
     currentCategory: string;
     onChange: (categoryId: number) => void;
 }
-export default function CategorySelect({
+
+export default function TransactionCategoryCell({
     categoryList,
     currentCategory,
     onChange

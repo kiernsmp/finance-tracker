@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getAllCategories } from "../../api/categoryApi";
-import type { CategoryOption } from "../../types/CategoryOption";
+import { getAllCategories } from "../../../api/categoryApi";
+import type { CategoryOption } from "../../../types/CategoryOption";
 
 export function useCategories() {
     const [categoryList, setCategoryList] = useState<CategoryOption[]>([]);

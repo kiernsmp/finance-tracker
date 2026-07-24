@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { uploadCsv } from "../api/transactionApi";
+import { uploadCsv } from "../../../api/transactionApi";
 
 export default function UploadCsv() {
     const [isUploading, setIsUploading] = useState(false);

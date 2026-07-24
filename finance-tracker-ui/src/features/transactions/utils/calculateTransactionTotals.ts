@@ -1,4 +1,4 @@
-import type { Transaction } from "../../types/Transaction";
+import type { Transaction } from "../../../types/Transaction";
 
 export function calculateTransactionTotals(transactions: Transaction[]) {
     const totalOut = transactions.reduce((sum, transaction) =>

@@ -1,15 +1,12 @@
+import { formatAuditorAmount } from "./formatters";
+
 interface Props {
     totalOut: number;
     totalIn: number;
 }
 
-export default function TransactionSummary({ totalOut, totalIn}: Props) {
+export default function TransactionSummary({ totalOut, totalIn }: Props) {
     const net = totalIn - totalOut;
-
-    const aud = new Intl.NumberFormat("en-AU", {
-            style: "currency",
-            currency: "AUD",
-        });
 
     return (
         <table>
@@ -22,14 +19,11 @@ export default function TransactionSummary({ totalOut, totalIn}: Props) {
             </thead>
             <tbody>
                 <tr>
-                    <td>{aud.format(totalOut)}</td>
-                    <td>{aud.format(totalIn)}</td>
-                    <td>{aud.format(net)}</td>
+                    <td>{formatAuditorAmount(totalOut)}</td>
+                    <td>{formatAuditorAmount(totalIn)}</td>
+                    <td>{formatAuditorAmount(net)}</td>
                 </tr>
             </tbody>
         </table>
     );
-
-
-
 }

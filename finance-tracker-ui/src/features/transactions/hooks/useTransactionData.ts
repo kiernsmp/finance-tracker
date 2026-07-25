@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { getTransactions } from "../../../api/transactionApi";
-import { updateKeywordCategory } from "../../../api/keywordsApi";
-import type { Transaction } from "../../../types/Transaction";
-import type { TransactionFilter } from "../../../types/TransactionFilter";
+import { getTransactions } from "@/api/transactionApi";
+import { updateKeywordCategory } from "@/api/keywordsApi";
+import type { Transaction } from "@/types/Transaction";
+import type { TransactionFilter } from "@/types/TransactionFilter";
 
 export function useTransactionData(appliedFilter: TransactionFilter) {
     const [transactions, setTransactions] = useState<Transaction[]>([]);

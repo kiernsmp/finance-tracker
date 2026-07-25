@@ -1,12 +1,13 @@
 import Select from "react-select";
-import type { CategoryOption } from "../../types/CategoryOption";
+import type { CategoryOption } from "@/types/CategoryOption";
 
 interface Props {
     categoryList: CategoryOption[];
     currentCategory: string;
     onChange: (categoryId: number) => void;
 }
-export default function CategorySelect({
+
+export default function TransactionCategoryCell({
     categoryList,
     currentCategory,
     onChange

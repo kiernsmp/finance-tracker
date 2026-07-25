@@ -1,11 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import Header from "./components/Header";
-import Transactions from "./pages/Transactions";
-import Upload from "./pages/Upload";
-import Dashboard from "./pages/Dashboard";
-
-
+import AppLayout from "./components/AppLayout";
+import Dashboard from "./features/dashboard/pages/DashboardPage";
+import Upload from "./features/upload/pages/UploadPage";
+import TransactionsPage from "./pages/TransactionsPage";
 
 import './App.css'
 
@@ -13,16 +11,15 @@ function App() {
 
     return (
         <BrowserRouter>
-        <Header />
             <Routes>
-                <Route path="/" element={<Navigate to="/transactions" replace /> } />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/upload" element={<Upload />} />
-                <Route path="/transactions" element={<Transactions />} />
+                <Route element={<AppLayout />}>
+                    <Route path="/" element={<Navigate to="/transactions" replace />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/upload" element={<Upload />} />
+                    <Route path="/transactions" element={<TransactionsPage />} />
+                </Route>
             </Routes>
         </BrowserRouter>
-
-
     )
 }
 

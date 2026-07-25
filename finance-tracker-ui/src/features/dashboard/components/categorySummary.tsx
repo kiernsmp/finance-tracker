@@ -13,13 +13,12 @@ export function CategorySummary ({
 }: CategorySummaryProps) {
 
     return (
-        {categorySummaryList.map((category) => (
+        <>
+        {categorySummaryList.map((summary) => (
             <div>
-                category.category
+                {summary.category.label}
             </div>
         ))}
-        <div>
-            <h2>{key} {category}</h2>
-        </div>
+        </>
     )
 }

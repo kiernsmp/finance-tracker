@@ -17,13 +17,15 @@ export function MonthlySummaryTable({
     const categorySummaryList = categoryList.map((category) => {
         const categoryTransactions = transactions.filter(
             (transaction) =>
-                transaction.category === category.category
+                transaction.category === category.label
         );
         return {
             category,
             transactions: categoryTransactions
         }
-    })
+    }).filter((categorySummary) => categorySummary.transactions.length > 0);
+
+    console.log("TEMP: ", categorySummaryList);
 
     return (
         <div>

@@ -1,11 +1,11 @@
 package com.kiernan.finance_tracker_api.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.stereotype.Service;
-
+import com.kiernan.finance_tracker_api.dto.CategoryResponse;
 import com.kiernan.finance_tracker_api.entity.*;
 import com.kiernan.finance_tracker_api.repository.CategoryRepository;
 
@@ -18,8 +18,13 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<CategoryEntity> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryResponse> getAllCategories() {
+        List<CategoryEntity> entities = categoryRepository.findAll();
+        List<CategoryResponse> categoryResponses = new ArrayList<>();
+        for (var category : entities) {
+            categoryResponses.add(new CategoryResponse(category.getId(), category.getCategory()));
+        }
+        return categoryResponses;
     }
 
     public Map<Integer, String> getCategoryLookup() {

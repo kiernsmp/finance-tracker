@@ -6,6 +6,8 @@ const GET_ALL_URL = "/all";
 
 export async function getAllCategories(): Promise<CategoryOption[]> {
     const response = await axios.get<CategoryOption[]>(API_URL + GET_ALL_URL);
+
+    console.log("Categories Loaded: ", response.data);
     
     return response.data;
 }

@@ -1,11 +1,11 @@
 package com.kiernan.finance_tracker_api.controller;
 
-import com.kiernan.finance_tracker_api.entity.CategoryEntity;
 import com.kiernan.finance_tracker_api.service.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
+import com.kiernan.finance_tracker_api.dto.*;
 
 
 @RestController
@@ -19,7 +19,7 @@ public class CategoryController {
     }
 
     @GetMapping("/all")    
-    public List<CategoryEntity> getCategoryNames() {
+    public List<CategoryResponse> getCategoryNames() {
         
         return categoryService.getAllCategories();
     }

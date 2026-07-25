@@ -19,7 +19,7 @@ export default function Dashboard() {
                 setAppliedFilter={setAppliedFilter}
                 categoryList={categoryList}
                 />
-            <h1>{transactions[0]?.category ?? "No transactions"}</h1>
+            <h1>{transactions.length}</h1>
 
             <MonthlySummaryTable 
                 transactions={transactions}

@@ -1,5 +1,5 @@
 import Select from "react-select";
-import type { CategoryOption } from "../types/CategoryOption";
+import type { CategoryOption } from "../../types/CategoryOption";
 
 interface Props {
     categoryList: CategoryOption[];

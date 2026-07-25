@@ -1,5 +1,6 @@
-import DateFilter from "../components/DateFilter";
-import TransactionTable from "../components/TransactionTable";
+import DateFilter from "../components/transactions/DateFilter";
+import TransactionSummary from "../components/transactions/TransactionSummary";
+import TransactionTable from "../components/transactions/TransactionTable";
 import { useTransactions } from "../hooks/useTransactions";
 
 export default function Transactions() {
@@ -13,7 +14,9 @@ export default function Transactions() {
         setCategoryId,
         applyFilters,
         categoryList,
-        updateCategory
+        updateCategory,
+        totalIn,
+        totalOut
     } = useTransactions();
     
     return (
@@ -30,7 +33,12 @@ export default function Transactions() {
             categoryList={categoryList}
             applyFilters={applyFilters}
         />
-        
+
+        <TransactionSummary 
+            totalIn={totalIn}
+            totalOut={totalOut}
+        />
+    
         <TransactionTable 
             transactions={transactions} 
             categoryList={categoryList}

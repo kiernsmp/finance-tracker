@@ -1,4 +1,4 @@
-import UploadCsv from "../components/UploadCsv";
+import UploadCsv from "@/features/upload/components/UploadCsv";
 
 export default function UploadPage() {
     return (

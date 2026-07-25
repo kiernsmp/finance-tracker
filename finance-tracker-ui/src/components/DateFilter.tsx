@@ -1,6 +1,6 @@
 import { useState, type KeyboardEvent } from "react";
-import type { CategoryOption } from "../types/CategoryOption";
-import type { TransactionFilter } from "../types/TransactionFilter";
+import type { CategoryOption } from "@/types/CategoryOption";
+import type { TransactionFilter } from "@/types/TransactionFilter";
 import Select from "react-select";
 
 interface DateFilterProps {

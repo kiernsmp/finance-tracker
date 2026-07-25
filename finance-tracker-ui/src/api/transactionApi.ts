@@ -1,6 +1,6 @@
 import axios from "axios";
-import type { Transaction } from "../types/Transaction";
-import type { TransactionFilter } from "../types/TransactionFilter";
+import type { Transaction } from "@/types/Transaction";
+import type { TransactionFilter } from "@/types/TransactionFilter";
 
 const API_URL = "http://localhost:8080/transactions";
 const GET_RECORD_URL = "/records";

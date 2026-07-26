@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import com.kiernan.finance_tracker_api.repository.*;
 import com.kiernan.finance_tracker_api.dto.KeywordRequest;
+import com.kiernan.finance_tracker_api.entity.CategoryEntity;
 import com.kiernan.finance_tracker_api.entity.KeywordEntity;
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
 import org.slf4j.LoggerFactory;
@@ -16,11 +17,13 @@ public class KeywordService {
     
     private final KeywordRepository keywordRepository;
     private final TransactionRepository transactionRepository;
+    private final CategoryRepository categoryRepository;
     private static final Logger log = LoggerFactory.getLogger(KeywordService.class);
 
-    public KeywordService(KeywordRepository keywordRepository, TransactionRepository transactionRepository) {
+    public KeywordService(KeywordRepository keywordRepository, TransactionRepository transactionRepository, CategoryRepository categoryRepository) {
         this.keywordRepository = keywordRepository;
         this.transactionRepository = transactionRepository;
+        this.categoryRepository = categoryRepository;
     }
     
     public KeywordEntity createKeyword(KeywordRequest request) {
@@ -52,18 +55,20 @@ public class KeywordService {
         transactionRepository.saveAll(entities);
     }
 
-    public void assignCategories(List<TransactionEntity> entities) {
+    public void assignCategories(List<TransactionEntity> transactions) {
         Map<String, Integer> keywordMap = toKeywordMap(keywordRepository.findAll());
+        Map<Integer, CategoryEntity> categoryMap = toCategoryMap(categoryRepository.findAll());
+        CategoryEntity defaultCategory = categoryRepository.findByName(CategoryEntity.DEFAULT_CATEGORY_NAME);
 
-        for (TransactionEntity entity : entities) {
-            String key = entity.getDescription();
+        for (TransactionEntity transaction : transactions) {
+            String key = transaction.getDescription();
 
             if (keywordMap.containsKey(key)) {
                 Integer categoryId = keywordMap.get(key);
-                entity.setCategoryId(categoryId);
+                transaction.setCategory(categoryMap.get(categoryId));
             }
             else {
-                entity.setCategoryId(8);
+                transaction.setCategory(defaultCategory);
             }
         }
     }
@@ -80,5 +85,16 @@ public class KeywordService {
         }
 
         return keywordMap;
+    }
+
+    private Map<Integer, CategoryEntity> toCategoryMap(List<CategoryEntity> categories) {
+        Map<Integer, CategoryEntity> categoryMap = new HashMap<>();
+        
+        for (CategoryEntity category : categories) {
+            categoryMap.put(category.getId(), category);
+        }
+
+        return categoryMap;
+
     }
 }

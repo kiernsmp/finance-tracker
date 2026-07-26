@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,18 +21,21 @@ public class TransactionEntity {
 
     private String description;
     private BigDecimal amount;
-    private Integer categoryId;
     private String notes;
     private LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
 
     public TransactionEntity() {
         // Required by JPA
     }
 
-    public TransactionEntity(String description, BigDecimal amount, Integer categoryId, String notes, LocalDate date) {
+    public TransactionEntity(String description, BigDecimal amount, CategoryEntity category, String notes, LocalDate date) {
         this.description = description;
         this.amount = amount;
-        this.categoryId = categoryId;
+        this.category = category;
         this.notes = notes;
         this.date = date;
     }
@@ -59,14 +64,6 @@ public class TransactionEntity {
         this.amount = amount;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public String getNotes() {
         return notes;
     }
@@ -81,5 +78,13 @@ public class TransactionEntity {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public void setCategory(CategoryEntity category) {
+        this.category = category;
+    }
+
+    public CategoryEntity getCategory() {
+        return this.category;
     }
 }

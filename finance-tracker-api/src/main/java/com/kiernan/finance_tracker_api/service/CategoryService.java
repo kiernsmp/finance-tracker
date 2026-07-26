@@ -22,7 +22,7 @@ public class CategoryService {
         List<CategoryEntity> entities = categoryRepository.findAll();
         List<CategoryResponse> categoryResponses = new ArrayList<>();
         for (var category : entities) {
-            categoryResponses.add(new CategoryResponse(category.getId(), category.getCategory()));
+            categoryResponses.add(new CategoryResponse(category.getId(), category.getName()));
         }
         return categoryResponses;
     }
@@ -37,7 +37,7 @@ public class CategoryService {
         Map<Integer, String> categoryMap = new HashMap<>();
 
         for (CategoryEntity category : categories) {
-            categoryMap.put(category.getId(), category.getCategory());
+            categoryMap.put(category.getId(), category.getName());
         }
 
         return categoryMap;

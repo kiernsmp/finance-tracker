@@ -34,7 +34,7 @@ export default function DateFilter({
 
     const categoryOptions = categoryList.map((c) => ({
         value: c.id,
-        label: c.category
+        label: c.label
     }));
 
     const selected = categoryOptions.find((o) => o.value === categoryId) ?? null;

@@ -1,4 +1,4 @@
 export interface CategoryOption {
-    category: string;
+    label: string;
     id: number;
 }

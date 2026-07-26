@@ -50,7 +50,7 @@ public class TransactionService {
         }
         if (categoryId != null) {
             spec = spec.and((root, query, cb) ->
-            cb.equal(root.get("categoryId"), categoryId));
+            cb.equal(root.get("category").get("id"), categoryId));
         }
 
         List<TransactionEntity> response = transactionRepository.findAll(spec);

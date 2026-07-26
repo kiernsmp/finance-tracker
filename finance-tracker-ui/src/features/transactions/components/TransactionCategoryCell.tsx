@@ -15,7 +15,7 @@ export default function TransactionCategoryCell({
 
     const options = categoryList.map(category => ({
         value: category.id,
-        label: category.category
+        label: category.label
     }));
 
     const selectedOption = options.find((option) => option.label === currentCategory) ?? null;

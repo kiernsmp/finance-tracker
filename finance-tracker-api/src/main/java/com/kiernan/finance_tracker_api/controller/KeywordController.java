@@ -25,7 +25,8 @@ public class KeywordController {
 
     @PostMapping("/add")
     public KeywordEntity createKeyword (@RequestBody KeywordRequest request) {
-        log.info("UPDATING KEYWORD RECORD\n");
+        log.info("\n");
+        log.info("UPDATING KEYWORD RECORD");
         log.info("Updating keyword with following mapping: keyword: {}, category_id: {}", request.getKeyword(), request.getCategoryId());
         
         return keywordService.createKeyword(request);

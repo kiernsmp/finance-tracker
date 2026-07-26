@@ -9,23 +9,29 @@ public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String category;
+    private String name;
+
+    public static final String DEFAULT_CATEGORY_NAME = "-";
 
 
     public CategoryEntity() {
         // Required by JPA
     }
 
+    public static String defaultCategory() {
+        return DEFAULT_CATEGORY_NAME;
+    }
+
     public Integer getId() {
         return id;
     }
 
-    public String getCategory() {
-        return category;
+    public String getName() {
+        return name;
     }
     
-    public void setCategory(String category) {
-        this.category = category;
+    public void setName(String name) {
+        this.name = name;
     }
     
 }

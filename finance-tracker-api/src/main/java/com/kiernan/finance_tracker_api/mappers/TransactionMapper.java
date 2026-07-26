@@ -27,7 +27,6 @@ public class TransactionMapper {
         entity.setAmount(dto.getAmount());
         entity.setDescription(dto.getDescription());
         entity.setNotes(dto.getNotes());
-        entity.setCategoryId(0);
         return entity;
     }
 
@@ -36,7 +35,6 @@ public class TransactionMapper {
             .map(entity -> this.toResponseDto(entity, categoryMap))
             .collect(Collectors.toList());
     } 
-
 
     public TransactionResponseDto toResponseDto(TransactionEntity entity, Map<Integer,String> categoryMap) {
         if (entity == null) {
@@ -49,7 +47,7 @@ public class TransactionMapper {
             entity.getAmount(),
             entity.getDescription(),
             entity.getNotes(),
-            categoryMap.getOrDefault(entity.getCategoryId(), null)
+            entity.getCategory().getName()
         );
 
     }

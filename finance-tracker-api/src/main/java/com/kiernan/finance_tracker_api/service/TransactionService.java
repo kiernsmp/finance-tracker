@@ -3,6 +3,7 @@ package com.kiernan.finance_tracker_api.service;
 import java.time.LocalDate;
 import java.util.List;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,6 @@ import com.kiernan.finance_tracker_api.repository.*;
 
 import jakarta.transaction.Transactional;
 
-import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -96,18 +96,11 @@ public class TransactionService {
             cb.equal(root.get("category").get("id"), categoryId));
         }
 
-        List<TransactionEntity> response = transactionRepository.findAll(spec);
+        Sort sort = Sort.by(
+                Sort.Order.desc("date"),
+                Sort.Order.asc("id"));
 
-        response.sort(
-            Comparator.comparing(
-                TransactionEntity::getDate,
-                Comparator.nullsLast(Comparator.naturalOrder())
-            ).reversed()
-            .thenComparing(
-                TransactionEntity::getId,
-                Comparator.nullsLast(Comparator.naturalOrder())
-            )
-        );
+        List<TransactionEntity> response = transactionRepository.findAll(spec, sort);
 
         List<TransactionResponse> result = mapper.toResponseDto(response);
         log.info("Successfully retrieved {} records from DB", result.size());

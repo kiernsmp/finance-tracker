@@ -20,6 +20,8 @@ public class MonthlyCategorySummaryResponse {
     @AllArgsConstructor
     public static class MonthSummary {
         private YearMonth monthYear;
+        private BigDecimal totalIn;
+        private BigDecimal totalOut;
         private List<CategorySummary> categories;
     }
 

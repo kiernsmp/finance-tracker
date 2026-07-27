@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
+import com.kiernan.finance_tracker_api.projections.MonthlyAmountProjection;
 import com.kiernan.finance_tracker_api.projections.MonthlyCategoryProjection;
 
 public interface DashboardRepository extends JpaRepository<TransactionEntity, Integer> {
@@ -27,5 +28,18 @@ public interface DashboardRepository extends JpaRepository<TransactionEntity, In
             c.name
         """, nativeQuery = true)
     List<MonthlyCategoryProjection> getMonthlyCategorySummary();
+
+    @Query(value = """
+        SELECT
+            DATE_TRUNC('month', t.date) AS month,
+            SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END) AS total_in,
+            SUM(CASE WHEN t.amount < 0 THEN ABS(t.amount) ELSE 0 END) AS total_out
+        FROM transactions t
+        GROUP BY
+            DATE_TRUNC('month', t.date)
+        ORDER BY
+            month DESC;
+            """, nativeQuery = true)
+    List<MonthlyAmountProjection> getMonthlyAmountSummary();
 
 }

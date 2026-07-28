@@ -26,7 +26,7 @@ export function useTransactionData(appliedFilter: TransactionFilter) {
         if (!target) return;
 
         try {
-            await updateKeywordCategory(target.description, categoryId);
+            await updateKeywordCategory(target.description, categoryId, transactionId);
             await refreshTransactions();
         } catch (error) {
             console.error(error);
@@ -35,6 +35,7 @@ export function useTransactionData(appliedFilter: TransactionFilter) {
 
     return {
         transactions,
+        refreshTransactions,
         updateTransactionCategory
     };
 }

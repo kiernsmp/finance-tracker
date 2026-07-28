@@ -5,6 +5,7 @@ import type { TransactionFilter } from "@/types/TransactionFilter";
 const API_URL = "http://localhost:8080/transactions";
 const GET_RECORD_URL = "/records";
 const POST_CSV_URL = "/upload";
+const PATCH_APPROVE_ALL = "/approve-all";
 
 
 export async function getTransactions(filter: TransactionFilter): Promise<Transaction[]> {
@@ -26,4 +27,8 @@ export async function uploadCsv(file: File): Promise<void> {
     formData.append("file", file);
 
     await axios.post(API_URL + POST_CSV_URL, formData);
+}
+
+export async function approveAllTransactions(): Promise<void> {
+    await axios.patch(API_URL + PATCH_APPROVE_ALL);
 }

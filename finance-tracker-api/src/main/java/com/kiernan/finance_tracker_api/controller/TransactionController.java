@@ -57,4 +57,16 @@ public class TransactionController {
         return response;
     }
 
+    @PatchMapping("/approve-all")
+    public void patchAllTransactionsApproved() {
+        log.info("\n");
+        log.info("PATCH /transactions/approve-all request received");
+        transactionService.patchAllTransactionsApproved();
+    }
+
+    @PatchMapping("/disapprove-all")
+    public void patchAllTransactionsDisapproved() {
+        transactionService.patchAllTransactionsDisapproved();
+    }
+
 }

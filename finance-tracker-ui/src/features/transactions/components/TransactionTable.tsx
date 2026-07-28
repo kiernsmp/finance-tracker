@@ -20,6 +20,7 @@ export default function TransactionTable({
         <table>
             <thead>
                 <tr>
+                    <th>New</th>
                     <th>Date</th>
                     <th>Description</th>
                     <th>Amount</th>
@@ -31,6 +32,7 @@ export default function TransactionTable({
             <tbody>
                 {transactions.map((transaction) => (
                     <tr key={transaction.id}>
+                        <td>{transaction.approved ? "" : "*"}</td>
                         <td>{formatTransactionDate(transaction.date)}</td>
                         <td>{transaction.description}</td>
                         <td>{formatAuditorAmount(transaction.amount)}</td>

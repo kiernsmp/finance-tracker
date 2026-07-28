@@ -22,12 +22,12 @@ public class TransactionMapper {
             return null;
         }
 
-        TransactionEntity entity = new TransactionEntity();
-        entity.setDate(dto.getDate());
-        entity.setAmount(dto.getAmount());
-        entity.setDescription(dto.getDescription());
-        entity.setNotes(dto.getNotes());
-        return entity;
+        return new TransactionEntity(
+            dto.getDate(),
+            dto.getAmount(),
+            dto.getDescription(),
+            dto.getNotes()
+        );
     }
 
     public List<TransactionResponseDto> toResponseDto(List<TransactionEntity> entities, Map<Integer,String> categoryMap) {
@@ -47,7 +47,9 @@ public class TransactionMapper {
             entity.getAmount(),
             entity.getDescription(),
             entity.getNotes(),
-            entity.getCategory().getName()
+            entity.getCategory().getName(),
+            entity.getApproved(),
+            entity.getLocked()
         );
 
     }

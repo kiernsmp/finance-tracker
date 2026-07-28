@@ -5,6 +5,7 @@ import { calculateTransactionTotals } from "@/utils/calculateTransactionTotals";
 import { useCategories } from "@/features/transactions/hooks/useCategories";
 import { useTransactionData } from "@/features/transactions/hooks/useTransactionData";
 import { useTransactionFilters } from "@/features/transactions/hooks/useTransactionFilters";
+import { approveAllTransactions } from "@/api/transactionApi";
 
 export default function TransactionsPage() {
     const {
@@ -13,8 +14,18 @@ export default function TransactionsPage() {
     } = useTransactionFilters();
 
     const { categoryList } = useCategories();
-    const { transactions, updateTransactionCategory } = useTransactionData(appliedFilter);
+    const { transactions, refreshTransactions, updateTransactionCategory } = useTransactionData(appliedFilter);
     const { totalIn, totalOut } = calculateTransactionTotals(transactions);
+    
+    const handleApproveAll = async () => {
+        try {
+            await approveAllTransactions();
+            refreshTransactions();
+            console.log("Approved all transactions");
+        } catch (error) {
+            console.error("Failed to approve transactions", error);
+        }
+    };
     
     return (
         <div>
@@ -30,6 +41,10 @@ export default function TransactionsPage() {
             totalIn={totalIn}
             totalOut={totalOut}
         />
+
+        <button onClick={handleApproveAll}>
+            Approve All
+        </button>
     
         <TransactionTable 
             transactions={transactions} 

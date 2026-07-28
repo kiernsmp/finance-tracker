@@ -25,6 +25,26 @@ public class TransactionService {
     private final TransactionMapper mapper;
     private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
 
+    public void patchAllTransactionsApproved() {
+        List<TransactionEntity> entities = transactionRepository.findAll();
+        for (TransactionEntity entity : entities) {
+            entity.setApproved(true);
+        }
+
+        transactionRepository.saveAll(entities);
+
+    }
+    
+    public void patchAllTransactionsDisapproved() {
+        List<TransactionEntity> entities = transactionRepository.findAll();
+        for (TransactionEntity entity : entities) {
+            entity.setApproved(false);
+        }
+
+        transactionRepository.saveAll(entities);
+
+    }
+
     public TransactionService(TransactionRepository transactionRepository, TransactionMapper mapper, KeywordService keywordService, CategoryService categoryService) {
         this.transactionRepository = transactionRepository;
         this.keywordService = keywordService;

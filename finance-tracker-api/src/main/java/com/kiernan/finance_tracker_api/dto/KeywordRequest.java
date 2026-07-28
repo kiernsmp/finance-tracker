@@ -4,6 +4,7 @@ public class KeywordRequest {
 
     private String keyword;
     private int categoryId;
+    private int transactionId;
 
     public String getKeyword() {
         return keyword;
@@ -19,5 +20,9 @@ public class KeywordRequest {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public  int getTransactionId() {
+        return transactionId;
     }
 }

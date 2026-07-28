@@ -11,14 +11,18 @@ public class TransactionResponseDto {
     private String description;
     private String notes;
     private String category;
+    private Boolean approved;
+    private Boolean locked;
 
-    public TransactionResponseDto(Integer id, LocalDate date, BigDecimal amount, String description, String notes, String category) {
+    public TransactionResponseDto(Integer id, LocalDate date, BigDecimal amount, String description, String notes, String category, Boolean approved, Boolean locked) {
         this.id = id;
         this.date = date;
         this.amount = amount;
         this.description = description;
         this.notes = notes;
         this.category = category;
+        this.approved = approved;
+        this.locked = locked;
     }
 
     public Integer getId() {
@@ -43,6 +47,14 @@ public class TransactionResponseDto {
 
     public String getCategory() {
         return category;
+    }
+
+    public Boolean getApproved() {
+        return approved;
+    }
+
+    public Boolean getLocked() {
+        return locked;
     }
 
 }

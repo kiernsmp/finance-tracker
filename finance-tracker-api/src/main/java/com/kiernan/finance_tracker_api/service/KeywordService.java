@@ -30,6 +30,9 @@ public class KeywordService {
         KeywordEntity entity = new KeywordEntity(request.getKeyword(), request.getCategoryId());
         KeywordEntity response;
 
+        log.info("Updatind transactionId {} to True", request.getTransactionId());
+        transactionRepository.updateApproved(request.getTransactionId());
+
         List<KeywordEntity> existing = keywordRepository.findByKeyword(entity.getKeyword());
         if (existing.isEmpty()) {
             log.info("New Keyword is original, saving to database");

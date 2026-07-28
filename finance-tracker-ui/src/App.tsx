@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import AppLayout from "./components/AppLayout";
-import Dashboard from "./features/dashboard/pages/DashboardPage";
+import Dashboard from "./pages/DashboardPage";
 import Upload from "./features/upload/pages/UploadPage";
 import TransactionsPage from "./pages/TransactionsPage";
 

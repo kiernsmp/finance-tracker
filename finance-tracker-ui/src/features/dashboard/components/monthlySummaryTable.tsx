@@ -1,37 +1,33 @@
-import type { CategoryOption } from "@/types/CategoryOption";
-import type { Transaction } from "@/types/Transaction";
-import { CategorySummary } from "./categorySummary";
-
+import type { MonthlySummary } from "@/types/MonthlySummary";
+import { formatMonth } from "./formatters";
 
 interface MonthlySummaryProps {
-    transactions: Transaction[];
-    categoryList: CategoryOption[];
-    
+    monthlySummary: MonthlySummary
 }
 
-export function MonthlySummaryTable({
-    transactions,
-    categoryList
+export default function MonthlySummaryTable({
+    monthlySummary
 }: MonthlySummaryProps) {
     
-    const categorySummaryList = categoryList.map((category) => {
-        const categoryTransactions = transactions.filter(
-            (transaction) =>
-                transaction.category?.id === category.id
-        );
-        return {
-            category,
-            transactions: categoryTransactions
-        }
-    }).filter((categorySummary) => categorySummary.transactions.length > 0);
-
-    console.log("TEMP: ", categorySummaryList);
 
     return (
-        <div>
-            <CategorySummary
-                categorySummaryList = {categorySummaryList}
-            />
-        </div>
-    );
+        <table>
+            <tbody>
+                {monthlySummary?.months.map((month) =>
+                <>
+                    <tr>
+                        <td><h1>{formatMonth(month.monthYear)}</h1></td>
+                    </tr>
+                    <tr>
+                        <td>Total In: {month.totalIn}</td>
+                        <td>Total Out: {month.totalOut}</td>
+                        <td>net:{month.totalIn - month.totalOut} </td>
+                    </tr>
+                
+                </>
+
+                )}
+            </tbody>
+        </table>
+    )
 }

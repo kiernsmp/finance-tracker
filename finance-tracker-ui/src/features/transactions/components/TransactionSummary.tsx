@@ -1,4 +1,4 @@
-import { formatAuditorAmount } from "./formatters";
+import { formatAuditorAmount } from "@/utils/formatters";
 
 interface Props {
     totalOut: number;

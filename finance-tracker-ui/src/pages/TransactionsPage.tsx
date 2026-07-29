@@ -6,6 +6,7 @@ import { useCategories } from "@/features/transactions/hooks/useCategories";
 import { useTransactionData } from "@/features/transactions/hooks/useTransactionData";
 import { useTransactionFilters } from "@/features/transactions/hooks/useTransactionFilters";
 import { approveAllTransactions } from "@/api/transactionApi";
+import { approveTransaction } from "@/api/transactionApi";
 
 export default function TransactionsPage() {
     const {
@@ -26,31 +27,43 @@ export default function TransactionsPage() {
             console.error("Failed to approve transactions", error);
         }
     };
+
+    const handleApproveTransaction = async (id: number, approved: boolean) => {
+        try {
+            await approveTransaction(id, approved);
+            refreshTransactions();
+                console.log("Approved transaction: " + id);
+        } catch (error) {
+            console.error("Failed to approve transaction", error);
+        }
+    }
     
     return (
         <div>
-        <h1>Transactions</h1>
-        
-        <DateFilter
-            appliedFilter={appliedFilter}
-            setAppliedFilter={setAppliedFilter}
-            categoryList={categoryList}
-        />
-
-        <TransactionSummary 
-            totalIn={totalIn}
-            totalOut={totalOut}
-        />
-
-        <button onClick={handleApproveAll}>
-            Approve All
-        </button>
-    
-        <TransactionTable 
-            transactions={transactions} 
-            categoryList={categoryList}
-            updateTransactionCategory={updateTransactionCategory}
+            <h1>Transactions</h1>
+            
+            <DateFilter
+                appliedFilter={appliedFilter}
+                setAppliedFilter={setAppliedFilter}
+                categoryList={categoryList}
             />
+
+            <TransactionSummary 
+                totalIn={totalIn}
+                totalOut={totalOut}
+            />
+
+            <button onClick={handleApproveAll}>
+                Approve All
+            </button>
+        
+            <TransactionTable 
+                transactions={transactions} 
+                categoryList={categoryList}
+                updateTransactionCategory={updateTransactionCategory}
+                onApproveTransaction={handleApproveTransaction}
+            />
+            
         </div>
     );
 }

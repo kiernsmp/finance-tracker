@@ -5,6 +5,6 @@ export interface Transaction {
     date: string;
     category: string;
     notes: string;
-    approved: Boolean;
-    locked: Boolean;
+    approved: boolean;
+    locked: boolean;
 }

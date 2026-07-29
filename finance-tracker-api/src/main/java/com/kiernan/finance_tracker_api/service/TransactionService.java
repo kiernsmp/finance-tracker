@@ -11,6 +11,9 @@ import com.kiernan.finance_tracker_api.dto.TransactionResponseDto;
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
 import com.kiernan.finance_tracker_api.mappers.TransactionMapper;
 import com.kiernan.finance_tracker_api.repository.*;
+
+import jakarta.transaction.Transactional;
+
 import java.util.Comparator;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -24,6 +27,14 @@ public class TransactionService {
     private final CategoryService categoryService;
     private final TransactionMapper mapper;
     private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
+
+    @Transactional
+    public void updateTransactionApproved(Integer id, boolean approved) {
+        TransactionEntity transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        transaction.setApproved(approved);
+    }
 
     public void patchAllTransactionsApproved() {
         List<TransactionEntity> entities = transactionRepository.findAll();

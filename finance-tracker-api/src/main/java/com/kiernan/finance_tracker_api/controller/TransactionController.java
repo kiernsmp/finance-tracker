@@ -1,17 +1,22 @@
 package com.kiernan.finance_tracker_api.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.kiernan.finance_tracker_api.dto.TransactionApproveRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionResponseDto;
 import com.kiernan.finance_tracker_api.service.*;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,10 +63,25 @@ public class TransactionController {
     }
 
     @PatchMapping("/approve-all")
-    public void patchAllTransactionsApproved() {
+    public ResponseEntity<Void> patchAllTransactionsApproved() {
         log.info("\n");
         log.info("PATCH /transactions/approve-all request received");
         transactionService.patchAllTransactionsApproved();
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PatchMapping("/{id}/approve")
+    public ResponseEntity<Void> patchTransactionApproved(
+        @PathVariable Integer id,
+        @RequestBody TransactionApproveRequest request) {
+        log.info("\n");
+        log.info("PATCH /transactions/approve request received for transaction {}, with approved={}", id, request.isApproved());
+        transactionService.updateTransactionApproved(id, request.isApproved());
+
+        return ResponseEntity.noContent().build();
+
     }
 
     @PatchMapping("/disapprove-all")

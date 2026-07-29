@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import com.kiernan.finance_tracker_api.dto.CategoryResponse;
 import com.kiernan.finance_tracker_api.entity.*;
@@ -27,19 +29,12 @@ public class CategoryService {
         return categoryResponses;
     }
 
-    public Map<Integer, String> getCategoryLookup() {
-        List<CategoryEntity> categories = categoryRepository.findAll();
-
-        return toCategoryMap(categories);
+    public Map<Integer, CategoryEntity> getCategoryMap() {
+        return categoryRepository.findAll().stream()
+                .collect(Collectors.toMap(CategoryEntity::getId, category -> category));
     }
 
-    private Map<Integer, String> toCategoryMap(List<CategoryEntity> categories) {
-        Map<Integer, String> categoryMap = new HashMap<>();
-
-        for (CategoryEntity category : categories) {
-            categoryMap.put(category.getId(), category.getName());
-        }
-
-        return categoryMap;
+    public CategoryEntity getDefaultEntity() {
+        return categoryRepository.findByName(CategoryEntity.DEFAULT_CATEGORY_NAME);
     }
 }

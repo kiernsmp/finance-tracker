@@ -3,7 +3,12 @@ package com.kiernan.finance_tracker_api.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
+
 import com.kiernan.finance_tracker_api.repository.*;
 import com.kiernan.finance_tracker_api.dto.KeywordRequest;
 import com.kiernan.finance_tracker_api.entity.CategoryEntity;
@@ -26,82 +31,47 @@ public class KeywordService {
         this.categoryRepository = categoryRepository;
     }
     
-    public KeywordEntity createKeyword(KeywordRequest request) {
-        KeywordEntity entity = new KeywordEntity(request.getKeyword(), request.getCategoryId());
-        KeywordEntity response;
+    // public KeywordEntity createKeyword(KeywordRequest request) {
+    //     KeywordEntity entity = new KeywordEntity(request.getKeyword(), request.getCategoryId());
+    //     KeywordEntity response;
 
-        log.info("Updating transactionId {} to True", request.getTransactionId());
-        transactionRepository.updateApproved(request.getTransactionId());
+    //     log.info("Updating transactionId {} to True", request.getTransactionId());
+    //     transactionRepository.updateApproved(request.getTransactionId());
 
-        List<KeywordEntity> existing = keywordRepository.findByKeyword(entity.getKeyword());
-        if (existing.isEmpty()) {
-            log.info("New Keyword is original, saving to database");
-            response = keywordRepository.save(entity);
-        }
-        else {
-            log.info("New Keyword is duplicate, with original category_id: {}", existing.get(0).getCategoryId());
-            KeywordEntity existingKeyword = existing.get(0);
-            existingKeyword.setCategoryId(entity.getCategoryId());
-            response = keywordRepository.save(existingKeyword);
-            log.info("Updated keyword to new category_id: {}", existingKeyword.getCategoryId());
-        }
+    //     List<KeywordEntity> existing = keywordRepository.findByKeyword(entity.getKeyword());
+    //     if (existing.isEmpty()) {
+    //         log.info("New Keyword is original, saving to database");
+    //         response = keywordRepository.save(entity);
+    //     }
+    //     else {
+    //         log.info("New Keyword is duplicate, with original category_id: {}", existing.get(0).getCategoryId());
+    //         KeywordEntity existingKeyword = existing.get(0);
+    //         existingKeyword.setCategoryId(entity.getCategoryId());
+    //         response = keywordRepository.save(existingKeyword);
+    //         log.info("Updated keyword to new category_id: {}", existingKeyword.getCategoryId());
+    //     }
         
-        reclassifyCategoryByKeyword();
+    //     reclassifyCategoryByKeyword();
         
-        return response;
-    }
+    //     return response;
+    // }
     
-    public void reclassifyCategoryByKeyword() {
-        List<TransactionEntity> entities = transactionRepository.findAll();
-        assignCategories(entities);
+    // public void reclassifyCategoryByKeyword() {
+    //     List<TransactionEntity> entities = transactionRepository.findAll();
+    //     assignCategories(entities);
         
-        transactionRepository.saveAll(entities);
-    }
+    //     transactionRepository.saveAll(entities);
+    // }
 
-    public void assignCategories(List<TransactionEntity> transactions) {
-        Map<String, Integer> keywordMap = toKeywordMap(keywordRepository.findAll());
-        Map<Integer, CategoryEntity> categoryMap = toCategoryMap(categoryRepository.findAll());
-        CategoryEntity defaultCategory = categoryRepository.findByName(CategoryEntity.DEFAULT_CATEGORY_NAME);
-
-        for (TransactionEntity transaction : transactions) {
-            String key = transaction.getDescription();
-
-            if (transaction.isLocked()) {
-                continue;
-            }
-
-            if (keywordMap.containsKey(key)) {
-                Integer categoryId = keywordMap.get(key);
-                transaction.setCategory(categoryMap.get(categoryId));
-            }
-            else {
-                transaction.setCategory(defaultCategory);
-            }
-        }
-    }
-
-    private Map<String, Integer> toKeywordMap(List<KeywordEntity> keywords) {
-        Map<String, Integer> keywordMap = new HashMap<>();
-
-        for (KeywordEntity keyword : keywords) {
-            if (keyword.getKeyword() == null || keyword.getCategoryId() == null) {
-                continue;
-            }
-
-            keywordMap.put(keyword.getKeyword(), keyword.getCategoryId());
-        }
-
-        return keywordMap;
-    }
-
-    private Map<Integer, CategoryEntity> toCategoryMap(List<CategoryEntity> categories) {
-        Map<Integer, CategoryEntity> categoryMap = new HashMap<>();
-        
-        for (CategoryEntity category : categories) {
-            categoryMap.put(category.getId(), category);
-        }
-
-        return categoryMap;
+    public Map<String, Integer> getKeywordMapForDescriptions(Set<String> descriptions) {
+        return keywordRepository.findAllByKeywordIn(descriptions).stream()
+                .collect(Collectors.toMap(
+                    KeywordEntity::getKeyword,
+                    KeywordEntity::getCategoryId,
+                    (existing, replacement) -> existing
+                ));
 
     }
+
+    
 }

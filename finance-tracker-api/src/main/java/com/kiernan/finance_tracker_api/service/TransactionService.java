@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.kiernan.finance_tracker_api.dto.TransactionRequestDto;
 import com.kiernan.finance_tracker_api.dto.TransactionResponseDto;
+import com.kiernan.finance_tracker_api.entity.CategoryEntity;
+import com.kiernan.finance_tracker_api.entity.KeywordEntity;
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
 import com.kiernan.finance_tracker_api.mappers.TransactionMapper;
 import com.kiernan.finance_tracker_api.repository.*;
@@ -15,19 +17,33 @@ import com.kiernan.finance_tracker_api.repository.*;
 import jakarta.transaction.Transactional;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+
 import org.slf4j.Logger;
 import com.kiernan.finance_tracker_api.parsers.*;
 
 @Service
 public class TransactionService {
-
+    
     private final KeywordService keywordService;
     private final TransactionRepository transactionRepository;
     private final CategoryService categoryService;
     private final TransactionMapper mapper;
     private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
+    
+    public TransactionService(TransactionRepository transactionRepository, TransactionMapper mapper, KeywordService keywordService, CategoryService categoryService) {
+        this.transactionRepository = transactionRepository;
+        this.keywordService = keywordService;
+        this.categoryService = categoryService;
+        this.mapper = mapper;
+    }
 
+    
     @Transactional
     public void updateTransactionApproved(Integer id, boolean approved) {
         TransactionEntity transaction = transactionRepository.findById(id)
@@ -64,19 +80,7 @@ public class TransactionService {
 
     }
 
-    public TransactionService(TransactionRepository transactionRepository, TransactionMapper mapper, KeywordService keywordService, CategoryService categoryService) {
-        this.transactionRepository = transactionRepository;
-        this.keywordService = keywordService;
-        this.categoryService = categoryService;
-        this.mapper = mapper;
-    }
-    
-    public void reclassifyCategories() {
-        keywordService.reclassifyCategoryByKeyword();
-    }
-
     public List<TransactionResponseDto> getTransactionRecords(LocalDate startDate, LocalDate endDate, Integer categoryId) {
-
         Specification<TransactionEntity> spec = (root, query, cb) -> cb.conjunction();
 
         if (startDate != null) {
@@ -119,9 +123,33 @@ public class TransactionService {
         List<TransactionRequestDto> records = parser.parse(file);
         List<TransactionEntity> entities = mapper.toEntity(records);
 
-        keywordService.assignCategories(entities);
+        assignAllCategories(entities);
         transactionRepository.saveAll(entities);
 
+    }
+
+    public void assignAllCategories(List<TransactionEntity> transactions) {
+        Map<Integer, CategoryEntity> categoryMap = categoryService.getCategoryMap();
+        CategoryEntity defaultCategory = categoryService.getDefaultEntity();
+
+        Set<String> descriptions = transactions.stream()
+                .map(TransactionEntity::getDescription)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        Map<String, Integer> keywordMap = keywordService.getKeywordMapForDescriptions(descriptions);
+
+        for (TransactionEntity transaction : transactions) {
+            String key = transaction.getDescription();
+
+            if (keywordMap.containsKey(key)) {
+                Integer categoryId = keywordMap.get(key);
+                transaction.setCategory(categoryMap.get(categoryId));
+            }
+            else {
+                transaction.setCategory(defaultCategory);
+            }
+        }
     }
 
     private TransactionParser resolveParser(MultipartFile file, String input) {

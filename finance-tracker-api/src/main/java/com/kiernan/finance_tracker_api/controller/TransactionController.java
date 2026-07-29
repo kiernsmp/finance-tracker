@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kiernan.finance_tracker_api.dto.TransactionApproveRequest;
 
 import com.kiernan.finance_tracker_api.dto.TransactionLockRequest;
-import com.kiernan.finance_tracker_api.dto.TransactionResponseDto;
+import com.kiernan.finance_tracker_api.dto.TransactionResponse;
 import com.kiernan.finance_tracker_api.service.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -43,7 +43,7 @@ public class TransactionController {
     }
 
     @GetMapping("/records")
-    public List<TransactionResponseDto> getTransactionRecords(
+    public List<TransactionResponse> getTransactionRecords(
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
         @RequestParam(required = false) Integer categoryId
@@ -51,7 +51,7 @@ public class TransactionController {
         log.info("\n");
         log.info("ENTERING GET TRANSACTION RECORDS");
         log.info("Fetching transaction records with startDate={}, endDate={}, categoryId={}", startDate, endDate, categoryId);
-        List<TransactionResponseDto> response = transactionService.getTransactionRecords(startDate, endDate, categoryId);
+        List<TransactionResponse> response = transactionService.getTransactionRecords(startDate, endDate, categoryId);
 
         return response;
     }

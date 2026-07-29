@@ -7,7 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.kiernan.finance_tracker_api.dto.TransactionRequestDto;
-import com.kiernan.finance_tracker_api.dto.TransactionResponseDto;
+import com.kiernan.finance_tracker_api.dto.TransactionResponse;
 import com.kiernan.finance_tracker_api.entity.CategoryEntity;
 import com.kiernan.finance_tracker_api.entity.KeywordEntity;
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
@@ -80,7 +80,7 @@ public class TransactionService {
 
     }
 
-    public List<TransactionResponseDto> getTransactionRecords(LocalDate startDate, LocalDate endDate, Integer categoryId) {
+    public List<TransactionResponse> getTransactionRecords(LocalDate startDate, LocalDate endDate, Integer categoryId) {
         Specification<TransactionEntity> spec = (root, query, cb) -> cb.conjunction();
 
         if (startDate != null) {
@@ -109,10 +109,7 @@ public class TransactionService {
             )
         );
 
-        log.info("Making API call to get category lookup table");
-        Map<Integer, String> categoryMap = categoryService.getCategoryLookup();
-
-        List<TransactionResponseDto> result = mapper.toResponseDto(response, categoryMap);
+        List<TransactionResponse> result = mapper.toResponseDto(response);
         log.info("Successfully retrieved {} records from DB", result.size());
 
         return result;

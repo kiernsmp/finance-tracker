@@ -17,7 +17,7 @@ export function MonthlySummaryTable({
     const categorySummaryList = categoryList.map((category) => {
         const categoryTransactions = transactions.filter(
             (transaction) =>
-                transaction.category === category.label
+                transaction.category?.id === category.id
         );
         return {
             category,

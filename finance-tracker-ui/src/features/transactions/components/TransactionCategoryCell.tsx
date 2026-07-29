@@ -3,13 +3,13 @@ import type { CategoryOption } from "@/types/CategoryOption";
 
 interface Props {
     categoryList: CategoryOption[];
-    currentCategory: string;
+    currentCategoryId?: number;
     onChange: (categoryId: number) => void;
 }
 
 export default function TransactionCategoryCell({
     categoryList,
-    currentCategory,
+    currentCategoryId,
     onChange
 }: Props) {
 
@@ -18,7 +18,7 @@ export default function TransactionCategoryCell({
         label: category.label
     }));
 
-    const selectedOption = options.find((option) => option.label === currentCategory) ?? null;
+    const selectedOption = options.find((option) => option.value === currentCategoryId) ?? null;
 
     return (
         <Select

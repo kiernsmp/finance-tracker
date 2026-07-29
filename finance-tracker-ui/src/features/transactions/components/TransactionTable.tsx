@@ -55,7 +55,7 @@ export default function TransactionTable({
                             <TransactionCategoryCell
                                 categoryList={categoryList}
                                 currentCategoryId={transaction.category?.id}
-                                onChange={(categoryId) => updateTransactionCategory(transaction.id, categoryId)}
+                                onChange={(categoryId) => updateTransactionCategory(transaction, categoryId)}
                             />
                         </td>
                         <td>

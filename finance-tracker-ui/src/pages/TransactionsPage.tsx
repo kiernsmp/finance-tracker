@@ -5,7 +5,6 @@ import { calculateTransactionTotals } from "@/utils/calculateTransactionTotals";
 import { useCategories } from "@/features/transactions/hooks/useCategories";
 import { useTransactionData } from "@/features/transactions/hooks/useTransactionData";
 import { useTransactionFilters } from "@/features/transactions/hooks/useTransactionFilters";
-import { approveAllTransactions, approveTransaction, lockTransaction} from "@/api/transactionApi";
 
 export default function TransactionsPage() {
     const {
@@ -14,38 +13,14 @@ export default function TransactionsPage() {
     } = useTransactionFilters();
 
     const { categoryList } = useCategories();
-    const { transactions, refreshTransactions, updateTransactionCategory } = useTransactionData(appliedFilter);
+    const {
+        transactions,
+        updateTransactionCategory,
+        approveAll,
+        setTransactionApproved,
+        setTransactionLocked,
+    } = useTransactionData(appliedFilter);
     const { totalIn, totalOut } = calculateTransactionTotals(transactions);
-    
-    const handleApproveAll = async () => {
-        try {
-            await approveAllTransactions();
-            refreshTransactions();
-            console.log("Approved all transactions");
-        } catch (error) {
-            console.error("Failed to approve transactions", error);
-        }
-    };
-
-    const handleApproveTransaction = async (id: number, approved: boolean) => {
-        try {
-            await approveTransaction(id, approved);
-            refreshTransactions();
-                console.log("Approved transaction: " + id);
-        } catch (error) {
-            console.error("Failed to approve transaction", error);
-        }
-    }
-
-    const handleLockTransaction = async (id: number, locked: boolean) => {
-        try {
-            await lockTransaction(id, locked);
-            refreshTransactions()
-            console.log("Locked transaction");
-        } catch (error) {
-            console.error("Failed to lock transaction", error);
-        }
-    };
     
     return (
         <div>
@@ -62,7 +37,7 @@ export default function TransactionsPage() {
                 totalOut={totalOut}
             />
 
-            <button onClick={handleApproveAll}>
+            <button onClick={approveAll}>
                 Approve All
             </button>
         
@@ -70,8 +45,8 @@ export default function TransactionsPage() {
                 transactions={transactions} 
                 categoryList={categoryList}
                 updateTransactionCategory={updateTransactionCategory}
-                onApproveTransaction={handleApproveTransaction}
-                onLockTransaction={handleLockTransaction}
+                onApproveTransaction={setTransactionApproved}
+                onLockTransaction={setTransactionLocked}
             />
             
         </div>

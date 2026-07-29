@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Locale.Category;
 import java.util.stream.Collectors;
 
 
@@ -155,6 +156,15 @@ public class TransactionService {
         }
 
         return new CommbankTransactionParser();
+    }
+
+    @Transactional
+    public void updateTransactionCategory(Integer id, Integer categoryId) {
+        TransactionEntity entity = transactionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+        CategoryEntity category = categoryService.getCategory(categoryId);
+        
+        entity.setCategory(category);
     }
     
 }

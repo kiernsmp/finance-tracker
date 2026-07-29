@@ -2,6 +2,8 @@ package com.kiernan.finance_tracker_api.service;
 
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import com.kiernan.finance_tracker_api.dto.CategoryResponse;
@@ -25,11 +27,20 @@ public class CategoryService {
                 .toList();
     }
 
+    public Map<Integer, CategoryEntity> getCategoryMap() {
+        return categoryRepository.findAll().stream()
+                .collect(Collectors.toMap(
+                    CategoryEntity::getId,
+                    category -> category
+                ) );
+    }
+
+    
+
     public CategoryEntity getDefaultEntity() {
         return categoryRepository.findByName(CategoryEntity.DEFAULT_CATEGORY_NAME);
     }
-
-    public CategoryEntity getCategory(Integer categoryId) {
+    public CategoryEntity getCategoryById(Integer categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found with ID: " + categoryId));
     }

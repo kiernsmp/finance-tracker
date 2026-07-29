@@ -7,7 +7,7 @@ import { formatAuditorAmount, formatTransactionDate } from "./formatters";
 interface TransactionTableProps {
     transactions: Transaction[];
     categoryList: CategoryOption[];
-    updateTransactionCategory: (transactionId: number, categoryId: number) => void;
+    updateTransactionCategory: (transaction: Transaction, categoryId: number) => void;
     onApproveTransaction: (id: number, approved: boolean) => void;
     onLockTransaction: (id: number, locked: boolean) => void;
 }

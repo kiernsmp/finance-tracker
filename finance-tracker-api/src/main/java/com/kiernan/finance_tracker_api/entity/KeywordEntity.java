@@ -22,7 +22,10 @@ public class KeywordEntity {
     @Column(name = "category_id")
     private Integer categoryId;
 
-
+    public KeywordEntity(String keyword, Integer categoryId) {
+        this.keyword = keyword;
+        this.categoryId = categoryId;
+    }
     
 
 }

@@ -1,67 +1,52 @@
 package com.kiernan.finance_tracker_api.service;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import com.kiernan.finance_tracker_api.repository.*;
+
+import jakarta.transaction.Transactional;
+
 import com.kiernan.finance_tracker_api.dto.KeywordRequest;
-import com.kiernan.finance_tracker_api.entity.CategoryEntity;
 import com.kiernan.finance_tracker_api.entity.KeywordEntity;
-import com.kiernan.finance_tracker_api.entity.TransactionEntity;
+import com.kiernan.finance_tracker_api.events.KeywordUpdatedEvent;
+
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 @Service
 public class KeywordService {
     
+    private final CategoryService categoryService;
     private final KeywordRepository keywordRepository;
-    private final TransactionRepository transactionRepository;
-    private final CategoryRepository categoryRepository;
+    private final ApplicationEventPublisher eventPublisher;
+    
     private static final Logger log = LoggerFactory.getLogger(KeywordService.class);
 
-    public KeywordService(KeywordRepository keywordRepository, TransactionRepository transactionRepository, CategoryRepository categoryRepository) {
+    public KeywordService(KeywordRepository keywordRepository, TransactionRepository transactionRepository, CategoryRepository categoryRepository, CategoryService categoryService, ApplicationEventPublisher eventPublisher) {
         this.keywordRepository = keywordRepository;
-        this.transactionRepository = transactionRepository;
-        this.categoryRepository = categoryRepository;
+        this.eventPublisher = eventPublisher;
+        this.categoryService = categoryService;
     }
     
-    // public KeywordEntity createKeyword(KeywordRequest request) {
-    //     KeywordEntity entity = new KeywordEntity(request.getKeyword(), request.getCategoryId());
-    //     KeywordEntity response;
+    @Transactional
+    public KeywordEntity upsertKeyword(KeywordRequest request) {
+        KeywordEntity keywordEntity = keywordRepository.findByKeyword(request.getKeyword())
+                .orElseGet(() -> new KeywordEntity(request.getKeyword(), request.getCategoryId()));
 
-    //     log.info("Updating transactionId {} to True", request.getTransactionId());
-    //     transactionRepository.updateApproved(request.getTransactionId());
+        keywordEntity.setCategoryId(request.getCategoryId());
+        
+        eventPublisher.publishEvent(
+            new KeywordUpdatedEvent(keywordEntity.getKeyword(), categoryService.getCategoryById(request.getCategoryId()))
+        );
 
-    //     List<KeywordEntity> existing = keywordRepository.findByKeyword(entity.getKeyword());
-    //     if (existing.isEmpty()) {
-    //         log.info("New Keyword is original, saving to database");
-    //         response = keywordRepository.save(entity);
-    //     }
-    //     else {
-    //         log.info("New Keyword is duplicate, with original category_id: {}", existing.get(0).getCategoryId());
-    //         KeywordEntity existingKeyword = existing.get(0);
-    //         existingKeyword.setCategoryId(entity.getCategoryId());
-    //         response = keywordRepository.save(existingKeyword);
-    //         log.info("Updated keyword to new category_id: {}", existingKeyword.getCategoryId());
-    //     }
-        
-    //     reclassifyCategoryByKeyword();
-        
-    //     return response;
-    // }
-    
-    // public void reclassifyCategoryByKeyword() {
-    //     List<TransactionEntity> entities = transactionRepository.findAll();
-    //     assignCategories(entities);
-        
-    //     transactionRepository.saveAll(entities);
-    // }
+        return keywordRepository.save(keywordEntity);
+
+    }
 
     public Map<String, Integer> getKeywordMapForDescriptions(Set<String> descriptions) {
         return keywordRepository.findAllByKeywordIn(descriptions).stream()
@@ -70,8 +55,6 @@ public class KeywordService {
                     KeywordEntity::getCategoryId,
                     (existing, replacement) -> existing
                 ));
-
     }
 
-    
 }

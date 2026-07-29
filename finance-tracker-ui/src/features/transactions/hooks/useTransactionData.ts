@@ -37,7 +37,7 @@ export function useTransactionData(appliedFilter: TransactionFilter) {
                 await refreshTransactions();
             }
             else {
-                await updateKeywordCategory(target.description, categoryId, transactionId);
+                await updateKeywordCategory(target.description, categoryId);
                 await refreshTransactions();
 
             }

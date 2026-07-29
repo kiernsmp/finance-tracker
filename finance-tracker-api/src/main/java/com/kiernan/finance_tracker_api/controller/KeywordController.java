@@ -23,14 +23,13 @@ public class KeywordController {
         this.keywordService = keywordService;
     }
 
-    // @PostMapping("/add")
-    // public KeywordEntity createKeyword (@RequestBody KeywordRequest request) {
-    //     log.info("\n");
-    //     log.info("UPDATING KEYWORD RECORD");
-    //     log.info("Updating keyword with following mapping: keyword: {}, category_id: {}", request.getKeyword(), request.getCategoryId());
+    @PostMapping("/add")
+    public KeywordEntity upsertKeyword (@RequestBody KeywordRequest request) {
+        log.info("\n");
+        log.info("POST /add received, upserting keyword {} to categoryId: {}", request.getKeyword(),request.getCategoryId());
         
-    //     return keywordService.createKeyword(request);
-    // }
+        return keywordService.upsertKeyword(request);
+    }
 
     
 }

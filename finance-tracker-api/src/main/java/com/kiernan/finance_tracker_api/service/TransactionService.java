@@ -3,25 +3,24 @@ package com.kiernan.finance_tracker_api.service;
 import java.time.LocalDate;
 import java.util.List;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.kiernan.finance_tracker_api.dto.TransactionRequestDto;
 import com.kiernan.finance_tracker_api.dto.TransactionResponse;
 import com.kiernan.finance_tracker_api.entity.CategoryEntity;
-import com.kiernan.finance_tracker_api.entity.KeywordEntity;
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
+import com.kiernan.finance_tracker_api.events.KeywordUpdatedEvent;
 import com.kiernan.finance_tracker_api.mappers.TransactionMapper;
 import com.kiernan.finance_tracker_api.repository.*;
 
 import jakarta.transaction.Transactional;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Locale.Category;
 import java.util.stream.Collectors;
 
 
@@ -162,9 +161,27 @@ public class TransactionService {
     public void updateTransactionCategory(Integer id, Integer categoryId) {
         TransactionEntity entity = transactionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
-        CategoryEntity category = categoryService.getCategory(categoryId);
+        CategoryEntity category = categoryService.getCategoryById(categoryId);
         
         entity.setCategory(category);
+    }
+
+    @EventListener
+    public void handleKeywordUpdated(KeywordUpdatedEvent event) {
+        recategoriseTransactions(event.getKeyword(), event.getCategory());
+
+    }
+
+    @Transactional
+    public void recategoriseTransactions(String keyword, CategoryEntity category) {
+        List<TransactionEntity> transactions = transactionRepository.findByDescriptionAndCategoryIdNotAndLocked(keyword, category.getId(), false);
+
+        for (TransactionEntity transaction : transactions) {
+            transaction.setCategory(category);
+        }
+        if (transactions.size() != 0) {
+            log.info("Updated {} transactions to {}", transactions.size(), category.getName());
+        }
     }
     
 }

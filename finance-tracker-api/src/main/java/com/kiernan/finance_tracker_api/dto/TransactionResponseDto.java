@@ -49,11 +49,11 @@ public class TransactionResponseDto {
         return category;
     }
 
-    public Boolean getApproved() {
+    public Boolean isApproved() {
         return approved;
     }
 
-    public Boolean getLocked() {
+    public Boolean isLocked() {
         return locked;
     }
 

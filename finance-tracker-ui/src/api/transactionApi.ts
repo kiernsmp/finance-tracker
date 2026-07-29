@@ -7,6 +7,7 @@ const GET_RECORD_URL = "/records";
 const POST_CSV_URL = "/upload";
 const PATCH_APPROVE = "/approve";
 const PATCH_APPROVE_ALL = "/approve-all";
+const PATCH_TRANSACTION = "/lock"
 
 
 export async function getTransactions(filter: TransactionFilter): Promise<Transaction[]> {
@@ -41,4 +42,13 @@ export async function approveTransaction(id: number, approved: boolean): Promise
             approved
         }
     );
+}
+
+export async function lockTransaction(id: number, locked: boolean): Promise<void> {
+    await axios.patch(API_URL + "/" + id + PATCH_TRANSACTION,
+        {
+            locked
+        }
+    );
+
 }

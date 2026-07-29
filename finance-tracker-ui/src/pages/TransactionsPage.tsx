@@ -5,8 +5,7 @@ import { calculateTransactionTotals } from "@/utils/calculateTransactionTotals";
 import { useCategories } from "@/features/transactions/hooks/useCategories";
 import { useTransactionData } from "@/features/transactions/hooks/useTransactionData";
 import { useTransactionFilters } from "@/features/transactions/hooks/useTransactionFilters";
-import { approveAllTransactions } from "@/api/transactionApi";
-import { approveTransaction } from "@/api/transactionApi";
+import { approveAllTransactions, approveTransaction, lockTransaction} from "@/api/transactionApi";
 
 export default function TransactionsPage() {
     const {
@@ -37,6 +36,16 @@ export default function TransactionsPage() {
             console.error("Failed to approve transaction", error);
         }
     }
+
+    const handleLockTransaction = async (id: number, locked: boolean) => {
+        try {
+            await lockTransaction(id, locked);
+            refreshTransactions()
+            console.log("Locked transaction");
+        } catch (error) {
+            console.error("Failed to lock transaction", error);
+        }
+    };
     
     return (
         <div>
@@ -62,6 +71,7 @@ export default function TransactionsPage() {
                 categoryList={categoryList}
                 updateTransactionCategory={updateTransactionCategory}
                 onApproveTransaction={handleApproveTransaction}
+                onLockTransaction={handleLockTransaction}
             />
             
         </div>

@@ -36,6 +36,14 @@ public class TransactionService {
         transaction.setApproved(approved);
     }
 
+    @Transactional
+    public void updateLock(Integer id, boolean locked) {
+        TransactionEntity transaction = transactionRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        transaction.setLocked(locked);
+    }
+
     public void patchAllTransactionsApproved() {
         List<TransactionEntity> entities = transactionRepository.findAll();
         for (TransactionEntity entity : entities) {

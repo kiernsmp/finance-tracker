@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kiernan.finance_tracker_api.dto.TransactionApproveRequest;
+
+import com.kiernan.finance_tracker_api.dto.TransactionLockRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionResponseDto;
 import com.kiernan.finance_tracker_api.service.*;
 import java.time.LocalDate;
@@ -27,7 +29,6 @@ public class TransactionController {
 
     private final TransactionService transactionService;
     private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
-
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
@@ -85,8 +86,21 @@ public class TransactionController {
     }
 
     @PatchMapping("/disapprove-all")
-    public void patchAllTransactionsDisapproved() {
+    public ResponseEntity<Void> patchAllTransactionsDisapproved() {
         transactionService.patchAllTransactionsDisapproved();
+        
+        return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}/lock")
+    public ResponseEntity<Void> updateLock(
+            @PathVariable Integer id,
+            @RequestBody TransactionLockRequest request) {
+
+        log.info("\n");
+        log.info("PATCH lock received for transactionId={}, setting locked={}", id, request.isLocked());
+        transactionService.updateLock(id, request.isLocked());
+        return ResponseEntity.noContent().build();
+}
 
 }

@@ -30,7 +30,7 @@ public class KeywordService {
         KeywordEntity entity = new KeywordEntity(request.getKeyword(), request.getCategoryId());
         KeywordEntity response;
 
-        log.info("Updatind transactionId {} to True", request.getTransactionId());
+        log.info("Updating transactionId {} to True", request.getTransactionId());
         transactionRepository.updateApproved(request.getTransactionId());
 
         List<KeywordEntity> existing = keywordRepository.findByKeyword(entity.getKeyword());
@@ -65,6 +65,10 @@ public class KeywordService {
 
         for (TransactionEntity transaction : transactions) {
             String key = transaction.getDescription();
+
+            if (transaction.isLocked()) {
+                continue;
+            }
 
             if (keywordMap.containsKey(key)) {
                 Integer categoryId = keywordMap.get(key);

@@ -9,13 +9,15 @@ interface TransactionTableProps {
     categoryList: CategoryOption[];
     updateTransactionCategory: (transactionId: number, categoryId: number) => void;
     onApproveTransaction: (id: number, approved: boolean) => void;
+    onLockTransaction: (id: number, locked: boolean) => void;
 }
 
 export default function TransactionTable({
     transactions,
     categoryList,
     updateTransactionCategory,
-    onApproveTransaction
+    onApproveTransaction,
+    onLockTransaction
 }: TransactionTableProps) {
 
     return (
@@ -27,6 +29,7 @@ export default function TransactionTable({
                     <th>Description</th>
                     <th>Amount</th>
                     <th>Category</th>
+                    <th>Locked</th>
                     <th>Notes</th>
                 </tr>
             </thead>
@@ -53,6 +56,13 @@ export default function TransactionTable({
                                 categoryList={categoryList}
                                 currentCategory={transaction.category}
                                 onChange={(categoryId) => updateTransactionCategory(transaction.id, categoryId)}
+                            />
+                        </td>
+                        <td>
+                            <input type="checkbox" 
+                                checked={transaction.locked}
+                                onChange={(e) => 
+                                    onLockTransaction(transaction.id, e.target.checked)}
                             />
                         </td>
                         <td>{transaction.notes}</td>

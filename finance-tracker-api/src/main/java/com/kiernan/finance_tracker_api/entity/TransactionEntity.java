@@ -31,8 +31,8 @@ public class TransactionEntity {
     private BigDecimal amount;
     private String notes;
     private LocalDate date;
-    private Boolean approved;
-    private Boolean locked;
+    private boolean approved;
+    private boolean locked;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

@@ -48,8 +48,8 @@ public class TransactionMapper {
             entity.getDescription(),
             entity.getNotes(),
             entity.getCategory().getName(),
-            entity.getApproved(),
-            entity.getLocked()
+            entity.isApproved(),
+            entity.isLocked()
         );
 
     }

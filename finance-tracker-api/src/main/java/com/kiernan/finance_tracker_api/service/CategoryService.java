@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.kiernan.finance_tracker_api.dto.CategoryResponse;
 import com.kiernan.finance_tracker_api.entity.*;
@@ -35,8 +36,6 @@ public class CategoryService {
                 ) );
     }
 
-    
-
     public CategoryEntity getDefaultEntity() {
         return categoryRepository.findByName(CategoryEntity.DEFAULT_CATEGORY_NAME);
     }
@@ -44,4 +43,10 @@ public class CategoryService {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found with ID: " + categoryId));
     }
+
+    public CategoryEntity addCategory(String categoryName) {
+        return categoryRepository.save( new CategoryEntity(null, categoryName));
+
+    }
+
 }

@@ -5,6 +5,10 @@ import type { TransactionFilter } from "@/types/TransactionFilter";
 const API_URL = "http://localhost:8080/transactions";
 const GET_RECORD_URL = "/records";
 const POST_CSV_URL = "/upload";
+const PATCH_APPROVE = "/approve";
+const PATCH_APPROVE_ALL = "/approve-all";
+const PATCH_TRANSACTION = "/lock"
+const PATCH_CATEGORY = "/update-category";
 
 
 export async function getTransactions(filter: TransactionFilter): Promise<Transaction[]> {
@@ -26,4 +30,34 @@ export async function uploadCsv(file: File): Promise<void> {
     formData.append("file", file);
 
     await axios.post(API_URL + POST_CSV_URL, formData);
+}
+
+export async function approveAllTransactions(): Promise<void> {
+    await axios.patch(API_URL + PATCH_APPROVE_ALL);
+}
+
+export async function approveTransaction(id: number, approved: boolean): Promise<void> {
+    console.log("API CALL: " + approved)
+    await axios.patch(API_URL + "/" + id + PATCH_APPROVE,
+        {
+            approved
+        }
+    );
+}
+
+export async function lockTransaction(id: number, locked: boolean): Promise<void> {
+    await axios.patch(API_URL + "/" + id + PATCH_TRANSACTION,
+        {
+            locked
+        }
+    );
+
+}
+
+export async function updateCategory(id: number, categoryId: number) {
+    await axios.patch(API_URL + "/" + id + PATCH_CATEGORY,
+        {
+            categoryId
+        }
+    );
 }

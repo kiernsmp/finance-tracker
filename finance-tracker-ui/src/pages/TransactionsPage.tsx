@@ -13,29 +13,43 @@ export default function TransactionsPage() {
     } = useTransactionFilters();
 
     const { categoryList } = useCategories();
-    const { transactions, updateTransactionCategory } = useTransactionData(appliedFilter);
+    const {
+        transactions,
+        updateTransactionCategory,
+        approveAll,
+        setTransactionApproved,
+        setTransactionLocked,
+    } = useTransactionData(appliedFilter);
     const { totalIn, totalOut } = calculateTransactionTotals(transactions);
     
     return (
         <div>
-        <h1>Transactions</h1>
-        
-        <DateFilter
-            appliedFilter={appliedFilter}
-            setAppliedFilter={setAppliedFilter}
-            categoryList={categoryList}
-        />
-
-        <TransactionSummary 
-            totalIn={totalIn}
-            totalOut={totalOut}
-        />
-    
-        <TransactionTable 
-            transactions={transactions} 
-            categoryList={categoryList}
-            updateTransactionCategory={updateTransactionCategory}
+            <h1>Transactions</h1>
+            
+            <DateFilter
+                appliedFilter={appliedFilter}
+                setAppliedFilter={setAppliedFilter}
+                categoryList={categoryList}
             />
+
+            <TransactionSummary 
+                totalIn={totalIn}
+                totalOut={totalOut}
+                transactionsFound={transactions.length}
+            />
+
+            <button onClick={approveAll}>
+                Approve All
+            </button>
+        
+            <TransactionTable 
+                transactions={transactions} 
+                categoryList={categoryList}
+                updateTransactionCategory={updateTransactionCategory}
+                onApproveTransaction={setTransactionApproved}
+                onLockTransaction={setTransactionLocked}
+            />
+            
         </div>
     );
 }

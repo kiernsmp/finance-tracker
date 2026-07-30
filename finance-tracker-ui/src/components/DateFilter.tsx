@@ -16,13 +16,12 @@ export default function DateFilter({
 }: DateFilterProps) {
     const [startDate, setStartDate] = useState(appliedFilter.startDate ?? "");
     const [endDate, setEndDate] = useState(appliedFilter.endDate ?? "");
-    const [categoryId, setCategoryId] = useState<number | undefined>(appliedFilter.categoryId);
 
-    function commitFilter(nextCategoryId = categoryId) {
+    function commitFilter(nextCategoryId?: number) {
         setAppliedFilter({
             startDate: startDate || undefined,
             endDate: endDate || undefined,
-            categoryId: nextCategoryId
+            ...(nextCategoryId !== undefined ? { categoryId: nextCategoryId } : {})
         });
     }
 
@@ -37,7 +36,7 @@ export default function DateFilter({
         label: c.label
     }));
 
-    const selected = categoryOptions.find((o) => o.value === categoryId) ?? null;
+    const selected = categoryOptions.find((o) => o.value === appliedFilter.categoryId) ?? null;
 
     return (
         <div>
@@ -47,9 +46,7 @@ export default function DateFilter({
                 value={selected}
                 isClearable
                 onChange={(option) => {
-                    const nextCategoryId = option ? option.value : undefined;
-                    setCategoryId(nextCategoryId);
-                    commitFilter(nextCategoryId);
+                    commitFilter(option?.value);
                 }}
             />
 

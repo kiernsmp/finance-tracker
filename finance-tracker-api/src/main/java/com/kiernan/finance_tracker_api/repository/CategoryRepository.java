@@ -8,4 +8,3 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Intege
     CategoryEntity findByName(String category);
 
 }
-

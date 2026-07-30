@@ -5,9 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class KeywordRequest {
-
-    private String keyword;
-    private int categoryId;
-
+public class TransactionCategoryRequest {
+    private Integer categoryId;
+    
 }

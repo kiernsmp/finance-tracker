@@ -1,13 +1,16 @@
 package com.kiernan.finance_tracker_api.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import com.kiernan.finance_tracker_api.dto.CategoryResponse;
 import com.kiernan.finance_tracker_api.entity.*;
 import com.kiernan.finance_tracker_api.repository.CategoryRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class CategoryService {
@@ -19,27 +22,26 @@ public class CategoryService {
     }
 
     public List<CategoryResponse> getAllCategories() {
-        List<CategoryEntity> entities = categoryRepository.findAll();
-        List<CategoryResponse> categoryResponses = new ArrayList<>();
-        for (var category : entities) {
-            categoryResponses.add(new CategoryResponse(category.getId(), category.getName()));
-        }
-        return categoryResponses;
+        return categoryRepository.findAll().stream()
+                .map((CategoryEntity category) -> new CategoryResponse(category.getId(), category.getName()))
+                .toList();
     }
 
-    public Map<Integer, String> getCategoryLookup() {
-        List<CategoryEntity> categories = categoryRepository.findAll();
-
-        return toCategoryMap(categories);
+    public Map<Integer, CategoryEntity> getCategoryMap() {
+        return categoryRepository.findAll().stream()
+                .collect(Collectors.toMap(
+                    CategoryEntity::getId,
+                    category -> category
+                ) );
     }
 
-    private Map<Integer, String> toCategoryMap(List<CategoryEntity> categories) {
-        Map<Integer, String> categoryMap = new HashMap<>();
+    
 
-        for (CategoryEntity category : categories) {
-            categoryMap.put(category.getId(), category.getName());
-        }
-
-        return categoryMap;
+    public CategoryEntity getDefaultEntity() {
+        return categoryRepository.findByName(CategoryEntity.DEFAULT_CATEGORY_NAME);
+    }
+    public CategoryEntity getCategoryById(Integer categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with ID: " + categoryId));
     }
 }

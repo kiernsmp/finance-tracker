@@ -5,8 +5,13 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
+
+import jakarta.transaction.Transactional;
 
 public interface TransactionRepository extends
     JpaRepository<TransactionEntity, Integer>,
@@ -15,5 +20,12 @@ public interface TransactionRepository extends
     List<TransactionEntity> findByDateBetween(LocalDate startDate, LocalDate endDate);
     List<TransactionEntity> findByDateGreaterThanEqual(LocalDate startDate);
     List<TransactionEntity> findByDateLessThanEqual(LocalDate endDate);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE TransactionEntity t SET t.approved = true WHERE t.id = :transactionId")
+    void updateApproved(@Param("transactionId") Integer transactionId);
+
+    List<TransactionEntity> findByDescriptionAndCategoryIdNotAndLocked(String keyword, Integer categoryId, boolean locked);
 
 }

@@ -6,8 +6,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.kiernan.finance_tracker_api.dto.*;
+import com.kiernan.finance_tracker_api.entity.CategoryEntity;
 
 
 @RestController
@@ -27,6 +33,17 @@ public class CategoryController {
         log.info("\n");
         log.info("ENTERING GET ALL CATEGORIES");
         return categoryService.getAllCategories();
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<CategoryEntity> addCategory(
+            @RequestBody AddCategoryRequest request
+    ) {
+        log.info("POST /categories/add received, adding category {}", request.getCategoryName());
+
+        CategoryEntity newCategory = categoryService.addCategory(request.getCategoryName());
+        return ResponseEntity.status(HttpStatus.CREATED).body(newCategory);
+
     }
     
 }

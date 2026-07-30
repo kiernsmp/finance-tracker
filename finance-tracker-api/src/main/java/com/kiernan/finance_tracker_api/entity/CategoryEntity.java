@@ -1,8 +1,10 @@
 package com.kiernan.finance_tracker_api.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 
 @Entity
+@AllArgsConstructor
 @Table(name = "categories")
 public class CategoryEntity {
     

@@ -3,9 +3,10 @@ import { formatAuditorAmount } from "./formatters";
 interface Props {
     totalOut: number;
     totalIn: number;
+    transactionsFound: number;
 }
 
-export default function TransactionSummary({ totalOut, totalIn }: Props) {
+export default function TransactionSummary({ totalOut, totalIn, transactionsFound}: Props) {
     const net = totalIn - totalOut;
 
     return (
@@ -15,6 +16,7 @@ export default function TransactionSummary({ totalOut, totalIn }: Props) {
                     <th scope="col">Total Out</th>
                     <th scope="col">Total In</th>
                     <th scope="col">Net</th>
+                    <th scope="col">Transactions Found</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,6 +24,7 @@ export default function TransactionSummary({ totalOut, totalIn }: Props) {
                     <td>{formatAuditorAmount(totalOut)}</td>
                     <td>{formatAuditorAmount(totalIn)}</td>
                     <td>{formatAuditorAmount(net)}</td>
+                    <td>{transactionsFound}</td>
                 </tr>
             </tbody>
         </table>

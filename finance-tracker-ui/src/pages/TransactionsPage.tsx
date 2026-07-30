@@ -35,6 +35,7 @@ export default function TransactionsPage() {
             <TransactionSummary 
                 totalIn={totalIn}
                 totalOut={totalOut}
+                transactionsFound={transactions.length}
             />
 
             <button onClick={approveAll}>

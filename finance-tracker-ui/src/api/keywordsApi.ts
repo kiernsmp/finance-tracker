@@ -7,7 +7,7 @@ export async function updateKeywordCategory(keyword: string, categoryId: number)
 
     await axios.post(API_URL + POST_UPDATE_KEYWORD_URL, {
         keyword: keyword,
-        categoryId: categoryId,
+        categoryId: categoryId
     });
 
 }

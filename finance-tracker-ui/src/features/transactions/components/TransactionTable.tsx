@@ -1,8 +1,7 @@
 import type { Transaction } from "@/types/Transaction";
 import type { CategoryOption } from "@/types/CategoryOption";
 import TransactionCategoryCell from "./TransactionCategoryCell";
-import { formatAuditorAmount, formatTransactionDate } from "./formatters";
-
+import { formatAuditorAmount, formatTransactionDate } from "@/utils/formatters";
 
 interface TransactionTableProps {
     transactions: Transaction[];

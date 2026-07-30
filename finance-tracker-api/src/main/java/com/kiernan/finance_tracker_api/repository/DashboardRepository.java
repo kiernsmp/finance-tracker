@@ -20,12 +20,16 @@ public interface DashboardRepository extends JpaRepository<TransactionEntity, In
         FROM transactions t
         JOIN categories c
             ON t.category_id = c.id
+        WHERE c.name != 'Internal'
         GROUP BY
             DATE_TRUNC('month', t.date),
             c.name
         ORDER BY
             month DESC,
-            c.name
+            GREATEST(
+                SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END),
+                SUM(CASE WHEN t.amount < 0 THEN ABS(t.amount) ELSE 0 END)
+            ) DESC
         """, nativeQuery = true)
     List<MonthlyCategoryProjection> getMonthlyCategorySummary();
 
@@ -35,6 +39,9 @@ public interface DashboardRepository extends JpaRepository<TransactionEntity, In
             SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END) AS total_in,
             SUM(CASE WHEN t.amount < 0 THEN ABS(t.amount) ELSE 0 END) AS total_out
         FROM transactions t
+        JOIN categories c
+            ON t.category_id = c.id
+        WHERE c.name != 'Internal'
         GROUP BY
             DATE_TRUNC('month', t.date)
         ORDER BY

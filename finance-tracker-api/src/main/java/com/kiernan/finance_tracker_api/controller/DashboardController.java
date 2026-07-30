@@ -1,7 +1,6 @@
 package com.kiernan.finance_tracker_api.controller;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;

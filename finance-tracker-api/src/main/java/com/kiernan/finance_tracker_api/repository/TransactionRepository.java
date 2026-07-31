@@ -26,6 +26,6 @@ public interface TransactionRepository extends
     @Query("UPDATE TransactionEntity t SET t.approved = true WHERE t.id = :transactionId")
     void updateApproved(@Param("transactionId") Integer transactionId);
 
-    List<TransactionEntity> findByDescriptionAndCategoryIdNotAndLocked(String keyword, Integer categoryId, boolean locked);
+    List<TransactionEntity> findByDescriptionAndCategoryIdNotAndLockedAndApproved(String keyword, Integer categoryId, boolean locked, boolean approved);
 
 }

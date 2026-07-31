@@ -70,6 +70,11 @@
   color: #f8fafc;
 }
 
+.dashboard-month-title:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.3rem;
+}
+
 .dashboard-summary-table,
 .dashboard-metrics-table {
   width: 100%;

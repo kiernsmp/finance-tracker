@@ -5,10 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CategoryResponse {
-
-    private Integer id;
-    private String label;
-    private Integer displayOrder;
-    
+public class CategoryDisplayOrderRequest {
+    private final Integer categoryId;
+    private final Integer newDisplayOrder;
 }

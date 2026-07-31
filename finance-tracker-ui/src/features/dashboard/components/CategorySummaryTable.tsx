@@ -25,8 +25,8 @@ export default function CategorySummaryTable({
             <thead>
                 <tr>
                     <th>Category</th>
-                    <th>Total In</th>
                     <th>Total Out</th>
+                    <th>Total In</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,8 +36,8 @@ export default function CategorySummaryTable({
                         onClick={() => handleCategoryClick(month.monthYear, category.categoryId)}
                     >
                         <td>{category.categoryName}</td>
-                        <td>{category.totalIn !== 0 ? formatAuditorAmount(category.totalIn) : "-"}</td>
                         <td>{category.totalOut !== 0 ? formatAuditorAmount(category.totalOut) : "-"}</td>
+                        <td>{category.totalIn !== 0 ? formatAuditorAmount(category.totalIn) : "-"}</td>
                     </tr>
                 ))}
             </tbody>

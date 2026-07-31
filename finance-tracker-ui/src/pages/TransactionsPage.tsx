@@ -6,53 +6,20 @@ import { calculateTransactionTotals } from "@/utils/calculateTransactionTotals";
 import { useCategories } from "@/features/transactions/hooks/useCategories";
 import { useTransactionData } from "@/features/transactions/hooks/useTransactionData";
 import { useTransactionFilters } from "@/features/transactions/hooks/useTransactionFilters";
-import type { TransactionFilter as TransactionFilterType } from "@/types/TransactionFilter";
-
-function getMonthDateRange(month: string): { startDate: string; endDate: string } | null {
-    const start = new Date(`${month}-01T00:00:00`);
-    if (Number.isNaN(start.getTime())) {
-        return null;
-    }
-
-    const end = new Date(start.getFullYear(), start.getMonth() + 1, 0);
-    const endDay = String(end.getDate()).padStart(2, "0");
-
-    return {
-        startDate: `${month}-01`,
-        endDate: `${month}-${endDay}`,
-    };
-}
-
-function getInitialFilter(month: string | null, categoryId: string | null): TransactionFilterType {
-    const nextFilter: TransactionFilterType = {};
-
-    if (month) {
-        const monthRange = getMonthDateRange(month);
-        if (monthRange) {
-            nextFilter.startDate = monthRange.startDate;
-            nextFilter.endDate = monthRange.endDate;
-        }
-    }
-
-    if (categoryId) {
-        const parsedCategoryId = Number(categoryId);
-        if (!Number.isNaN(parsedCategoryId)) {
-            nextFilter.categoryId = parsedCategoryId;
-        }
-    }
-
-    return nextFilter;
-}
+import { buildInitialFilterFromSearchParams } from "@/features/transactions/utils/transactionFilterUtils";
 
 export default function TransactionsPage() {
     const [searchParams] = useSearchParams();
-    const month = searchParams.get("month");
-    const categoryId = searchParams.get("categoryId");
 
     const {
         appliedFilter,
+        draftFilter,
         setAppliedFilter,
-    } = useTransactionFilters(getInitialFilter(month, categoryId));
+        updateDraftFilter,
+        applyFilter,
+        applyWithDraftUpdates,
+        clearFilters,
+    } = useTransactionFilters(buildInitialFilterFromSearchParams(searchParams));
 
     const { categoryList } = useCategories();
     const {
@@ -74,8 +41,11 @@ export default function TransactionsPage() {
             </div>
             
             <TransactionFilter
-                appliedFilter={appliedFilter}
-                setAppliedFilter={setAppliedFilter}
+                draftFilter={draftFilter}
+                updateDraftFilter={updateDraftFilter}
+                applyFilter={applyFilter}
+                applyWithDraftUpdates={applyWithDraftUpdates}
+                clearFilters={clearFilters}
                 categoryList={categoryList}
             />
 

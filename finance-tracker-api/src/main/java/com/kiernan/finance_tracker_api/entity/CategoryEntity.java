@@ -26,4 +26,9 @@ public class CategoryEntity {
         return DEFAULT_CATEGORY_NAME;
     }
 
+    public CategoryEntity(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
 }

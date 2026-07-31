@@ -51,6 +51,7 @@ public class DashboardMapper {
             MonthlyCategoryProjection projection) {
 
         return new MonthlyCategorySummaryResponse.CategorySummary(
+                projection.getCategoryId(), 
                 projection.getCategoryName(),
                 projection.getTotalIn(),
                 projection.getTotalOut());

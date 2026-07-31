@@ -3,4 +3,5 @@ export interface TransactionFilter {
     endDate?: string;
     categoryId?: number;
     approved?: boolean;
+    keyword?: string;
 }

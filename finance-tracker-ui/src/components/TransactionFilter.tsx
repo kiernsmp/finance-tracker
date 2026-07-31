@@ -1,7 +1,13 @@
-import { useState, type KeyboardEvent } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import type { CategoryOption } from "@/types/CategoryOption";
 import type { TransactionFilter } from "@/types/TransactionFilter";
 import Select from "react-select";
+import {
+    createFilterDraft,
+    toAppliedFilter,
+    type ApprovedSelectValue,
+    type TransactionFilterDraft
+} from "@/features/transactions/utils/transactionFilterUtils";
 
 interface TransactionFilterProps {
     appliedFilter: TransactionFilter;
@@ -14,27 +20,36 @@ export default function TransactionFilter({
     setAppliedFilter,
     categoryList
 }: TransactionFilterProps) {
-    const [startDate, setStartDate] = useState(appliedFilter.startDate ?? "");
-    const [endDate, setEndDate] = useState(appliedFilter.endDate ?? "");
-    const [approved, setApproved] = useState<"" | "true" | "false">(
-        appliedFilter.approved === undefined ? "" : String(appliedFilter.approved) as "true" | "false"
-    );
+    const [draftFilter, setDraftFilter] = useState<TransactionFilterDraft>(() => createFilterDraft(appliedFilter));
 
-    function commitFilter(nextCategoryId?: number, nextApproved?: "" | "true" | "false") {
-        const valueToApply = nextApproved ?? approved;
-        const approvedValue = valueToApply === "" ? undefined : valueToApply === "true";
+    useEffect(() => {
+        setDraftFilter(createFilterDraft(appliedFilter));
+    }, [appliedFilter]);
 
-        setAppliedFilter({
-            startDate: startDate || undefined,
-            endDate: endDate || undefined,
-            ...(nextCategoryId !== undefined ? { categoryId: nextCategoryId } : {}),
-            approved: approvedValue
-        });
+    function updateDraftFilter(updates: Partial<TransactionFilterDraft>) {
+        setDraftFilter((previous) => ({ ...previous, ...updates }));
+    }
+
+    function applyFilter(nextDraft?: TransactionFilterDraft) {
+        const valueToApply = nextDraft ?? draftFilter;
+        setAppliedFilter(toAppliedFilter(valueToApply));
+    }
+
+    function applyWithDraftUpdates(updates: Partial<TransactionFilterDraft>) {
+        const nextDraft = { ...draftFilter, ...updates };
+        setDraftFilter(nextDraft);
+        applyFilter(nextDraft);
+    }
+
+    function clearFilters() {
+        const emptyDraft = createFilterDraft({});
+        setDraftFilter(emptyDraft);
+        applyFilter(emptyDraft);
     }
 
     function handleEnterApply(event: KeyboardEvent<HTMLInputElement>) {
         if (event.key === "Enter") {
-            commitFilter();
+            applyFilter();
         }
     }
 
@@ -43,7 +58,7 @@ export default function TransactionFilter({
         label: c.label
     }));
 
-    const selected = categoryOptions.find((o) => o.value === appliedFilter.categoryId) ?? null;
+    const selected = categoryOptions.find((o) => o.value === draftFilter.categoryId) ?? null;
 
     return (
         <div>
@@ -53,17 +68,43 @@ export default function TransactionFilter({
                 value={selected}
                 isClearable
                 onChange={(option) => {
-                    commitFilter(option?.value);
+                    applyWithDraftUpdates({ categoryId: option?.value });
                 }}
             />
 
             <label>
+                Approved:
+                <select
+                    value={draftFilter.approved}
+                    onChange={(e) => {
+                        const value = e.target.value as ApprovedSelectValue;
+                        applyWithDraftUpdates({ approved: value });
+                    }}
+                >
+                    <option value="">All</option>
+                    <option value="true">Approved</option>
+                    <option value="false">Not Approved</option>
+                </select>
+            </label>
+
+            <label>
+                Keyword:
+                <input
+                    type="text"
+                    value={draftFilter.keyword}
+                    onChange={(e) => updateDraftFilter({ keyword: e.target.value })}
+                    onBlur={() => applyFilter()}
+                    onKeyDown={handleEnterApply}
+                />
+            </label>
+            
+            <label>
                 Start Date:
                 <input
                     type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    onBlur={() => commitFilter()}
+                    value={draftFilter.startDate}
+                    onChange={(e) => updateDraftFilter({ startDate: e.target.value })}
+                    onBlur={() => applyFilter()}
                     onKeyDown={handleEnterApply}
                 />
             </label>
@@ -72,28 +113,17 @@ export default function TransactionFilter({
                 End Date:
                 <input
                     type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    onBlur={() => commitFilter()}
+                    value={draftFilter.endDate}
+                    onChange={(e) => updateDraftFilter({ endDate: e.target.value })}
+                    onBlur={() => applyFilter()}
                     onKeyDown={handleEnterApply}
                 />
             </label>
 
-            <label>
-                Approved:
-                <select
-                    value={approved}
-                    onChange={(e) => {
-                        const value = e.target.value as "" | "true" | "false";
-                        setApproved(value);
-                        commitFilter(undefined, value);
-                    }}
-                >
-                    <option value="">All</option>
-                    <option value="true">Approved</option>
-                    <option value="false">Not Approved</option>
-                </select>
-            </label>
+            <button type="button" onClick={clearFilters}>
+                Clear Filters
+            </button>
+
         </div>
     );
 

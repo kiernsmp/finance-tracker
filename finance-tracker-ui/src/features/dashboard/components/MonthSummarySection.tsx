@@ -13,18 +13,23 @@ export default function MonthSummarySection({
     const netAmount = month.totalIn - month.totalOut;
 
     return (
-        <section>
-            <h1>{formatMonth(month.monthYear)}</h1>
+        <section className="dashboard-month-section">
+            <h2 className="dashboard-month-title">{formatMonth(month.monthYear)}</h2>
             <CategorySummaryTable categories={month.categories} />
-            <table>
-                <tbody>
-                    <tr>
-                        <td><h3>Total In:</h3> {formatAuditorAmount(month.totalIn)}</td>
-                        <td><h3>Total Out:</h3> {formatAuditorAmount(month.totalOut)}</td>
-                        <td><h3>Net:</h3> {formatAuditorAmount(netAmount)}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div className="dashboard-metrics-row">
+                <div className="dashboard-metric-card">
+                    <h3>Total In</h3>
+                    <strong>{formatAuditorAmount(month.totalIn)}</strong>
+                </div>
+                <div className="dashboard-metric-card">
+                    <h3>Total Out</h3>
+                    <strong>{formatAuditorAmount(month.totalOut)}</strong>
+                </div>
+                <div className="dashboard-metric-card">
+                    <h3>Net</h3>
+                    <strong>{formatAuditorAmount(netAmount)}</strong>
+                </div>
+            </div>
         </section>
     );
 }

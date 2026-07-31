@@ -8,11 +8,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import com.kiernan.finance_tracker_api.dto.CategoryDisplayOrderRequest;
 import com.kiernan.finance_tracker_api.dto.CategoryResponse;
 import com.kiernan.finance_tracker_api.entity.*;
 import com.kiernan.finance_tracker_api.repository.CategoryRepository;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CategoryService {
@@ -52,6 +55,33 @@ public class CategoryService {
         Integer nextDisplayOrder = categoryRepository.findMaxDisplayOrder()
             .orElse(0) + 1;
         return categoryRepository.save( new CategoryEntity(null, categoryName, nextDisplayOrder));
+    }
+
+    @Transactional
+    public void updateCategoryDisplayOrder(CategoryDisplayOrderRequest request) {
+        CategoryEntity category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow();
+
+        Integer oldOrder = category.getDisplayOrder();
+        Integer newOrder = request.getNewDisplayOrder();
+
+        if (oldOrder.equals(newOrder)) {
+            return;
+        }
+
+        if (newOrder < oldOrder) {
+            List<CategoryEntity> categories = categoryRepository
+                    .findByDisplayOrderBetween(newOrder, oldOrder - 1);
+
+            categories.forEach(c -> c.setDisplayOrder(c.getDisplayOrder() + 1));
+        } else {
+            List<CategoryEntity> categories = categoryRepository
+                    .findByDisplayOrderBetween(oldOrder + 1, newOrder);
+
+            categories.forEach(c -> c.setDisplayOrder(c.getDisplayOrder() - 1));
+        }
+
+        category.setDisplayOrder(newOrder);
     }
 
 }

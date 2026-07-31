@@ -1,13 +1,12 @@
 package com.kiernan.finance_tracker_api.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kiernan.finance_tracker_api.dto.TransactionApproveRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionCategoryRequest;
+import com.kiernan.finance_tracker_api.dto.TransactionFilterRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionLockRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionResponse;
 import com.kiernan.finance_tracker_api.service.*;
@@ -44,14 +44,11 @@ public class TransactionController {
 
     @GetMapping("/records")
     public List<TransactionResponse> getTransactionRecords(
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-        @RequestParam(required = false) Integer categoryId
+            @ModelAttribute TransactionFilterRequest request
     ) {
         log.info("\n");
-        log.info("ENTERING GET TRANSACTION RECORDS");
-        log.info("Fetching transaction records with startDate={}, endDate={}, categoryId={}", startDate, endDate, categoryId);
-        List<TransactionResponse> response = transactionService.getTransactionRecords(startDate, endDate, categoryId);
+        log.info("GET /records receieved");
+        List<TransactionResponse> response = transactionService.getTransactionRecords(request);
 
         return response;
     }

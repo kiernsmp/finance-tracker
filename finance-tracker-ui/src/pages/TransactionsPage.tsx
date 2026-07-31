@@ -1,4 +1,4 @@
-import DateFilter from "@/components/DateFilter";
+import TransactionFilter from "@/components/TransactionFilter";
 import TransactionSummary from "@/features/transactions/components/TransactionSummary";
 import TransactionTable from "@/features/transactions/components/TransactionTable";
 import { calculateTransactionTotals } from "@/utils/calculateTransactionTotals";
@@ -26,7 +26,7 @@ export default function TransactionsPage() {
         <div>
             <h1>Transactions</h1>
             
-            <DateFilter
+            <TransactionFilter
                 appliedFilter={appliedFilter}
                 setAppliedFilter={setAppliedFilter}
                 categoryList={categoryList}

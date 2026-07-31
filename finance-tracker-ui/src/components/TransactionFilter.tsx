@@ -3,17 +3,17 @@ import type { CategoryOption } from "@/types/CategoryOption";
 import type { TransactionFilter } from "@/types/TransactionFilter";
 import Select from "react-select";
 
-interface DateFilterProps {
+interface TransactionFilterProps {
     appliedFilter: TransactionFilter;
     setAppliedFilter: (filter: TransactionFilter) => void;
     categoryList: CategoryOption[];
 }
 
-export default function DateFilter({
+export default function TransactionFilter({
     appliedFilter,
     setAppliedFilter,
     categoryList
-}: DateFilterProps) {
+}: TransactionFilterProps) {
     const [startDate, setStartDate] = useState(appliedFilter.startDate ?? "");
     const [endDate, setEndDate] = useState(appliedFilter.endDate ?? "");
 

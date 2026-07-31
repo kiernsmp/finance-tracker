@@ -8,6 +8,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.kiernan.finance_tracker_api.dto.TransactionFilterRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionRequestDto;
 import com.kiernan.finance_tracker_api.dto.TransactionResponse;
 import com.kiernan.finance_tracker_api.entity.CategoryEntity;
@@ -80,7 +82,14 @@ public class TransactionService {
 
     }
 
-    public List<TransactionResponse> getTransactionRecords(LocalDate startDate, LocalDate endDate, Integer categoryId) {
+    public List<TransactionResponse> getTransactionRecords(TransactionFilterRequest request) {
+        LocalDate startDate = request.getStartDate();
+        LocalDate endDate = request.getEndDate();
+        Integer categoryId = request.getCategoryId();
+        Boolean approved = request.getApproved();
+
+        log.info("startDate: {}, endDate: {}, categoryId: {}, approved: {}", startDate, endDate, categoryId, approved);
+        
         Specification<TransactionEntity> spec = (root, query, cb) -> cb.conjunction();
 
         if (startDate != null) {
@@ -94,6 +103,10 @@ public class TransactionService {
         if (categoryId != null) {
             spec = spec.and((root, query, cb) ->
             cb.equal(root.get("category").get("id"), categoryId));
+        }
+        if (approved != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.equal(root.get("approved"), approved));
         }
 
         Sort sort = Sort.by(

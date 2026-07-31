@@ -1,6 +1,7 @@
 package com.kiernan.finance_tracker_api.service;
 
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,7 +25,10 @@ public class CategoryService {
 
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll().stream()
-                .map((CategoryEntity category) -> new CategoryResponse(category.getId(), category.getName()))
+                .sorted(Comparator.comparing(
+                    CategoryEntity::getDisplayOrder,
+                    Comparator.nullsLast(Integer::compareTo)))
+                .map((CategoryEntity category) -> new CategoryResponse(category.getId(), category.getName(), category.getDisplayOrder()))
                 .toList();
     }
 
@@ -45,8 +49,9 @@ public class CategoryService {
     }
 
     public CategoryEntity addCategory(String categoryName) {
-        return categoryRepository.save( new CategoryEntity(null, categoryName));
-
+        Integer nextDisplayOrder = categoryRepository.findMaxDisplayOrder()
+            .orElse(0) + 1;
+        return categoryRepository.save( new CategoryEntity(null, categoryName, nextDisplayOrder));
     }
 
 }

@@ -9,7 +9,7 @@ export default function CategorySummaryTable({
     categories
 }: CategorySummaryTableProps) {
     return (
-        <table>
+        <table className="dashboard-summary-table">
             <thead>
                 <tr>
                     <th>Category</th>

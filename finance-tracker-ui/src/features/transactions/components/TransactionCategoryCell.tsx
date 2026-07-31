@@ -22,6 +22,8 @@ export default function TransactionCategoryCell({
 
     return (
         <Select
+            className="transaction-category-select"
+            classNamePrefix="transaction-select"
             options={options}
             value={selectedOption}
             onChange={(selected) => {

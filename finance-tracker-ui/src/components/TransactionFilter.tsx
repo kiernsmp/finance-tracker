@@ -61,69 +61,74 @@ export default function TransactionFilter({
     const selected = categoryOptions.find((o) => o.value === draftFilter.categoryId) ?? null;
 
     return (
-        <div>
-            <label>Category: </label>
-            <Select
-                options={categoryOptions}
-                value={selected}
-                isClearable
-                onChange={(option) => {
-                    applyWithDraftUpdates({ categoryId: option?.value });
-                }}
-            />
+        <div className="filter-panel">
+            <div className="filter-grid">
+                <label className="filter-field">
+                    <span>Category</span>
+                    <Select
+                        className="transaction-filter-select"
+                        classNamePrefix="transaction-select"
+                        options={categoryOptions}
+                        value={selected}
+                        isClearable
+                        onChange={(option) => {
+                            applyWithDraftUpdates({ categoryId: option?.value });
+                        }}
+                    />
+                </label>
 
-            <label>
-                Approved:
-                <select
-                    value={draftFilter.approved}
-                    onChange={(e) => {
-                        const value = e.target.value as ApprovedSelectValue;
-                        applyWithDraftUpdates({ approved: value });
-                    }}
-                >
-                    <option value="">All</option>
-                    <option value="true">Approved</option>
-                    <option value="false">Not Approved</option>
-                </select>
-            </label>
+                <label className="filter-field">
+                    <span>Approved</span>
+                    <select
+                        value={draftFilter.approved}
+                        onChange={(e) => {
+                            const value = e.target.value as ApprovedSelectValue;
+                            applyWithDraftUpdates({ approved: value });
+                        }}
+                    >
+                        <option value="">All</option>
+                        <option value="true">Approved</option>
+                        <option value="false">Not Approved</option>
+                    </select>
+                </label>
 
-            <label>
-                Keyword:
-                <input
-                    type="text"
-                    value={draftFilter.keyword}
-                    onChange={(e) => updateDraftFilter({ keyword: e.target.value })}
-                    onBlur={() => applyFilter()}
-                    onKeyDown={handleEnterApply}
-                />
-            </label>
-            
-            <label>
-                Start Date:
-                <input
-                    type="date"
-                    value={draftFilter.startDate}
-                    onChange={(e) => updateDraftFilter({ startDate: e.target.value })}
-                    onBlur={() => applyFilter()}
-                    onKeyDown={handleEnterApply}
-                />
-            </label>
+                <label className="filter-field">
+                    <span>Keyword</span>
+                    <input
+                        type="text"
+                        value={draftFilter.keyword}
+                        onChange={(e) => updateDraftFilter({ keyword: e.target.value })}
+                        onBlur={() => applyFilter()}
+                        onKeyDown={handleEnterApply}
+                    />
+                </label>
+                
+                <label className="filter-field">
+                    <span>Start Date</span>
+                    <input
+                        type="date"
+                        value={draftFilter.startDate}
+                        onChange={(e) => updateDraftFilter({ startDate: e.target.value })}
+                        onBlur={() => applyFilter()}
+                        onKeyDown={handleEnterApply}
+                    />
+                </label>
 
-            <label>
-                End Date:
-                <input
-                    type="date"
-                    value={draftFilter.endDate}
-                    onChange={(e) => updateDraftFilter({ endDate: e.target.value })}
-                    onBlur={() => applyFilter()}
-                    onKeyDown={handleEnterApply}
-                />
-            </label>
+                <label className="filter-field">
+                    <span>End Date</span>
+                    <input
+                        type="date"
+                        value={draftFilter.endDate}
+                        onChange={(e) => updateDraftFilter({ endDate: e.target.value })}
+                        onBlur={() => applyFilter()}
+                        onKeyDown={handleEnterApply}
+                    />
+                </label>
+            </div>
 
-            <button type="button" onClick={clearFilters}>
+            <button className="ghost-button" type="button" onClick={clearFilters}>
                 Clear Filters
             </button>
-
         </div>
     );
 

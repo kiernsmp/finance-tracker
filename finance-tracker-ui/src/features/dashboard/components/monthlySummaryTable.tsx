@@ -9,12 +9,11 @@ export default function MonthlySummaryTable({
     monthlySummary
 }: MonthlySummaryProps) {
     return (
-        <div>
+        <div className="dashboard-month-list">
             {monthlySummary.months.map((month) => (
-                <MonthSummarySection
-                    key={month.monthYear}
-                    month={month}
-                />
+                <div className="dashboard-month-card" key={month.monthYear}>
+                    <MonthSummarySection month={month} />
+                </div>
             ))}
         </div>
     );

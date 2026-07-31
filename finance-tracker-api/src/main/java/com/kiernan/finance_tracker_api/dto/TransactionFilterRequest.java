@@ -23,4 +23,6 @@ public class TransactionFilterRequest {
     private Integer categoryId;
 
     private Boolean approved;
+
+    private String keyword;
 }

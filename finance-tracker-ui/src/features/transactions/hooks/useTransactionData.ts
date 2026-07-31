@@ -32,7 +32,7 @@ export function useTransactionData(appliedFilter: TransactionFilter) {
         if (!target) return;
 
         try {
-            if (transaction.locked) {
+            if (transaction.locked || transaction.approved) {
                 await updateCategory(target.id, categoryId);
                 await refreshTransactions();
             }

@@ -23,8 +23,13 @@ export default function TransactionsPage() {
     const { totalIn, totalOut } = calculateTransactionTotals(transactions);
     
     return (
-        <div>
-            <h1>Transactions</h1>
+        <div className="transactions-page">
+            <div className="page-header">
+                <div>
+                    <h1 className="page-title">Transactions</h1>
+                </div>
+
+            </div>
             
             <TransactionFilter
                 appliedFilter={appliedFilter}
@@ -38,18 +43,19 @@ export default function TransactionsPage() {
                 transactionsFound={transactions.length}
             />
 
-            <button onClick={approveAll}>
+            <button className="primary-action approve-all-button" onClick={approveAll}>
                 Approve All
             </button>
         
-            <TransactionTable 
-                transactions={transactions} 
-                categoryList={categoryList}
-                updateTransactionCategory={updateTransactionCategory}
-                onApproveTransaction={setTransactionApproved}
-                onLockTransaction={setTransactionLocked}
-            />
-            
+            <div className="table-card">
+                <TransactionTable 
+                    transactions={transactions} 
+                    categoryList={categoryList}
+                    updateTransactionCategory={updateTransactionCategory}
+                    onApproveTransaction={setTransactionApproved}
+                    onLockTransaction={setTransactionLocked}
+                />
+            </div>
         </div>
     );
 }

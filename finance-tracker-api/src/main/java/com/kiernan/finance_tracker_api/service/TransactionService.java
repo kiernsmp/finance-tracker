@@ -87,6 +87,7 @@ public class TransactionService {
         LocalDate endDate = request.getEndDate();
         Integer categoryId = request.getCategoryId();
         Boolean approved = request.getApproved();
+        String keyword = request.getKeyword();
 
         log.info("startDate: {}, endDate: {}, categoryId: {}, approved: {}", startDate, endDate, categoryId, approved);
         
@@ -106,7 +107,15 @@ public class TransactionService {
         }
         if (approved != null) {
             spec = spec.and((root, query, cb) ->
-                cb.equal(root.get("approved"), approved));
+            cb.equal(root.get("approved"), approved));
+        }
+        if (keyword != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.like(
+                    cb.lower(root.get("description")),
+                    "%" + keyword.toLowerCase() + "%"
+                )
+            );
         }
 
         Sort sort = Sort.by(

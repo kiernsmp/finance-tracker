@@ -3,25 +3,32 @@ import type { CategoryOption } from "@/types/CategoryOption";
 import type { TransactionFilter } from "@/types/TransactionFilter";
 import Select from "react-select";
 
-interface DateFilterProps {
+interface TransactionFilterProps {
     appliedFilter: TransactionFilter;
     setAppliedFilter: (filter: TransactionFilter) => void;
     categoryList: CategoryOption[];
 }
 
-export default function DateFilter({
+export default function TransactionFilter({
     appliedFilter,
     setAppliedFilter,
     categoryList
-}: DateFilterProps) {
+}: TransactionFilterProps) {
     const [startDate, setStartDate] = useState(appliedFilter.startDate ?? "");
     const [endDate, setEndDate] = useState(appliedFilter.endDate ?? "");
+    const [approved, setApproved] = useState<"" | "true" | "false">(
+        appliedFilter.approved === undefined ? "" : String(appliedFilter.approved) as "true" | "false"
+    );
 
-    function commitFilter(nextCategoryId?: number) {
+    function commitFilter(nextCategoryId?: number, nextApproved?: "" | "true" | "false") {
+        const valueToApply = nextApproved ?? approved;
+        const approvedValue = valueToApply === "" ? undefined : valueToApply === "true";
+
         setAppliedFilter({
             startDate: startDate || undefined,
             endDate: endDate || undefined,
-            ...(nextCategoryId !== undefined ? { categoryId: nextCategoryId } : {})
+            ...(nextCategoryId !== undefined ? { categoryId: nextCategoryId } : {}),
+            approved: approvedValue
         });
     }
 
@@ -70,6 +77,22 @@ export default function DateFilter({
                     onBlur={() => commitFilter()}
                     onKeyDown={handleEnterApply}
                 />
+            </label>
+
+            <label>
+                Approved:
+                <select
+                    value={approved}
+                    onChange={(e) => {
+                        const value = e.target.value as "" | "true" | "false";
+                        setApproved(value);
+                        commitFilter(undefined, value);
+                    }}
+                >
+                    <option value="">All</option>
+                    <option value="true">Approved</option>
+                    <option value="false">Not Approved</option>
+                </select>
             </label>
         </div>
     );

@@ -42,7 +42,8 @@ export default function TransactionTable({
                 </thead>
 
                 <tbody>
-                    {transactions.map((transaction, index) => {
+                    {transactions
+                    .map((transaction, index) => {
                         const previousTransaction = transactions[index - 1];
                         const showMonthDivider = index === 0 || getMonthLabel(transaction.date) !== getMonthLabel(previousTransaction.date);
 

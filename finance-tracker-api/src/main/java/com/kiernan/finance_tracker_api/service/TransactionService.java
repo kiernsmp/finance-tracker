@@ -189,7 +189,7 @@ public class TransactionService {
 
     @Transactional
     public void recategoriseTransactions(String keyword, CategoryEntity category) {
-        List<TransactionEntity> transactions = transactionRepository.findByDescriptionAndCategoryIdNotAndLocked(keyword, category.getId(), false);
+        List<TransactionEntity> transactions = transactionRepository.findByDescriptionAndCategoryIdNotAndLockedAndApproved(keyword, category.getId(), false, false);
 
         for (TransactionEntity transaction : transactions) {
             transaction.setCategory(category);

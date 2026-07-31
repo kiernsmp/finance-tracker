@@ -23,8 +23,9 @@ export default function UploadCsv() {
 
     return (
         <label>
-            Upload CSV
+            <span>Upload CSV</span>
             <input type="file" accept=".csv" onChange={handleUpload} disabled={isUploading} />
+            {isUploading ? <span>Uploading...</span> : null}
         </label>
     );
 }

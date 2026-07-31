@@ -15,7 +15,12 @@ export default function MonthSummarySection({
     return (
         <section className="dashboard-month-section">
             <h2 className="dashboard-month-title">{formatMonth(month.monthYear)}</h2>
-            <CategorySummaryTable categories={month.categories} />
+
+            <CategorySummaryTable 
+                categories={month.categories} 
+                month={month}
+            />
+
             <div className="dashboard-metrics-row">
                 <div className="dashboard-metric-card">
                     <h3>Total In</h3>

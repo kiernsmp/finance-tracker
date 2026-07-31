@@ -1,11 +1,43 @@
 import { useState } from "react";
 import type { TransactionFilter } from "@/types/TransactionFilter";
+import {
+    createFilterDraft,
+    toAppliedFilter,
+    type TransactionFilterDraft
+} from "@/features/transactions/utils/transactionFilterUtils";
 
-export function useTransactionFilters() {
-    const [appliedFilter, setAppliedFilter] = useState<TransactionFilter>({});
+export function useTransactionFilters(initialFilter: TransactionFilter = {}) {
+    const [appliedFilter, setAppliedFilter] = useState<TransactionFilter>(initialFilter);
+    const [draftFilter, setDraftFilter] = useState<TransactionFilterDraft>(() => createFilterDraft(initialFilter));
+
+    function updateDraftFilter(updates: Partial<TransactionFilterDraft>) {
+        setDraftFilter((previous) => ({ ...previous, ...updates }));
+    }
+
+    function applyFilter(nextDraft?: TransactionFilterDraft) {
+        const draftToApply = nextDraft ?? draftFilter;
+        setAppliedFilter(toAppliedFilter(draftToApply));
+    }
+
+    function applyWithDraftUpdates(updates: Partial<TransactionFilterDraft>) {
+        const nextDraft = { ...draftFilter, ...updates };
+        setDraftFilter(nextDraft);
+        applyFilter(nextDraft);
+    }
+
+    function clearFilters() {
+        const emptyDraft = createFilterDraft({});
+        setDraftFilter(emptyDraft);
+        applyFilter(emptyDraft);
+    }
 
     return {
         appliedFilter,
-        setAppliedFilter
+        draftFilter,
+        setAppliedFilter,
+        updateDraftFilter,
+        applyFilter,
+        applyWithDraftUpdates,
+        clearFilters,
     };
 }

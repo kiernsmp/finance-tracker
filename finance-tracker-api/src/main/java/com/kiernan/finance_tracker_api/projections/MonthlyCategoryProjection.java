@@ -7,8 +7,10 @@ public interface MonthlyCategoryProjection {
 
     LocalDateTime getMonth();
 
-    String getCategoryName();
+    Integer getCategoryId();
 
+    String getCategoryName();
+    
     BigDecimal getTotalIn();
 
     BigDecimal getTotalOut();

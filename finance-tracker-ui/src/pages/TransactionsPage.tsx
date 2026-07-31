@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import TransactionFilter from "@/components/TransactionFilter";
 import TransactionSummary from "@/features/transactions/components/TransactionSummary";
 import TransactionTable from "@/features/transactions/components/TransactionTable";
@@ -5,12 +6,20 @@ import { calculateTransactionTotals } from "@/utils/calculateTransactionTotals";
 import { useCategories } from "@/features/transactions/hooks/useCategories";
 import { useTransactionData } from "@/features/transactions/hooks/useTransactionData";
 import { useTransactionFilters } from "@/features/transactions/hooks/useTransactionFilters";
+import { buildInitialFilterFromSearchParams } from "@/features/transactions/utils/transactionFilterUtils";
 
 export default function TransactionsPage() {
+    const [searchParams] = useSearchParams();
+
     const {
         appliedFilter,
+        draftFilter,
         setAppliedFilter,
-    } = useTransactionFilters();
+        updateDraftFilter,
+        applyFilter,
+        applyWithDraftUpdates,
+        clearFilters,
+    } = useTransactionFilters(buildInitialFilterFromSearchParams(searchParams));
 
     const { categoryList } = useCategories();
     const {
@@ -21,7 +30,7 @@ export default function TransactionsPage() {
         setTransactionLocked,
     } = useTransactionData(appliedFilter);
     const { totalIn, totalOut } = calculateTransactionTotals(transactions);
-    
+
     return (
         <div className="transactions-page">
             <div className="page-header">
@@ -32,8 +41,11 @@ export default function TransactionsPage() {
             </div>
             
             <TransactionFilter
-                appliedFilter={appliedFilter}
-                setAppliedFilter={setAppliedFilter}
+                draftFilter={draftFilter}
+                updateDraftFilter={updateDraftFilter}
+                applyFilter={applyFilter}
+                applyWithDraftUpdates={applyWithDraftUpdates}
+                clearFilters={clearFilters}
                 categoryList={categoryList}
             />
 

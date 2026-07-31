@@ -14,6 +14,7 @@ public interface DashboardRepository extends JpaRepository<TransactionEntity, In
     @Query(value = """
         SELECT
             DATE_TRUNC('month', t.date) AS month,
+            c.id AS category_id,
             c.name AS category_name,
             SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END) AS total_in,
             SUM(CASE WHEN t.amount < 0 THEN ABS(t.amount) ELSE 0 END) AS total_out
@@ -23,7 +24,8 @@ public interface DashboardRepository extends JpaRepository<TransactionEntity, In
         WHERE c.name != 'Internal'
         GROUP BY
             DATE_TRUNC('month', t.date),
-            c.name
+            c.name,
+            c.id
         ORDER BY
             month DESC,
             GREATEST(

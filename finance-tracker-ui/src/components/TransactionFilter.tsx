@@ -1,52 +1,28 @@
-import { useEffect, useState, type KeyboardEvent } from "react";
+import { type KeyboardEvent } from "react";
 import type { CategoryOption } from "@/types/CategoryOption";
-import type { TransactionFilter } from "@/types/TransactionFilter";
 import Select from "react-select";
 import {
-    createFilterDraft,
-    toAppliedFilter,
     type ApprovedSelectValue,
     type TransactionFilterDraft
 } from "@/features/transactions/utils/transactionFilterUtils";
 
 interface TransactionFilterProps {
-    appliedFilter: TransactionFilter;
-    setAppliedFilter: (filter: TransactionFilter) => void;
+    draftFilter: TransactionFilterDraft;
+    updateDraftFilter: (updates: Partial<TransactionFilterDraft>) => void;
+    applyFilter: (nextDraft?: TransactionFilterDraft) => void;
+    applyWithDraftUpdates: (updates: Partial<TransactionFilterDraft>) => void;
+    clearFilters: () => void;
     categoryList: CategoryOption[];
 }
 
 export default function TransactionFilter({
-    appliedFilter,
-    setAppliedFilter,
+    draftFilter,
+    updateDraftFilter,
+    applyFilter,
+    applyWithDraftUpdates,
+    clearFilters,
     categoryList
 }: TransactionFilterProps) {
-    const [draftFilter, setDraftFilter] = useState<TransactionFilterDraft>(() => createFilterDraft(appliedFilter));
-
-    useEffect(() => {
-        setDraftFilter(createFilterDraft(appliedFilter));
-    }, [appliedFilter]);
-
-    function updateDraftFilter(updates: Partial<TransactionFilterDraft>) {
-        setDraftFilter((previous) => ({ ...previous, ...updates }));
-    }
-
-    function applyFilter(nextDraft?: TransactionFilterDraft) {
-        const valueToApply = nextDraft ?? draftFilter;
-        setAppliedFilter(toAppliedFilter(valueToApply));
-    }
-
-    function applyWithDraftUpdates(updates: Partial<TransactionFilterDraft>) {
-        const nextDraft = { ...draftFilter, ...updates };
-        setDraftFilter(nextDraft);
-        applyFilter(nextDraft);
-    }
-
-    function clearFilters() {
-        const emptyDraft = createFilterDraft({});
-        setDraftFilter(emptyDraft);
-        applyFilter(emptyDraft);
-    }
-
     function handleEnterApply(event: KeyboardEvent<HTMLInputElement>) {
         if (event.key === "Enter") {
             applyFilter();

@@ -8,6 +8,8 @@ export interface TransactionFilterDraft {
     categoryId?: number;
     approved: ApprovedSelectValue;
     keyword: string;
+    includeHidden: boolean;
+    groupTransactions: boolean;
 }
 
 export function createFilterDraft(appliedFilter: TransactionFilter): TransactionFilterDraft {
@@ -16,7 +18,9 @@ export function createFilterDraft(appliedFilter: TransactionFilter): Transaction
         endDate: appliedFilter.endDate ?? "",
         categoryId: appliedFilter.categoryId,
         approved: toApprovedSelectValue(appliedFilter.approved),
-        keyword: appliedFilter.keyword ?? ""
+        keyword: appliedFilter.keyword ?? "",
+        includeHidden: appliedFilter.includeHidden === true,
+        groupTransactions: appliedFilter.groupTransactions === true,
     };
 }
 
@@ -28,14 +32,19 @@ export function toAppliedFilter(draft: TransactionFilterDraft): TransactionFilte
         endDate: draft.endDate || undefined,
         categoryId: draft.categoryId,
         approved: draft.approved === "" ? undefined : draft.approved === "true",
-        keyword: keyword || undefined
+        keyword: keyword || undefined,
+        includeHidden: draft.includeHidden === true,
+        groupTransactions: draft.groupTransactions === true,
     };
 }
 
 export function buildInitialFilterFromSearchParams(searchParams: URLSearchParams): TransactionFilter {
     const month = searchParams.get("month");
     const categoryId = searchParams.get("categoryId");
-    const nextFilter: TransactionFilter = {};
+    const nextFilter: TransactionFilter = {
+        includeHidden: false,
+        groupTransactions: false,
+    };
 
     if (month) {
         const monthRange = getMonthDateRange(month);

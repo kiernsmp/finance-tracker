@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import TransactionFilter from "@/components/TransactionFilter";
 import TransactionSummary from "@/features/transactions/components/TransactionSummary";
@@ -7,14 +8,22 @@ import { useCategories } from "@/features/transactions/hooks/useCategories";
 import { useTransactionData } from "@/features/transactions/hooks/useTransactionData";
 import { useTransactionFilters } from "@/features/transactions/hooks/useTransactionFilters";
 import { buildInitialFilterFromSearchParams } from "@/features/transactions/utils/transactionFilterUtils";
+import { groupTransactions } from "@/features/transactions/utils/groupTransactions";
 
 export default function TransactionsPage() {
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        const hasFiltersApplied = Array.from(searchParams.keys()).some((key) => key !== "page");
+
+        if (hasFiltersApplied) {
+            setSearchParams({}, { replace: true });
+        }
+    }, [searchParams, setSearchParams]);
 
     const {
         appliedFilter,
         draftFilter,
-        setAppliedFilter,
         updateDraftFilter,
         applyFilter,
         applyWithDraftUpdates,
@@ -58,7 +67,7 @@ export default function TransactionsPage() {
             <button className="primary-action approve-all-button" onClick={approveAll}>
                 Approve All
             </button>
-        
+
             <div className="table-card">
                 <TransactionTable 
                     transactions={transactions} 
@@ -66,6 +75,8 @@ export default function TransactionsPage() {
                     updateTransactionCategory={updateTransactionCategory}
                     onApproveTransaction={setTransactionApproved}
                     onLockTransaction={setTransactionLocked}
+                    groupTransactionsFlag={appliedFilter.groupTransactions}
+                    groupTransactions={groupTransactions}
                 />
             </div>
         </div>

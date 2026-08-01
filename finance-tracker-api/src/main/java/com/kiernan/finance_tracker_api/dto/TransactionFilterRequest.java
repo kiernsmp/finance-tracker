@@ -25,4 +25,6 @@ public class TransactionFilterRequest {
     private Boolean approved;
 
     private String keyword;
+
+    private Boolean includeHidden;
 }

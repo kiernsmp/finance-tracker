@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import type { Transaction } from "@/types/Transaction";
 import type { CategoryOption } from "@/types/CategoryOption";
 import TransactionCategoryCell from "./TransactionCategoryCell";
-import { formatAuditorAmount, formatTransactionDate } from "@/utils/formatters";
+import { formatAuditorAmountWithSigns, formatTransactionDate } from "@/utils/formatters";
 import type { GroupedTransaction } from "@/features/transactions/utils/groupTransactions";
 
 interface TransactionTableProps {
@@ -61,6 +61,7 @@ export default function TransactionTable({
     const truncate = (text: string, length: number) =>
         text.length > length ? `${text.slice(0, length)}...` : text;
 
+
     return (
         <div className="transaction-table-wrapper">
             <table className="transactions-table">
@@ -84,6 +85,12 @@ export default function TransactionTable({
                             getMonthLabel(transaction.date) !== getMonthLabel(previousTransaction?.date ?? "");
                         const isGrouped = isGroupedTransaction(transaction);
                         const isExpanded = isGrouped && expandedGroupIds.includes(transaction.id);
+                        const showDayDivider = 
+                            index === 0 ||
+                            transaction.date !== (previousTransaction?.date ?? "");
+                        const dayTotal = transactions
+                            .filter((t) => t.date === transaction.date && t.amount < 0)
+                            .reduce((sum, t) => sum + t.amount, 0);
 
                         return (
                             <Fragment key={isGrouped ? `group-${transaction.id}` : transaction.id}>
@@ -91,6 +98,15 @@ export default function TransactionTable({
                                     <tr className="month-divider-row">
                                         <td colSpan={7}>
                                             <span className="month-divider-label">{getMonthLabel(transaction.date)}</span>
+                                        </td>
+                                    </tr>
+                                )}
+                                {showDayDivider && (
+                                    <tr className="month-divider-row">
+                                        <td colSpan={7}>
+                                            <span className="month-divider-label">
+                                                {`${formatTransactionDate(transaction.date)}: ${formatAuditorAmountWithSigns(dayTotal)}`}
+                                            </span>
                                         </td>
                                     </tr>
                                 )}
@@ -110,7 +126,7 @@ export default function TransactionTable({
                                     </td>
                                     <td>{formatTransactionDate(transaction.date)}</td>
                                     <td>{isGroupedTransaction(transaction) ? `${truncate(transaction.description, 30)} (${transaction.transactionCount})` : truncate(transaction.description, 30)}</td>
-                                    <td>{formatAuditorAmount(transaction.amount)}</td>
+                                    <td>{formatAuditorAmountWithSigns(transaction.amount)}</td>
                                     <td onClick={(e) => e.stopPropagation()}>
                                         <TransactionCategoryCell
                                             categoryList={categoryList}
@@ -137,7 +153,7 @@ export default function TransactionTable({
                                             <td />
                                             <td>{formatTransactionDate(childTransaction.date)}</td>
                                             <td>{childTransaction.description}</td>
-                                            <td>{formatAuditorAmount(childTransaction.amount)}</td>
+                                            <td>{formatAuditorAmountWithSigns(childTransaction.amount)}</td>
                                             <td>
                                                 <TransactionCategoryCell
                                                     categoryList={categoryList}

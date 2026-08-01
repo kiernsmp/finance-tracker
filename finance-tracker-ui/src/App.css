@@ -262,6 +262,36 @@
   gap: 1rem;
 }
 
+.filter-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.filter-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #4b5563;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #e5e7eb;
+  font-weight: 600;
+}
+
+.filter-flag input {
+  accent-color: #60a5fa;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+}
+
+.filter-flag:hover {
+  border-color: #60a5fa;
+  background: #111827;
+}
+
 header {
   display: flex;
   align-items: center;

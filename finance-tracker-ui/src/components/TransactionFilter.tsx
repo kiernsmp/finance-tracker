@@ -101,8 +101,10 @@ export default function TransactionFilter({
                     />
                 </label>
 
-                <label className="filter-field">
-                    <span>Include Hidden</span>
+            </div>
+
+            <div className="filter-flags">
+                <label className="filter-flag">
                     <input
                         type="checkbox"
                         checked={draftFilter.includeHidden}
@@ -110,6 +112,18 @@ export default function TransactionFilter({
                             applyWithDraftUpdates({ includeHidden: e.target.checked });
                         }}
                     />
+                    <span>Include Internal</span>
+                </label>
+
+                <label className="filter-flag">
+                    <input
+                        type="checkbox"
+                        checked={draftFilter.groupTransactions}
+                        onChange={(e) => {
+                            applyWithDraftUpdates({ groupTransactions: e.target.checked });
+                        }}
+                    />
+                    <span>Group Transactions</span>
                 </label>
             </div>
 

@@ -7,6 +7,7 @@ import { useCategories } from "@/features/transactions/hooks/useCategories";
 import { useTransactionData } from "@/features/transactions/hooks/useTransactionData";
 import { useTransactionFilters } from "@/features/transactions/hooks/useTransactionFilters";
 import { buildInitialFilterFromSearchParams } from "@/features/transactions/utils/transactionFilterUtils";
+import { groupTransactions } from "@/features/transactions/utils/groupTransactions";
 
 export default function TransactionsPage() {
     const [searchParams] = useSearchParams();
@@ -58,7 +59,6 @@ export default function TransactionsPage() {
                 Approve All
             </button>
 
-        
             <div className="table-card">
                 <TransactionTable 
                     transactions={transactions} 
@@ -66,6 +66,8 @@ export default function TransactionsPage() {
                     updateTransactionCategory={updateTransactionCategory}
                     onApproveTransaction={setTransactionApproved}
                     onLockTransaction={setTransactionLocked}
+                    groupTransactionsFlag={appliedFilter.groupTransactions}
+                    groupTransactions={groupTransactions}
                 />
             </div>
         </div>

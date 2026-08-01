@@ -1,7 +1,9 @@
+import { Fragment } from "react";
 import type { Transaction } from "@/types/Transaction";
 import type { CategoryOption } from "@/types/CategoryOption";
 import TransactionCategoryCell from "./TransactionCategoryCell";
 import { formatAuditorAmount, formatTransactionDate } from "@/utils/formatters";
+import type { GroupedTransaction } from "@/features/transactions/utils/groupTransactions";
 
 interface TransactionTableProps {
     transactions: Transaction[];
@@ -9,6 +11,8 @@ interface TransactionTableProps {
     updateTransactionCategory: (transaction: Transaction, categoryId: number) => void;
     onApproveTransaction: (id: number, approved: boolean) => void;
     onLockTransaction: (id: number, locked: boolean) => void;
+    groupTransactions: (transactions: Transaction[]) => GroupedTransaction[];
+    groupTransactionsFlag: boolean;
 }
 
 export default function TransactionTable({
@@ -16,7 +20,9 @@ export default function TransactionTable({
     categoryList,
     updateTransactionCategory,
     onApproveTransaction,
-    onLockTransaction
+    onLockTransaction,
+    groupTransactionsFlag,
+    groupTransactions
 }: TransactionTableProps) {
     const getMonthLabel = (date: string) => {
         const parsedDate = new Date(date);
@@ -25,6 +31,15 @@ export default function TransactionTable({
             year: "numeric"
         });
     };
+
+    type DisplayTransaction = Transaction | GroupedTransaction;
+
+    const displayedTransactions: DisplayTransaction[] =
+        groupTransactionsFlag
+            ? groupTransactions(transactions)
+            : transactions;
+
+    console.log("HI: " + groupTransactionsFlag);
 
     return (
         <div className="transaction-table-wrapper">
@@ -42,30 +57,29 @@ export default function TransactionTable({
                 </thead>
 
                 <tbody>
-                    {transactions
-                    .map((transaction, index) => {
-                        const previousTransaction = transactions[index - 1];
-                        const showMonthDivider = index === 0 || getMonthLabel(transaction.date) !== getMonthLabel(previousTransaction.date);
+                    {displayedTransactions.map((transaction, index) => {
+                        const previousTransaction = displayedTransactions[index - 1];
+                        const showMonthDivider =
+                            index === 0 ||
+                            getMonthLabel(transaction.date) !== getMonthLabel(previousTransaction?.date ?? "");
 
                         return (
-                            <>
+                            <Fragment key={transaction.id}>
                                 {showMonthDivider && (
-                                    <tr className="month-divider-row" key={`month-${transaction.id}`}>
+                                    <tr className="month-divider-row">
                                         <td colSpan={7}>
                                             <span className="month-divider-label">{getMonthLabel(transaction.date)}</span>
                                         </td>
                                     </tr>
                                 )}
-                                <tr key={transaction.id}>
+                                <tr>
                                     <td>
-                                        <input 
+                                        <input
                                             type="checkbox"
                                             checked={transaction.approved}
                                             onChange={(e) => {
-                                                    console.log(e.target.checked)
-                                                    onApproveTransaction(transaction.id, e.target.checked)
-                                                }
-                                            }
+                                                onApproveTransaction(transaction.id, e.target.checked);
+                                            }}
                                         />
                                     </td>
                                     <td>{formatTransactionDate(transaction.date)}</td>
@@ -79,15 +93,15 @@ export default function TransactionTable({
                                         />
                                     </td>
                                     <td>
-                                        <input type="checkbox" 
+                                        <input
+                                            type="checkbox"
                                             checked={transaction.locked}
-                                            onChange={(e) => 
-                                                onLockTransaction(transaction.id, e.target.checked)}
+                                            onChange={(e) => onLockTransaction(transaction.id, e.target.checked)}
                                         />
                                     </td>
                                     <td className="transaction-notes-cell">{transaction.notes}</td>
                                 </tr>
-                            </>
+                            </Fragment>
                         );
                     })}
                 </tbody>

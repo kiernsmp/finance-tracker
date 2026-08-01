@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import TransactionFilter from "@/components/TransactionFilter";
 import TransactionSummary from "@/features/transactions/components/TransactionSummary";
@@ -10,7 +11,15 @@ import { buildInitialFilterFromSearchParams } from "@/features/transactions/util
 import { groupTransactions } from "@/features/transactions/utils/groupTransactions";
 
 export default function TransactionsPage() {
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        const hasFiltersApplied = Array.from(searchParams.keys()).some((key) => key !== "page");
+
+        if (hasFiltersApplied) {
+            setSearchParams({}, { replace: true });
+        }
+    }, [searchParams, setSearchParams]);
 
     const {
         appliedFilter,

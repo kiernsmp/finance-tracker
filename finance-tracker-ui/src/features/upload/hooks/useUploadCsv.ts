@@ -1,9 +1,12 @@
 import { useCallback, useState, type ChangeEvent, type DragEvent } from "react";
+import type { UploadResponse } from "@/types/UploadResponse";
 import { uploadCsv } from "@/api/transactionApi";
 
 export function useUploadCsv() {
     const [isUploading, setIsUploading] = useState(false);
     const [isDragActive, setIsDragActive] = useState(false);
+    const [uploadResult, setUploadResult] = useState<UploadResponse | undefined>(undefined);
+    const [uploadError, setUploadError] = useState<string | null>(null);
 
     const uploadFile = useCallback(async (file: File | undefined) => {
         if (!file) {
@@ -11,9 +14,14 @@ export function useUploadCsv() {
         }
 
         setIsUploading(true);
+        setUploadError(null);
+        setUploadResult(undefined);
 
         try {
-            await uploadCsv(file);
+            const result = await uploadCsv(file);
+            setUploadResult(result);
+        } catch (error) {
+            setUploadError(error instanceof Error ? error.message : "Upload failed.");
         } finally {
             setIsUploading(false);
         }
@@ -46,6 +54,8 @@ export function useUploadCsv() {
     return {
         isUploading,
         isDragActive,
+        uploadResult,
+        uploadError,
         handleUpload,
         handleDrop,
         handleDragOver,

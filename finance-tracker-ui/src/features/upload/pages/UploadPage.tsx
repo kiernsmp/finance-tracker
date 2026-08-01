@@ -1,7 +1,6 @@
 import UploadCsv from "@/features/upload/components/UploadCsv";
 
 export default function UploadPage() {
-    const csvUploaded = ...
 
     return (
         <div className="upload-page">
@@ -14,7 +13,6 @@ export default function UploadPage() {
             <div className="upload-card">
                 <UploadCsv />
             </div>
-            {csvUploaded}
         </div>
     );
 }

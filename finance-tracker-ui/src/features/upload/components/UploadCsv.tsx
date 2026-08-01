@@ -1,10 +1,13 @@
 import "./UploadCsv.css";
 import { useUploadCsv } from "../hooks/useUploadCsv";
+import UploadResult from "./UploadResult";
 
 export default function UploadCsv() {
     const {
         isUploading,
         isDragActive,
+        uploadResult,
+        uploadError,
         handleUpload,
         handleDrop,
         handleDragOver,
@@ -41,6 +44,7 @@ export default function UploadCsv() {
                 className="upload-csv-input"
             />
             {isUploading ? <span className="upload-csv-status">Uploading...</span> : null}
+            <UploadResult result={uploadResult} error={uploadError ?? undefined} />
         </label>
     );
 }

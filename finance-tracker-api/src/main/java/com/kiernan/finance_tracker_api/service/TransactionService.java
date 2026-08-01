@@ -88,6 +88,7 @@ public class TransactionService {
         Integer categoryId = request.getCategoryId();
         Boolean approved = request.getApproved();
         String keyword = request.getKeyword();
+        Boolean includeHidden = request.getIncludeHidden();
 
         log.info("startDate: {}, endDate: {}, categoryId: {}, approved: {}", startDate, endDate, categoryId, approved);
         
@@ -116,6 +117,10 @@ public class TransactionService {
                     "%" + keyword.toLowerCase() + "%"
                 )
             );
+        }
+        if (!Boolean.TRUE.equals(includeHidden)) {
+            spec = spec.and((root, query, cb) ->
+                cb.notEqual(root.get("category").get("name"), "Internal"));
         }
 
         Sort sort = Sort.by(

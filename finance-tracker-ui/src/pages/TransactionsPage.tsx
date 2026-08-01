@@ -58,6 +58,17 @@ export default function TransactionsPage() {
             <button className="primary-action approve-all-button" onClick={approveAll}>
                 Approve All
             </button>
+
+            Include Hidden
+            <input
+                type="checkbox"
+                checked={false}
+                onChange={(e) => {
+
+                }}
+            />
+
+
         
             <div className="table-card">
                 <TransactionTable 

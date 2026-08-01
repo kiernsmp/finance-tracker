@@ -6,7 +6,6 @@ export default function UploadPage() {
             <div className="page-header">
                 <div>
                     <h1 className="page-title">Upload CSV</h1>
-                    <p className="page-subtitle">Import your transactions from a CSV file.</p>
                 </div>
             </div>
 

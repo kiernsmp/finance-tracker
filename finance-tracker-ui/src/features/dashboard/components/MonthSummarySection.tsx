@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { MonthSummary } from "@/types/MonthlySummary";
 import { formatAuditorAmount } from "@/utils/formatters";
 import CategorySummaryTable from "./CategorySummaryTable";
@@ -12,9 +13,22 @@ export default function MonthSummarySection({
 }: MonthSummarySectionProps) {
     const netAmount = month.totalIn - month.totalOut;
 
+    const navigate = useNavigate();
+
+    const handleMonthClick = (month: string) => {
+        navigate(
+            `/transactions?month=${month}`
+        )
+    }
+
     return (
         <section className="dashboard-month-section">
-            <h2 className="dashboard-month-title">{formatMonth(month.monthYear)}</h2>
+            <div className="dashboard-month-title">
+                <h2 className="dashboard-month-title"
+                    onClick={() => handleMonthClick(month.monthYear)}
+                    >{formatMonth(month.monthYear)}</h2>
+
+            </div>
 
             <CategorySummaryTable 
                 categories={month.categories} 

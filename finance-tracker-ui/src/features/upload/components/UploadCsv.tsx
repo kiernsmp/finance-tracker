@@ -1,48 +1,15 @@
-import { useState, type ChangeEvent, type DragEvent } from "react";
-import { uploadCsv } from "@/api/transactionApi";
 import "./UploadCsv.css";
+import { useUploadCsv } from "../hooks/useUploadCsv";
 
 export default function UploadCsv() {
-    const [isUploading, setIsUploading] = useState(false);
-    const [isDragActive, setIsDragActive] = useState(false);
-
-    async function uploadFile(file: File | undefined) {
-        if (!file) {
-            return;
-        }
-
-        setIsUploading(true);
-
-        try {
-            await uploadCsv(file);
-        } finally {
-            setIsUploading(false);
-        }
-    }
-
-    async function handleUpload(event: ChangeEvent<HTMLInputElement>) {
-        const file = event.target.files?.[0];
-        await uploadFile(file);
-        event.target.value = "";
-    }
-
-    async function handleDrop(event: DragEvent<HTMLLabelElement>) {
-        event.preventDefault();
-        setIsDragActive(false);
-
-        const file = event.dataTransfer.files?.[0];
-        await uploadFile(file);
-    }
-
-    function handleDragOver(event: DragEvent<HTMLLabelElement>) {
-        event.preventDefault();
-        setIsDragActive(true);
-    }
-
-    function handleDragLeave(event: DragEvent<HTMLLabelElement>) {
-        event.preventDefault();
-        setIsDragActive(false);
-    }
+    const {
+        isUploading,
+        isDragActive,
+        handleUpload,
+        handleDrop,
+        handleDragOver,
+        handleDragLeave,
+    } = useUploadCsv();
 
     return (
         <label

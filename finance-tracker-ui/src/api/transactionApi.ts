@@ -29,7 +29,9 @@ export async function uploadCsv(file: File): Promise<void> {
     const formData = new FormData();
     formData.append("file", file);
 
-    await axios.post(API_URL + POST_CSV_URL, formData);
+    const response = await axios.post(API_URL + POST_CSV_URL, formData);
+
+    return response.data;
 }
 
 export async function approveAllTransactions(): Promise<void> {

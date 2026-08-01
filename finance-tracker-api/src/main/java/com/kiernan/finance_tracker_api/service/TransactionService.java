@@ -1,6 +1,8 @@
 package com.kiernan.finance_tracker_api.service;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -12,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kiernan.finance_tracker_api.dto.TransactionFilterRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionRequestDto;
 import com.kiernan.finance_tracker_api.dto.TransactionResponse;
+import com.kiernan.finance_tracker_api.dto.TransactionUploadResponse;
 import com.kiernan.finance_tracker_api.entity.CategoryEntity;
 import com.kiernan.finance_tracker_api.entity.TransactionEntity;
 import com.kiernan.finance_tracker_api.events.KeywordUpdatedEvent;
@@ -135,15 +138,72 @@ public class TransactionService {
         return result;
     }
 
-    public void uploadCsv(MultipartFile file) {
+    public TransactionUploadResponse uploadCsv(MultipartFile file) {
         TransactionParser parser = resolveParser(file, "Commbank");
         List<TransactionRequestDto> records = parser.parse(file);
-        List<TransactionEntity> entities = mapper.toEntity(records);
+        List<TransactionEntity> newTransactions = mapper.toEntity(records);
+        Integer transactionsFound = newTransactions.size();
 
-        assignAllCategories(entities);
-        transactionRepository.saveAll(entities);
+        assignAllCategories(newTransactions);
 
+        Set<String> newDescriptions = newTransactions.stream()
+                .map(TransactionEntity::getDescription)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        LocalDate minDate = newTransactions.stream()
+            .map(TransactionEntity::getDate)
+            .filter(Objects::nonNull)
+            .min(LocalDate::compareTo)
+            .orElse(null);
+
+        LocalDate maxDate = newTransactions.stream()
+            .map(TransactionEntity::getDate)
+            .filter(Objects::nonNull)
+            .max(LocalDate::compareTo)
+            .orElse(null);
+        
+        Map<String, Long> existingTransactionsMap = transactionRepository.findAllByDescriptionInAndDateBetween(newDescriptions, minDate, maxDate).stream()
+            .collect(Collectors.groupingBy(
+                t -> t.getDate() + "|" + t.getDescription() + "|" + t.getCategory().getId(),
+                Collectors.counting()
+            ));
+
+        Integer duplicateRecords = removeDuplicates(newTransactions, existingTransactionsMap);
+
+        List<TransactionEntity> savedTransactions = transactionRepository.saveAll(newTransactions);
+
+        TransactionUploadResponse response = new TransactionUploadResponse(transactionsFound, duplicateRecords, newTransactions.size(), savedTransactions.size());
+        return response;
     }
+
+    private Integer removeDuplicates(List<TransactionEntity> newTransactions, Map<String, Long> existingTransactionsMap) {
+        Integer duplicateCount = 0;
+
+        Iterator<TransactionEntity> iterator = newTransactions.iterator();
+
+        while (iterator.hasNext()) {
+            TransactionEntity newTransaction = iterator.next();
+
+            String newKey = newTransaction.getDate() + "|" 
+                    + newTransaction.getDescription() + "|" 
+                    + newTransaction.getCategory().getId();
+
+            if (existingTransactionsMap.containsKey(newKey)) {
+                existingTransactionsMap.put(newKey, existingTransactionsMap.get(newKey) - 1);
+                iterator.remove();
+
+                duplicateCount++;
+
+                if (existingTransactionsMap.get(newKey) == 0) {
+                    existingTransactionsMap.remove(newKey);
+                }
+            }
+        }
+
+        return duplicateCount;
+    }
+
 
     public void assignAllCategories(List<TransactionEntity> transactions) {
         Map<Integer, CategoryEntity> categoryMap = categoryService.getCategoryMap();

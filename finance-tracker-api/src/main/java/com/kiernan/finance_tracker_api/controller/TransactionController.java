@@ -21,6 +21,7 @@ import com.kiernan.finance_tracker_api.dto.TransactionCategoryRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionFilterRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionLockRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionResponse;
+import com.kiernan.finance_tracker_api.dto.TransactionUploadResponse;
 import com.kiernan.finance_tracker_api.service.*;
 
 @RestController
@@ -34,12 +35,19 @@ public class TransactionController {
     }
 
     @PostMapping("/upload")
-    public String uploadCsv(@RequestParam("file") MultipartFile file) {
+    public TransactionUploadResponse uploadCsv(@RequestParam("file") MultipartFile file) {
         System.out.println("Uploading file: " + file.getOriginalFilename());
 
-        transactionService.uploadCsv(file);
+        TransactionUploadResponse response = transactionService.uploadCsv(file);
+        log.info(
+            "Transaction upload summary - Found: {}, Duplicates: {}, New: {}, Saved: {}",
+            response.getTransactionsFound(),
+            response.getDuplicatesFound(),
+            response.getNewTransactions(),
+            response.getTransactionsSaved()
+        );
         
-        return "CSV uploaded";
+        return response;
     }
 
     @GetMapping("/records")

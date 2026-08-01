@@ -125,7 +125,7 @@ export default function TransactionTable({
                                         />
                                     </td>
                                     <td>{formatTransactionDate(transaction.date)}</td>
-                                    <td>{isGroupedTransaction(transaction) ? `${truncate(transaction.description, 30)} (${transaction.transactionCount})` : truncate(transaction.description, 30)}</td>
+                                    <td>{isGroupedTransaction(transaction) ? `${truncate(transaction.description, 100)} (${transaction.transactionCount})` : truncate(transaction.description, 100)}</td>
                                     <td>{formatAuditorAmountWithSigns(transaction.amount)}</td>
                                     <td onClick={(e) => e.stopPropagation()}>
                                         <TransactionCategoryCell

@@ -1,6 +1,7 @@
 package com.kiernan.finance_tracker_api.repository;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,5 +28,6 @@ public interface TransactionRepository extends
     void updateApproved(@Param("transactionId") Integer transactionId);
 
     List<TransactionEntity> findByDescriptionAndCategoryIdNotAndLockedAndApproved(String keyword, Integer categoryId, boolean locked, boolean approved);
+    List<TransactionEntity> findAllByDescriptionInAndDateBetween(Collection<String> newDescriptions, LocalDate minDate, LocalDate maxDate);
 
 }

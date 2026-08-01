@@ -501,6 +501,23 @@ header nav a:hover {
   background: rgba(255, 255, 255, 0.05);
 }
 
+.grouped-transaction-row {
+  background: rgba(96, 165, 250, 0.12);
+  font-weight: 600;
+}
+
+.grouped-transaction-row td {
+  padding-left: 1rem;
+}
+
+.grouped-transaction-child-row {
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.grouped-transaction-child-row td {
+  padding-left: 2rem;
+}
+
 .transactions-table input[type="checkbox"] {
   width: 1rem;
   height: 1rem;

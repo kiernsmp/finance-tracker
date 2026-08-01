@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.Locale.Category;
-
-import com.kiernan.finance_tracker_api.entity.CategoryEntity;
 
 @Data
 @NoArgsConstructor

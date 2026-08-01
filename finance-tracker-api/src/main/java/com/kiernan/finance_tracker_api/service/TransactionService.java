@@ -1,7 +1,6 @@
 package com.kiernan.finance_tracker_api.service;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import org.slf4j.LoggerFactory;

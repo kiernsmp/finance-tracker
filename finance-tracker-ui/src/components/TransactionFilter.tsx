@@ -100,6 +100,17 @@ export default function TransactionFilter({
                         onKeyDown={handleEnterApply}
                     />
                 </label>
+
+                <label className="filter-field">
+                    <span>Include Hidden</span>
+                    <input
+                        type="checkbox"
+                        checked={draftFilter.includeHidden}
+                        onChange={(e) => {
+                            applyWithDraftUpdates({ includeHidden: e.target.checked });
+                        }}
+                    />
+                </label>
             </div>
 
             <button className="ghost-button" type="button" onClick={clearFilters}>

@@ -4,4 +4,5 @@ export interface TransactionFilter {
     categoryId?: number;
     approved?: boolean;
     keyword?: string;
+    includeHidden?: boolean;
 }

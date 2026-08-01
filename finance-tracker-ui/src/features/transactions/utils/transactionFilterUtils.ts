@@ -8,6 +8,7 @@ export interface TransactionFilterDraft {
     categoryId?: number;
     approved: ApprovedSelectValue;
     keyword: string;
+    includeHidden: boolean;
 }
 
 export function createFilterDraft(appliedFilter: TransactionFilter): TransactionFilterDraft {
@@ -16,7 +17,8 @@ export function createFilterDraft(appliedFilter: TransactionFilter): Transaction
         endDate: appliedFilter.endDate ?? "",
         categoryId: appliedFilter.categoryId,
         approved: toApprovedSelectValue(appliedFilter.approved),
-        keyword: appliedFilter.keyword ?? ""
+        keyword: appliedFilter.keyword ?? "",
+        includeHidden: appliedFilter.includeHidden ?? false,
     };
 }
 
@@ -28,7 +30,8 @@ export function toAppliedFilter(draft: TransactionFilterDraft): TransactionFilte
         endDate: draft.endDate || undefined,
         categoryId: draft.categoryId,
         approved: draft.approved === "" ? undefined : draft.approved === "true",
-        keyword: keyword || undefined
+        keyword: keyword || undefined,
+        includeHidden: draft.includeHidden ? true : undefined,
     };
 }
 

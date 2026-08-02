@@ -16,7 +16,7 @@ public class TransactionRequestDto {
 
     public TransactionRequestDto(String date, String transaction, String description, String notes) {
         this.date = LocalDate.parse(date, DATE_FORMATTER);
-        this.amount = new BigDecimal(transaction);
+        this.amount = new BigDecimal(transaction.replace(",", ""));
         this.description = description;
         this.notes = notes;
     }

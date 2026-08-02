@@ -15,17 +15,12 @@ import com.kiernan.finance_tracker_api.dto.KeywordRequest;
 import com.kiernan.finance_tracker_api.entity.KeywordEntity;
 import com.kiernan.finance_tracker_api.events.KeywordUpdatedEvent;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-
 @Service
 public class KeywordService {
     
     private final CategoryService categoryService;
     private final KeywordRepository keywordRepository;
     private final ApplicationEventPublisher eventPublisher;
-    
-    private static final Logger log = LoggerFactory.getLogger(KeywordService.class);
 
     public KeywordService(KeywordRepository keywordRepository, TransactionRepository transactionRepository, CategoryRepository categoryRepository, CategoryService categoryService, ApplicationEventPublisher eventPublisher) {
         this.keywordRepository = keywordRepository;
@@ -45,7 +40,6 @@ public class KeywordService {
         );
 
         return keywordRepository.save(keywordEntity);
-
     }
 
     public Map<String, Integer> getKeywordMapForDescriptions(Set<String> descriptions) {

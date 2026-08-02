@@ -102,7 +102,7 @@ export default function TransactionTable({
                                     </tr>
                                 )}
                                 {showDayDivider && (
-                                    <tr className="month-divider-row">
+                                    <tr className="day-divider-row">
                                         <td colSpan={7}>
                                             <span className="month-divider-label">
                                                 {`${formatTransactionDate(transaction.date)}: ${formatAuditorAmountWithSigns(dayTotal)}`}

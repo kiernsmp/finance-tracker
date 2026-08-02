@@ -127,7 +127,7 @@ export default function TransactionFilter({
                 </label>
             </div>
 
-            <button className="ghost-button" type="button" onClick={clearFilters}>
+            <button className="ghost-button clear-filters-button" type="button" onClick={clearFilters}>
                 Clear Filters
             </button>
         </div>

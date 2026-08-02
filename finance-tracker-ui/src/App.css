@@ -339,9 +339,7 @@ header nav a:hover {
   font-weight: 600;
 }
 
-.grouped-transaction-row td {
-  padding-left: 1rem;
-}
+
 
 .grouped-transaction-child-row {
   background: rgba(59, 130, 246, 0.06);

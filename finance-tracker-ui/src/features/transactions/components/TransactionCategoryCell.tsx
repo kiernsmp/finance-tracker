@@ -30,6 +30,14 @@ export default function TransactionCategoryCell({
                 if (selected) {
                     onChange(selected.value);
                 }
+                
+            }}
+            onMenuOpen={() => {
+                setTimeout(() => {
+                    document
+                        .querySelector(".transaction-select__menu-list")
+                        ?.scrollTo(0, 0);
+                }, 0);
             }}
         />
     );

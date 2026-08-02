@@ -1,9 +1,11 @@
-import { Fragment, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import type { Transaction } from "@/types/Transaction";
 import type { CategoryOption } from "@/types/CategoryOption";
-import TransactionCategoryCell from "./TransactionCategoryCell";
-import { formatAuditorAmountWithSigns, formatTransactionDate } from "@/utils/formatters";
 import type { GroupedTransaction } from "@/features/transactions/utils/groupTransactions";
+import TransactionRow from "./TransactionRow";
+import MonthDivider from "./MonthDivider";
+import DayDivider from "./DayDivider";
+import type { DisplayTransaction } from "@/types/DisplayTransaction";
 
 interface TransactionTableProps {
     transactions: Transaction[];
@@ -12,8 +14,25 @@ interface TransactionTableProps {
     onApproveTransaction: (id: number, approved: boolean) => void;
     onLockTransaction: (id: number, locked: boolean) => void;
     groupTransactions: (transactions: Transaction[]) => GroupedTransaction[];
-    groupTransactionsFlag: boolean;
+    isGrouped: boolean
 }
+
+const TABLE_COLUMN_COUNT = 7;
+
+const getMonthLabel = (date: string) => {
+    const parsedDate = new Date(date);
+
+    return parsedDate.toLocaleDateString("en-AU", {
+        month: "long",
+        year: "numeric"
+    });
+};
+
+const isGroupedTransaction = (
+    value: DisplayTransaction
+): value is GroupedTransaction =>
+    "groupedTransactions" in value && value.transactionCount !== 1;
+
 
 export default function TransactionTable({
     transactions,
@@ -21,36 +40,15 @@ export default function TransactionTable({
     updateTransactionCategory,
     onApproveTransaction,
     onLockTransaction,
-    groupTransactionsFlag,
-    groupTransactions
+    groupTransactions,
+    isGrouped,
 }: TransactionTableProps) {
-    const getMonthLabel = (date: string) => {
-        const parsedDate = new Date(date);
-        return parsedDate.toLocaleDateString("en-AU", {
-            month: "long",
-            year: "numeric"
-        });
-    };
-
-    type DisplayTransaction = Transaction | GroupedTransaction;
-
     const [expandedGroupIds, setExpandedGroupIds] = useState<number[]>([]);
-
-    const displayedTransactions: DisplayTransaction[] =
-        groupTransactionsFlag
-            ? groupTransactions(transactions)
-            : transactions;
-
-    const isGroupedTransaction = (
-        value: DisplayTransaction
-    ): value is GroupedTransaction =>
-        "groupedTransactions" in value && value.transactionCount !== 1;
 
     const toggleGroupExpansion = (transaction: DisplayTransaction) => {
         if (!isGroupedTransaction(transaction)) {
             return;
         }
-
         setExpandedGroupIds((previous) =>
             previous.includes(transaction.id)
                 ? previous.filter((id) => id !== transaction.id)
@@ -58,9 +56,32 @@ export default function TransactionTable({
         );
     };
 
-    const truncate = (text: string, length: number) =>
-        text.length > length ? `${text.slice(0, length)}...` : text;
+    const displayedTransactions: DisplayTransaction[] =
+        isGrouped
+            ? groupTransactions(transactions)
+            : transactions;
 
+    const dailyNegativeTotals = useMemo(() => {
+        const totals = new Map<string, number>();
+
+        transactions.forEach((transaction) => {
+            if (transaction.amount < 0) {
+                totals.set(
+                    transaction.date,
+                    (totals.get(transaction.date) ?? 0) + transaction.amount
+                );
+            }
+        });
+
+        return totals;
+    }, [transactions]);
+
+    const getDescription = (transaction: DisplayTransaction) => {
+            if (isGroupedTransaction(transaction)) {
+                return `${transaction.description} (${transaction.transactionCount})`;
+            }
+            return transaction.description;
+        };
 
     return (
         <div className="transaction-table-wrapper">
@@ -78,95 +99,63 @@ export default function TransactionTable({
                 </thead>
 
                 <tbody>
-                    {displayedTransactions.map((transaction, index) => {
+                    { displayedTransactions.map((transaction, index) => {
+
                         const previousTransaction = displayedTransactions[index - 1];
+                        const monthLabel = getMonthLabel(transaction.date);
                         const showMonthDivider =
                             index === 0 ||
-                            getMonthLabel(transaction.date) !== getMonthLabel(previousTransaction?.date ?? "");
-                        const isGrouped = isGroupedTransaction(transaction);
-                        const isExpanded = isGrouped && expandedGroupIds.includes(transaction.id);
-                        const showDayDivider = 
+                            monthLabel !== getMonthLabel(previousTransaction?.date ?? "");
+                        const showDayDivider =
                             index === 0 ||
                             transaction.date !== (previousTransaction?.date ?? "");
-                        const dayTotal = transactions
-                            .filter((t) => t.date === transaction.date && t.amount < 0)
-                            .reduce((sum, t) => sum + t.amount, 0);
+                        const dayTotal = dailyNegativeTotals.get(transaction.date) ?? 0;
 
                         return (
                             <Fragment key={isGrouped ? `group-${transaction.id}` : transaction.id}>
                                 {showMonthDivider && (
-                                    <tr className="month-divider-row">
-                                        <td colSpan={7}>
-                                            <span className="month-divider-label">{getMonthLabel(transaction.date)}</span>
-                                        </td>
-                                    </tr>
+                                    <MonthDivider
+                                        label={monthLabel}
+                                        columnCount={TABLE_COLUMN_COUNT}
+                                    />
                                 )}
+
                                 {showDayDivider && (
-                                    <tr className="day-divider-row">
-                                        <td colSpan={7}>
-                                            <span className="month-divider-label">
-                                                {`${formatTransactionDate(transaction.date)}: ${formatAuditorAmountWithSigns(dayTotal)}`}
-                                            </span>
-                                        </td>
-                                    </tr>
+                                    <DayDivider
+                                        label={monthLabel}
+                                        columnCount={TABLE_COLUMN_COUNT}
+                                        dayTotal={dayTotal}
+                                    />
                                 )}
-                                <tr
-                                    className={isGrouped ? "grouped-transaction-row" : undefined}
-                                    onClick={() => toggleGroupExpansion(transaction)}
-                                    style={{ cursor: isGrouped ? "pointer" : undefined }}
-                                >
-                                    <td onClick={(e) => e.stopPropagation()}>
-                                        <input
-                                            type="checkbox"
-                                            checked={transaction.approved}
-                                            onChange={(e) => {
-                                                onApproveTransaction(transaction.id, e.target.checked);
-                                            }}
-                                        />
-                                    </td>
-                                    <td>{formatTransactionDate(transaction.date)}</td>
-                                    <td>{isGroupedTransaction(transaction) ? `${truncate(transaction.description, 100)} (${transaction.transactionCount})` : truncate(transaction.description, 100)}</td>
-                                    <td onClick={(e) => e.stopPropagation()}>
-                                        <TransactionCategoryCell
-                                            categoryList={categoryList}
-                                            currentCategoryId={transaction.category?.id}
-                                            onChange={(categoryId) => updateTransactionCategory(transaction, categoryId)}
-                                        />
-                                    </td>
-                                    <td>{formatAuditorAmountWithSigns(transaction.amount)}</td>
-                                    <td onClick={(e) => e.stopPropagation()}>
-                                        <input
-                                            type="checkbox"
-                                            checked={transaction.locked}
-                                            onChange={(e) => onLockTransaction(transaction.id, e.target.checked)}
-                                        />
-                                    </td>
-                                    <td className="transaction-notes-cell">{transaction.notes}</td>
-                                </tr>
-                                {isGrouped && isExpanded &&
-                                    transaction.groupedTransactions.map((childTransaction) => (
-                                        <tr
-                                            key={`child-${childTransaction.id}`}
-                                            className="grouped-transaction-child-row"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            <td />
-                                            <td>{formatTransactionDate(childTransaction.date)}</td>
-                                            <td>{childTransaction.description}</td>
-                                            <td>
-                                                <TransactionCategoryCell
-                                                    categoryList={categoryList}
-                                                    currentCategoryId={childTransaction.category?.id}
-                                                    onChange={(categoryId) => updateTransactionCategory(childTransaction, categoryId)}
-                                                />
-                                            </td>
-                                            <td>{formatAuditorAmountWithSigns(childTransaction.amount)}</td>
-                                            <td />
-                                            <td className="transaction-notes-cell">{childTransaction.notes}</td>
-                                        </tr>
-                                    ))}
+                                    
+                                <TransactionRow
+                                    transaction={transaction}
+                                    getDescription={getDescription}
+                                    categoryList={categoryList}
+                                    updateTransactionCategory={updateTransactionCategory}
+                                    onApproveTransaction={onApproveTransaction}
+                                    onLockTransaction={onLockTransaction}
+                                    onClick={isGroupedTransaction(transaction)
+                                            ? () => toggleGroupExpansion(transaction)
+                                            : undefined
+                                    }
+                                />
+
+                                {isGroupedTransaction(transaction) &&
+                                expandedGroupIds.includes(transaction.id) &&
+                                transaction.groupedTransactions.map((childTransaction) => (
+                                    <TransactionRow
+                                        key={`child-${childTransaction.id}`}
+                                        transaction={childTransaction}
+                                        getDescription={getDescription}
+                                        categoryList={categoryList}
+                                        updateTransactionCategory={updateTransactionCategory}
+                                        onApproveTransaction={onApproveTransaction}
+                                        onLockTransaction={onLockTransaction}
+                                    />
+                                ))}
                             </Fragment>
-                        );
+                        )
                     })}
                 </tbody>
             </table>

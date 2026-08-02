@@ -29,8 +29,6 @@ export function groupTransactions(
         }
     });
 
-    
-
     return Array.from(groups.values());
 }
 

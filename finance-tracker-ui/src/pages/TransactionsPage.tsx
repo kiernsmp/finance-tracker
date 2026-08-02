@@ -75,7 +75,7 @@ export default function TransactionsPage() {
                     updateTransactionCategory={updateTransactionCategory}
                     onApproveTransaction={setTransactionApproved}
                     onLockTransaction={setTransactionLocked}
-                    groupTransactionsFlag={appliedFilter.groupTransactions}
+                    isGrouped={appliedFilter.groupTransactions}
                     groupTransactions={groupTransactions}
                 />
             </div>

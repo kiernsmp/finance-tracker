@@ -126,7 +126,6 @@ export default function TransactionTable({
                                     </td>
                                     <td>{formatTransactionDate(transaction.date)}</td>
                                     <td>{isGroupedTransaction(transaction) ? `${truncate(transaction.description, 100)} (${transaction.transactionCount})` : truncate(transaction.description, 100)}</td>
-                                    <td>{formatAuditorAmountWithSigns(transaction.amount)}</td>
                                     <td onClick={(e) => e.stopPropagation()}>
                                         <TransactionCategoryCell
                                             categoryList={categoryList}
@@ -134,6 +133,7 @@ export default function TransactionTable({
                                             onChange={(categoryId) => updateTransactionCategory(transaction, categoryId)}
                                         />
                                     </td>
+                                    <td>{formatAuditorAmountWithSigns(transaction.amount)}</td>
                                     <td onClick={(e) => e.stopPropagation()}>
                                         <input
                                             type="checkbox"
@@ -153,7 +153,6 @@ export default function TransactionTable({
                                             <td />
                                             <td>{formatTransactionDate(childTransaction.date)}</td>
                                             <td>{childTransaction.description}</td>
-                                            <td>{formatAuditorAmountWithSigns(childTransaction.amount)}</td>
                                             <td>
                                                 <TransactionCategoryCell
                                                     categoryList={categoryList}
@@ -161,6 +160,7 @@ export default function TransactionTable({
                                                     onChange={(categoryId) => updateTransactionCategory(childTransaction, categoryId)}
                                                 />
                                             </td>
+                                            <td>{formatAuditorAmountWithSigns(childTransaction.amount)}</td>
                                             <td />
                                             <td className="transaction-notes-cell">{childTransaction.notes}</td>
                                         </tr>

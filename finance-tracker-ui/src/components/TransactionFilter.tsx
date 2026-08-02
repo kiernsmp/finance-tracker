@@ -1,10 +1,7 @@
 import { type KeyboardEvent } from "react";
 import type { CategoryOption } from "@/types/CategoryOption";
 import Select from "react-select";
-import {
-    type ApprovedSelectValue,
-    type TransactionFilterDraft
-} from "@/features/transactions/utils/transactionFilterUtils";
+import { type TransactionFilterDraft } from "@/features/transactions/utils/transactionFilterUtils";
 
 interface TransactionFilterProps {
     draftFilter: TransactionFilterDraft;
@@ -53,20 +50,6 @@ export default function TransactionFilter({
                     />
                 </label>
 
-                <label className="filter-field">
-                    <span>Approved</span>
-                    <select
-                        value={draftFilter.approved}
-                        onChange={(e) => {
-                            const value = e.target.value as ApprovedSelectValue;
-                            applyWithDraftUpdates({ approved: value });
-                        }}
-                    >
-                        <option value="">All</option>
-                        <option value="true">Approved</option>
-                        <option value="false">Not Approved</option>
-                    </select>
-                </label>
 
                 <label className="filter-field">
                     <span>Keyword</span>
@@ -124,6 +107,17 @@ export default function TransactionFilter({
                         }}
                     />
                     <span>Group Transactions</span>
+                </label>
+
+                <label className="filter-flag">
+                    <span>New Transactions Only</span>
+                    <input
+                        type="checkbox"
+                        checked={draftFilter.approved === false}
+                        onChange={(e) => {
+                            applyWithDraftUpdates({ approved: e.target.checked ? false : null });
+                        }}
+                    />
                 </label>
             </div>
 

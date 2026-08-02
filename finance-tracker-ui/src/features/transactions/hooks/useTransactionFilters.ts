@@ -6,7 +6,10 @@ import {
     type TransactionFilterDraft
 } from "@/features/transactions/utils/transactionFilterUtils";
 
-export function useTransactionFilters(initialFilter: TransactionFilter = {}) {
+export function useTransactionFilters(initialFilter: TransactionFilter = {
+    includeHidden: false,
+    groupTransactions: false,
+}) {
     const [appliedFilter, setAppliedFilter] = useState<TransactionFilter>(initialFilter);
     const [draftFilter, setDraftFilter] = useState<TransactionFilterDraft>(() => createFilterDraft(initialFilter));
 
@@ -26,7 +29,10 @@ export function useTransactionFilters(initialFilter: TransactionFilter = {}) {
     }
 
     function clearFilters() {
-        const emptyDraft = createFilterDraft({});
+        const emptyDraft = createFilterDraft({
+            includeHidden: false,
+            groupTransactions: false,
+        });
         setDraftFilter(emptyDraft);
         applyFilter(emptyDraft);
     }

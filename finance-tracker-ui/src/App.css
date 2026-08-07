@@ -335,18 +335,22 @@ header nav a:hover {
 }
 
 .grouped-transaction-row {
-  background: rgba(96, 165, 250, 0.12);
+  background: rgba(148, 163, 184, 0.14);
   font-weight: 600;
 }
 
 
 
 .grouped-transaction-child-row {
-  background: rgba(59, 130, 246, 0.06);
+  background: rgba(148, 163, 184, 0.08);
 }
 
-.grouped-transaction-child-row td {
-  padding-left: 2rem;
+.grouped-transaction-child-row td:nth-child(n + 2) {
+  padding-left: 1.35rem;
+}
+
+.grouped-transaction-child-row td:nth-child(3) {
+  box-shadow: inset 3px 0 0 rgba(148, 163, 184, 0.35);
 }
 
 .transactions-table input[type="checkbox"] {
@@ -361,7 +365,8 @@ header nav a:hover {
   border-bottom: none;
 }
 
-.month-divider-label {
+.month-divider-label,
+.day-divider-label {
   display: inline-block;
   padding: 0.2rem 0.6rem;
   border-radius: 999px;

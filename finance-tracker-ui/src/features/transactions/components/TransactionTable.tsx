@@ -122,7 +122,7 @@ export default function TransactionTable({
 
                                 {showDayDivider && (
                                     <DayDivider
-                                        label={monthLabel}
+                                        label={transaction.date}
                                         columnCount={TABLE_COLUMN_COUNT}
                                         dayTotal={dayTotal}
                                     />
@@ -135,6 +135,11 @@ export default function TransactionTable({
                                     updateTransactionCategory={updateTransactionCategory}
                                     onApproveTransaction={onApproveTransaction}
                                     onLockTransaction={onLockTransaction}
+                                    className={
+                                        isGroupedTransaction(transaction)
+                                            ? "grouped-transaction-row"
+                                            : undefined
+                                    }
                                     onClick={isGroupedTransaction(transaction)
                                             ? () => toggleGroupExpansion(transaction)
                                             : undefined
@@ -152,6 +157,7 @@ export default function TransactionTable({
                                         updateTransactionCategory={updateTransactionCategory}
                                         onApproveTransaction={onApproveTransaction}
                                         onLockTransaction={onLockTransaction}
+                                        className="grouped-transaction-child-row"
                                     />
                                 ))}
                             </Fragment>

@@ -98,52 +98,58 @@ The UI runs on the Vite development server, usually `http://localhost:5173`.
 - Categorise transactions using keyword mappings
 - Filter transactions by category
 - Manage categories and keywords
+- Add dashboard with category breakdowns and spending visualisations
+- Add transaction filtering by month and uncategorised transactions
+- Handle duplicate transaction detection
 
 ## Roadmap
 ### Planned Features
-- [ ] Add dashboard with category breakdowns and spending visualisations
-- [ ] Add transaction filtering by month and uncategorised transactions
-- [ ] Add user authentication and user-specific keyword mappings
 - [ ] Add multi-user functionality
+- [ ] Add note editing features for transactions and database
 - [ ] Deploy frontend to Vercel and backend to AWS
-- [ ] Add bank API integration
 
 ### Engineering Improvements
 - [ ] Add unit and integration testing
 - [ ] Implement global exception handling
 - [ ] Add structured logging
 - [ ] Improve transaction retrieval performance with pagination and query optimisation
-- [ ] Handle duplicate transaction detection
 - [ ] Add frontend loading and error states
-- [ ] Improve frontend styling and responsiveness
-- [ ] Unique Category Items
 
 ## Screenshots
 
 The following screenshots map to key UI states and actions:
 
+### Latest Screens (7.8.2026)
 
-### 1. All Transactions
+### 1. Transactions Page
 
-![All Transactions](screenshots/TransactionsAll.png)
+![Transactions Page](screenshots/7.8.2026/Transactions%20Page.png)
 
-### 2. Filter By Category
+### 2. New Transactions Only
 
-![Filter By Category](screenshots/FilterByCategory.png)
+![New Transactions Only](screenshots/7.8.2026/New%20Transactions%20Only.png)
 
-### 3. View By Date
+### 3. Grouped Transactions
 
-![View By Date](screenshots/ViewByDate.png)
+![Grouped Transactions](screenshots/7.8.2026/Grouped%20Transactions.png)
 
-### 4. Upload CSV
+### 4. Keyword Filtering
 
-![Upload CSV](screenshots/UploadCsv.png)
+![Keyword Filtering](screenshots/7.8.2026/Keyword%20Filtering.png)
 
-### 5. Transaction Categorisation (Before)
+### 5. Dashboard Summary
 
-![Transaction Categorisation Before](screenshots/TransactionCategorisationBefore.png)
+![Dashboard Summary](screenshots/7.8.2026/Dashboard%20Summary.png)
 
-### 6. Transaction Categorisation (After)
+### 6. Dashboard Month Filter
 
-![Transaction Categorisation After](screenshots/TransactionCategorisationAfter.png)
+![Dashboard Month Filter](screenshots/7.8.2026/Dashboard%20Month%20Filter.png)
+
+### 7. CSV Upload
+
+![CSV Upload](screenshots/7.8.2026/CSV%20Upload.png)
+
+### Previous Screens (22.7.2026)
+
+
 

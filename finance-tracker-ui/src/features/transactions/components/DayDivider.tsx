@@ -1,4 +1,4 @@
-import { formatAuditorAmountWithSigns } from "@/utils/formatters";
+import { formatTransactionDate, formatAuditorAmountWithSigns } from "@/utils/formatters";
 
 interface DayDividerProps {
     label: string;
@@ -11,7 +11,7 @@ export default function DayDivider({ label, columnCount, dayTotal }: DayDividerP
         <tr className="day-divider-row">
             <td colSpan={columnCount}>
                 <span className="day-divider-label">
-                    {label}: { formatAuditorAmountWithSigns(dayTotal) } 
+                    {formatTransactionDate(label)}: { formatAuditorAmountWithSigns(dayTotal) } 
                 </span>
             </td>
         </tr>

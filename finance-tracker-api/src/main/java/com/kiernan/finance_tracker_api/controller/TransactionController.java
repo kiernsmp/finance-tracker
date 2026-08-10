@@ -20,6 +20,7 @@ import com.kiernan.finance_tracker_api.dto.TransactionApproveRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionCategoryRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionFilterRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionLockRequest;
+import com.kiernan.finance_tracker_api.dto.TransactionNoteRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionResponse;
 import com.kiernan.finance_tracker_api.dto.TransactionUploadResponse;
 import com.kiernan.finance_tracker_api.service.*;
@@ -108,6 +109,19 @@ public class TransactionController {
         log.info("\n");
         log.info("PATCH /update-category received for transaction: {} to categoryId: {}", id, request.getCategoryId());
         transactionService.updateTransactionCategory(id, request.getCategoryId());
+        
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/update-note")
+    public ResponseEntity<Void> updateTransactionNote(
+            @PathVariable Integer id,
+            @RequestBody TransactionNoteRequest request) {
+
+        log.info("\n");
+        log.info("PATCH /update-note received for transaction: {}", id);
+
+        transactionService.updateTransactionNote(id, request);
         
         return ResponseEntity.noContent().build();
     }

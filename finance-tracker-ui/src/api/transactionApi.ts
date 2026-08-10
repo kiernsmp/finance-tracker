@@ -10,6 +10,7 @@ const PATCH_APPROVE = "/approve";
 const PATCH_APPROVE_ALL = "/approve-all";
 const PATCH_TRANSACTION = "/lock"
 const PATCH_CATEGORY = "/update-category";
+const PATCH_TRANSACTION_NOTE = "/update-note";
 
 
 export async function getTransactions(filter: TransactionFilter): Promise<Transaction[]> {
@@ -61,6 +62,14 @@ export async function updateCategory(id: number, categoryId: number) {
     await axios.patch(API_URL + "/" + id + PATCH_CATEGORY,
         {
             categoryId
+        }
+    );
+}
+
+export async function updateTransactionNotesApi(id: number, note: string) {
+    await axios.patch(API_URL + "/" + id + PATCH_TRANSACTION_NOTE,
+        {
+            note
         }
     );
 }

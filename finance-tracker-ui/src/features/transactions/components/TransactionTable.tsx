@@ -14,7 +14,8 @@ interface TransactionTableProps {
     onApproveTransaction: (id: number, approved: boolean) => void;
     onLockTransaction: (id: number, locked: boolean) => void;
     groupTransactions: (transactions: Transaction[]) => GroupedTransaction[];
-    isGrouped: boolean
+    isGrouped: boolean;
+    updateTransactionNotes: (id: number, note: string) => void;
 }
 
 const TABLE_COLUMN_COUNT = 7;
@@ -42,6 +43,7 @@ export default function TransactionTable({
     onLockTransaction,
     groupTransactions,
     isGrouped,
+    updateTransactionNotes,
 }: TransactionTableProps) {
     const [expandedGroupIds, setExpandedGroupIds] = useState<number[]>([]);
 
@@ -135,6 +137,7 @@ export default function TransactionTable({
                                     updateTransactionCategory={updateTransactionCategory}
                                     onApproveTransaction={onApproveTransaction}
                                     onLockTransaction={onLockTransaction}
+                                    updateTransactionNotes={updateTransactionNotes}
                                     className={
                                         isGroupedTransaction(transaction)
                                             ? "grouped-transaction-row"
@@ -157,6 +160,7 @@ export default function TransactionTable({
                                         updateTransactionCategory={updateTransactionCategory}
                                         onApproveTransaction={onApproveTransaction}
                                         onLockTransaction={onLockTransaction}
+                                        updateTransactionNotes={updateTransactionNotes}
                                         className="grouped-transaction-child-row"
                                     />
                                 ))}

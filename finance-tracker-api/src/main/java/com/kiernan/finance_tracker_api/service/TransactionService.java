@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kiernan.finance_tracker_api.dto.TransactionFilterRequest;
+import com.kiernan.finance_tracker_api.dto.TransactionNoteRequest;
 import com.kiernan.finance_tracker_api.dto.TransactionRequestDto;
 import com.kiernan.finance_tracker_api.dto.TransactionResponse;
 import com.kiernan.finance_tracker_api.dto.TransactionUploadResponse;
@@ -262,5 +263,13 @@ public class TransactionService {
             log.info("Updated {} transactions to {}", transactions.size(), category.getName());
         }
     }
-    
+
+    @Transactional
+    public void updateTransactionNote(Integer id, TransactionNoteRequest request) {
+        TransactionEntity transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        transaction.setNotes(request.getNote());
+
+    }
 }

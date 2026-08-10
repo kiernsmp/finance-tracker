@@ -3,6 +3,8 @@ import type { Transaction } from "@/types/Transaction";
 import { formatAuditorAmountWithSigns, formatTransactionDate } from "@/utils/formatters";
 import TransactionCategoryCell from "./TransactionCategoryCell";
 import type { DisplayTransaction } from "@/types/DisplayTransaction";
+import NotesCell from "@/components/NotesCell";
+import { updateTransactionNotesApi } from "@/api/transactionApi";
 
 interface TransactionRowProps {
     transaction: DisplayTransaction;
@@ -13,6 +15,7 @@ interface TransactionRowProps {
     updateTransactionCategory: (transaction: Transaction, categoryId: number) => void;
     onClick?: () => void;
     className?: string;
+    updateTransactionNotes: (id: number, note: string) => void;
 }
 
 export default function TransactionRow({
@@ -24,6 +27,7 @@ export default function TransactionRow({
     onLockTransaction,
     onClick,
     className,
+    updateTransactionNotes,
 }: TransactionRowProps) {
 
     return (
@@ -58,7 +62,15 @@ export default function TransactionRow({
                     onChange={(e) => onLockTransaction(transaction.id, e.target.checked)}
                 />
             </td>
-            <td className="transaction-notes-cell">{transaction.notes}</td>
+            <td className="transaction-notes-cell"
+                onClick={(e) => e.stopPropagation()}>
+                <NotesCell
+                    value={transaction.notes ?? ""}
+                    onSave={(note) => {
+                        updateTransactionNotes(transaction.id, note);
+                    }}
+                />
+            </td>
         </tr>
     )
 }

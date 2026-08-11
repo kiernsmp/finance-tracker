@@ -14,4 +14,6 @@ public interface MonthlyCategoryProjection {
     BigDecimal getTotalIn();
 
     BigDecimal getTotalOut();
+
+    String getNote();
 }

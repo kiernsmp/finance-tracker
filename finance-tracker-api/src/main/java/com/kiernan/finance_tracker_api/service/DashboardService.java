@@ -52,4 +52,10 @@ public class DashboardService {
         
         return summaryResponse;
     }
+
+    public void upsertCategoryNote(CategoryNoteRequest request) {
+
+        dashboardRepository.upsertMonthlyCategoryNote(request.getMonth(), request.getCategoryId(), request.getNote());
+
+    }
 }

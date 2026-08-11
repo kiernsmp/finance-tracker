@@ -33,5 +33,6 @@ public class MonthlyCategorySummaryResponse {
         private String categoryName;
         private BigDecimal totalIn;
         private BigDecimal totalOut;
+        private String note;
     }
 }

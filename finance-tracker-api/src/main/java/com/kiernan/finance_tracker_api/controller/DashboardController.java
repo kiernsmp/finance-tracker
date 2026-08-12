@@ -57,7 +57,7 @@ public class DashboardController {
     @PutMapping("/update-category-note")
     public ResponseEntity<Void> updateCategoryNote(@RequestBody CategoryNoteRequest request) {
         log.info("\n");
-        log.info("PATCH /categories/update-category-note request received for categoryId: {} for date: {}", request.getCategoryId(), request.getMonth());
+        log.info("PUT /categories/update-category-note request received for categoryId: {} for date: {}", request.getCategoryId(), request.getMonth());
 
         dashboardService.upsertCategoryNote(request);
 

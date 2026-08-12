@@ -4,14 +4,15 @@ import { formatAuditorAmount } from "@/utils/formatters";
 import CategorySummaryTable from "./CategorySummaryTable";
 import { formatMonth } from "./formatters";
 import NotesCell from "@/components/NotesCell";
-import { updateDashboardCategoryNote } from "@/api/dashboardApi";
 
 interface MonthSummarySectionProps {
     month: MonthSummary;
+    updateDashboardCategoryNotes: (month: string, categoryId: number, note: string) => Promise<void>;
 }
 
 export default function MonthSummarySection({
-    month
+    month,
+    updateDashboardCategoryNotes
 }: MonthSummarySectionProps) {
     const netAmount = month.totalIn - month.totalOut;
 

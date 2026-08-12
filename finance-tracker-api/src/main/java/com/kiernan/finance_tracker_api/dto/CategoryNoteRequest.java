@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CategoryNoteRequest {
     private final Integer categoryId;
-    private final LocalDate month;
+    private final String month;
     private final String note;
     
 }

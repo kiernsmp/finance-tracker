@@ -4,7 +4,6 @@ import { formatAuditorAmountWithSigns, formatTransactionDate } from "@/utils/for
 import TransactionCategoryCell from "./TransactionCategoryCell";
 import type { DisplayTransaction } from "@/types/DisplayTransaction";
 import NotesCell from "@/components/NotesCell";
-import { updateTransactionNotesApi } from "@/api/transactionApi";
 
 interface TransactionRowProps {
     transaction: DisplayTransaction;

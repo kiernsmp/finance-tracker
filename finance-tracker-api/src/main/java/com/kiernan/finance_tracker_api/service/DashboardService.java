@@ -55,7 +55,7 @@ public class DashboardService {
 
     public void upsertCategoryNote(CategoryNoteRequest request) {
 
-        dashboardRepository.upsertMonthlyCategoryNote(request.getMonth(), request.getCategoryId(), request.getNote());
+        dashboardRepository.upsertMonthlyCategoryNote(LocalDate.parse(request.getMonth()), request.getCategoryId(), request.getNote());
 
     }
 }

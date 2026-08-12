@@ -3,6 +3,8 @@ import type { MonthSummary } from "@/types/MonthlySummary";
 import { formatAuditorAmount } from "@/utils/formatters";
 import CategorySummaryTable from "./CategorySummaryTable";
 import { formatMonth } from "./formatters";
+import NotesCell from "@/components/NotesCell";
+import { updateDashboardCategoryNote } from "@/api/dashboardApi";
 
 interface MonthSummarySectionProps {
     month: MonthSummary;
@@ -67,11 +69,15 @@ export default function MonthSummarySection({
                 <table className="dashboard-notes-table">
                     <tbody>
                         {month.categories.map((category) => (
-                            <tr
-                                key={category.categoryName}
-                                onClick={() => handleCategoryClick(category.categoryId)}
-                            >
-                                <td>{category.note}</td>
+                            <tr key={category.categoryId}>
+                                <td>
+                                    <NotesCell
+                                        value={category.note ?? ""}
+                                        onSave={(note) =>
+                                            updateDashboardCategoryNotes(month.monthYear, category.categoryId, note)
+                                        }
+                                    />
+                                </td>
                             </tr>
                         ))}
                     </tbody>

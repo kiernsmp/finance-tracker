@@ -18,6 +18,17 @@ export function useMonthlySummary() {
         void refreshDasboardSummary();
     }, []);
 
+    const updateDashboardCategoryNotes = async (month: string, categoryId: number, note: string) => {
+            await updateDashboardCategoryNote(month, categoryId, note);
+    
+            setTransactions(prev =>
+                prev.map(transaction => 
+                    transaction.id === id
+                        ? { ...transaction, notes: note }
+                        : transaction
+                )
+            );
+        };
+    
     return { monthlySummary };
-
 }

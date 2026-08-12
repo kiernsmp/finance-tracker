@@ -37,7 +37,7 @@ public class DashboardController {
             @RequestParam(required = false) Integer categoryId) {
         
         log.info("\n");
-        log.info("ENTERING GET DASHBOARDSUMMARIES");
+        log.info("GET /dashboard/summaries received, with parameters startDate: {}, endDate: {}, categoryId: {}", startDate, endDate, categoryId);
         return dashboardService.getDashboardSummaries(startDate, endDate, categoryId);
     }
 

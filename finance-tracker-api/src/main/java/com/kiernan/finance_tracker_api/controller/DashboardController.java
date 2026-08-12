@@ -3,8 +3,11 @@ package com.kiernan.finance_tracker_api.controller;
 import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.kiernan.finance_tracker_api.dto.MonthlyCategorySummaryResponse;
 import com.kiernan.finance_tracker_api.dto.BalanceOffsetResponse;
+import com.kiernan.finance_tracker_api.dto.CategoryNoteRequest;
 import com.kiernan.finance_tracker_api.service.DashboardService;
 
 @RestController
@@ -33,7 +37,7 @@ public class DashboardController {
             @RequestParam(required = false) Integer categoryId) {
         
         log.info("\n");
-        log.info("ENTERING GET DASHBOARDSUMMARIES");
+        log.info("GET /dashboard/summaries received, with parameters startDate: {}, endDate: {}, categoryId: {}", startDate, endDate, categoryId);
         return dashboardService.getDashboardSummaries(startDate, endDate, categoryId);
     }
 
@@ -49,4 +53,15 @@ public class DashboardController {
 
         return balanceOffset;
     }
+
+    @PutMapping("/update-category-note")
+    public ResponseEntity<Void> updateCategoryNote(@RequestBody CategoryNoteRequest request) {
+        log.info("\n");
+        log.info("PUT /categories/update-category-note request received for categoryId: {} for date: {}", request.getCategoryId(), request.getMonth());
+
+        dashboardService.upsertCategoryNote(request);
+
+        return ResponseEntity.noContent().build();
+    }
+        
 }

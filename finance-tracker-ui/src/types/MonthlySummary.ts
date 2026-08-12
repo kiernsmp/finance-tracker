@@ -13,5 +13,6 @@ export interface CategorySummary {
     categoryId: number;
     categoryName: string;
     totalIn: number;
-    totalOut: number
+    totalOut: number;
+    note: string;
 }

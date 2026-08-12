@@ -15,45 +15,47 @@ import com.kiernan.finance_tracker_api.projections.MonthlyCategoryProjection;
 @Component
 public class DashboardMapper {
 
-    public MonthlyCategorySummaryResponse toMonthlyCategoryResponse(
-            List<MonthlyCategoryProjection> categoryProjection,
-            List<MonthlyAmountProjection> amountsProjection) {
+        public MonthlyCategorySummaryResponse toMonthlyCategoryResponse(
+                        List<MonthlyCategoryProjection> categoryProjection,
+                        List<MonthlyAmountProjection> amountsProjection) {
 
-        Map<YearMonth, MonthlyAmountProjection> amountMap = amountsProjection.stream()
-                .collect(Collectors.toMap(
-                        projection -> YearMonth.from(projection.getMonth()),
-                        projection -> projection));
+                Map<YearMonth, MonthlyAmountProjection> amountMap = amountsProjection.stream()
+                                .collect(Collectors.toMap(
+                                                projection -> YearMonth.from(projection.getMonth()),
+                                                projection -> projection));
 
-        List<MonthlyCategorySummaryResponse.MonthSummary> months = categoryProjection.stream()
-                .collect(Collectors.groupingBy(
-                        projection -> YearMonth.from(projection.getMonth()),
-                        LinkedHashMap::new,
-                        Collectors.toList()))
-                .entrySet()
-                .stream()
-                .map(entry -> {
-                    MonthlyAmountProjection amount = amountMap.get(entry.getKey());
+                List<MonthlyCategorySummaryResponse.MonthSummary> months = categoryProjection.stream()
+                                .collect(Collectors.groupingBy(
+                                                projection -> YearMonth.from(projection.getMonth()),
+                                                LinkedHashMap::new,
+                                                Collectors.toList()))
+                                .entrySet()
+                                .stream()
+                                .map(entry -> {
+                                        MonthlyAmountProjection amount = amountMap.get(entry.getKey());
 
-                    return new MonthlyCategorySummaryResponse.MonthSummary(
-                            entry.getKey(),
-                            amount.getTotalIn(),
-                            amount.getTotalOut(),
-                            entry.getValue().stream()
-                                    .map(this::toCategory)
-                                    .toList());
-                })
-                .toList();
+                                        return new MonthlyCategorySummaryResponse.MonthSummary(
+                                                        entry.getKey(),
+                                                        amount.getTotalIn(),
+                                                        amount.getTotalOut(),
+                                                        entry.getValue().stream()
+                                                                        .map(this::toCategory)
+                                                                        .toList());
+                                })
+                                .toList();
 
-        return new MonthlyCategorySummaryResponse(months);
-    }
+                return new MonthlyCategorySummaryResponse(months);
+        }
 
-    private MonthlyCategorySummaryResponse.CategorySummary toCategory(
-            MonthlyCategoryProjection projection) {
+        private MonthlyCategorySummaryResponse.CategorySummary toCategory(
+                        MonthlyCategoryProjection projection) {
 
-        return new MonthlyCategorySummaryResponse.CategorySummary(
-                projection.getCategoryId(), 
-                projection.getCategoryName(),
-                projection.getTotalIn(),
-                projection.getTotalOut());
-    }
+                return new MonthlyCategorySummaryResponse.CategorySummary(
+                                projection.getCategoryId(),
+                                projection.getCategoryName(),
+                                projection.getTotalIn(),
+                                projection.getTotalOut(),
+                                projection.getNote()
+                        );
+        }
 }

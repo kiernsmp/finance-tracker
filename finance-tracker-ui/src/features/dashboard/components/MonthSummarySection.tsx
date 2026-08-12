@@ -3,13 +3,16 @@ import type { MonthSummary } from "@/types/MonthlySummary";
 import { formatAuditorAmount } from "@/utils/formatters";
 import CategorySummaryTable from "./CategorySummaryTable";
 import { formatMonth } from "./formatters";
+import NotesCell from "@/components/NotesCell";
 
 interface MonthSummarySectionProps {
     month: MonthSummary;
+    updateDashboardCategoryNotes: (month: string, categoryId: number, note: string) => Promise<void>;
 }
 
 export default function MonthSummarySection({
-    month
+    month,
+    updateDashboardCategoryNotes
 }: MonthSummarySectionProps) {
     const netAmount = month.totalIn - month.totalOut;
 
@@ -21,33 +24,65 @@ export default function MonthSummarySection({
         )
     }
 
+    const handleCategoryClick = (categoryId: number) => {
+        navigate(
+            `/transactions?month=${month.monthYear}&categoryId=${categoryId}`
+        )
+    }
+
     return (
         <section className="dashboard-month-section">
-            <div className="dashboard-month-title">
-                <h2 className="dashboard-month-title"
-                    onClick={() => handleMonthClick(month.monthYear)}
-                    >{formatMonth(month.monthYear)}</h2>
 
+            <div className="dashboard-month-layout">
+                <div className="dashboard-main-panel">
+                    <div className="dashboard-month-title">
+                        <h2
+                            className="dashboard-month-title"
+                            onClick={() => handleMonthClick(month.monthYear)}
+                        >{formatMonth(month.monthYear)}</h2>
+                    </div>
+
+                    <div className="dashboard-summary-column">
+                        <CategorySummaryTable
+                            categories={month.categories}
+                            onCategoryClick={handleCategoryClick}
+                        />
+
+                        <div className="dashboard-metrics-row">
+                            <div className="dashboard-metric-card">
+                                <h3>Total In</h3>
+                                <strong>{formatAuditorAmount(month.totalIn)}</strong>
+                            </div>
+                            <div className="dashboard-metric-card">
+                                <h3>Total Out</h3>
+                                <strong>{formatAuditorAmount(month.totalOut)}</strong>
+                            </div>
+                            <div className="dashboard-metric-card">
+                                <h3>Net</h3>
+                                <strong>{formatAuditorAmount(netAmount)}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <CategorySummaryTable 
-                categories={month.categories} 
-                month={month}
-            />
-
-            <div className="dashboard-metrics-row">
-                <div className="dashboard-metric-card">
-                    <h3>Total In</h3>
-                    <strong>{formatAuditorAmount(month.totalIn)}</strong>
-                </div>
-                <div className="dashboard-metric-card">
-                    <h3>Total Out</h3>
-                    <strong>{formatAuditorAmount(month.totalOut)}</strong>
-                </div>
-                <div className="dashboard-metric-card">
-                    <h3>Net</h3>
-                    <strong>{formatAuditorAmount(netAmount)}</strong>
-                </div>
+            <div className="dashboard-notes-panel">
+                <table className="dashboard-notes-table">
+                    <tbody>
+                        {month.categories.map((category) => (
+                            <tr key={category.categoryId}>
+                                <td>
+                                    <NotesCell
+                                        value={category.note ?? ""}
+                                        onSave={(note) =>
+                                            updateDashboardCategoryNotes(month.monthYear, category.categoryId, note)
+                                        }
+                                    />
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </section>
     );

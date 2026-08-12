@@ -4,7 +4,8 @@ import {
     approveTransaction,
     getTransactions,
     lockTransaction,
-    updateCategory
+    updateCategory,
+    updateTransactionNotesApi
 } from "@/api/transactionApi";
 import { updateKeywordCategory } from "@/api/keywordsApi";
 import type { Transaction } from "@/types/Transaction";
@@ -76,6 +77,18 @@ export function useTransactionData(appliedFilter: TransactionFilter) {
         }
     }
 
+    const updateTransactionNotes = async (id: number, note: string) => {
+        await updateTransactionNotesApi(id, note);
+
+        setTransactions(prev =>
+            prev.map(transaction => 
+                transaction.id === id
+                    ? { ...transaction, notes: note }
+                    : transaction
+            )
+        );
+    };
+
     return {
         transactions,
         refreshTransactions,
@@ -83,5 +96,6 @@ export function useTransactionData(appliedFilter: TransactionFilter) {
         approveAll,
         setTransactionApproved,
         setTransactionLocked,
+        updateTransactionNotes,
     };
 }

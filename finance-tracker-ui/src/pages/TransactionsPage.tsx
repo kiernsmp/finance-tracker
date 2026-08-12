@@ -37,6 +37,7 @@ export default function TransactionsPage() {
         approveAll,
         setTransactionApproved,
         setTransactionLocked,
+        updateTransactionNotes,
     } = useTransactionData(appliedFilter);
     const { totalIn, totalOut } = calculateTransactionTotals(transactions);
 
@@ -77,6 +78,7 @@ export default function TransactionsPage() {
                     onLockTransaction={setTransactionLocked}
                     isGrouped={appliedFilter.groupTransactions}
                     groupTransactions={groupTransactions}
+                    updateTransactionNotes={updateTransactionNotes}
                 />
             </div>
         </div>

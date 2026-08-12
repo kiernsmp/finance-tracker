@@ -4,7 +4,7 @@ import "./DashboardPage.css";
 import NetBalance from "@/features/dashboard/components/NetBalance";
 
 export default function DashboardPage() {
-    const { monthlySummary } = useMonthlySummary();
+    const { monthlySummary, updateDashboardCategoryNotes } = useMonthlySummary();
 
     if (!monthlySummary) {
         return <p>Loading...</p>;
@@ -37,7 +37,10 @@ export default function DashboardPage() {
 
             <div className="dashboard-sections">
                 <div className="dashboard-section-card">
-                    <MonthlySummaryTable monthlySummary={monthlySummary} />
+                    <MonthlySummaryTable
+                        monthlySummary={monthlySummary}
+                        updateDashboardCategoryNotes={updateDashboardCategoryNotes}
+                    />
                 </div>
             </div>
         </div>

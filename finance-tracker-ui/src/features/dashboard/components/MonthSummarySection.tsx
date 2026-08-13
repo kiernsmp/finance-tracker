@@ -77,6 +77,7 @@ export default function MonthSummarySection({
                                         onSave={(note) =>
                                             updateDashboardCategoryNotes(month.monthYear, category.categoryId, note)
                                         }
+                                        className="dashboard-notes-cell"
                                     />
                                 </td>
                             </tr>

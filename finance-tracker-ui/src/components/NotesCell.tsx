@@ -3,11 +3,13 @@ import { useState } from "react";
 interface NotesCellProps {
     value: string;
     onSave: (note: string) => void;
+    className?: string;
 }
 
 export default function NotesCell({
     value,
     onSave,
+    className,
 }: NotesCellProps) {
     const [editing, setEditing] = useState(false);
     const [note, setNote] = useState(value ?? "");
@@ -50,7 +52,7 @@ export default function NotesCell({
 
     return (
         <div
-            className="notes-cell-content"
+            className={`notes-cell-content ${className ?? ""}`.trim()}
             onClick={() => setEditing(true)}
             role="button"
             tabIndex={0}

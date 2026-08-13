@@ -47,8 +47,10 @@ export default function TransactionRow({
                 />
             </td>
             <td>{formatTransactionDate(transaction.date)}</td>
-            <td className="transaction-description-cell">
-                {getDescription(transaction)}
+            <td>
+                <div className="transaction-description-cell">
+                    {getDescription(transaction)}
+                </div>
             </td>
             <td>{formatAuditorAmountWithSigns(transaction.amount)}</td>
             <td onClick={(e) => e.stopPropagation()}>
@@ -65,8 +67,7 @@ export default function TransactionRow({
                     onChange={(e) => onLockTransaction(transaction.id, e.target.checked)}
                 />
             </td>
-            <td className="transaction-notes-cell"
-                onClick={(e) => e.stopPropagation()}>
+            <td onClick={(e) => e.stopPropagation()}>
                 <NotesCell
                     value={transaction.notes ?? ""}
                     onSave={(note) => {

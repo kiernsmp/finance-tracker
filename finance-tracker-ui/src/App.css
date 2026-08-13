@@ -359,6 +359,25 @@ header nav a:hover {
   accent-color: #60a5fa;
 }
 
+.amount-header {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.amount-header:hover {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.transactions-table th.amount-header-desc {
+  background: rgba(31, 64, 137, 0.25);
+}
+
+.amount-header-desc::after {
+  content: " ▼";
+}
+
 .month-divider-row td,
 .day-divider-row td {
   padding: 0.5rem 0.7rem 0.25rem;

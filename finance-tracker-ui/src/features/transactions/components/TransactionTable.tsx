@@ -104,7 +104,10 @@ export default function TransactionTable({
                         <th>Approved</th>
                         <th>Date</th>
                         <th>Description</th>
-                        <th onClick={handleAmountClick}>
+                        <th
+                            onClick={handleAmountClick}
+                            className={`amount-header ${sortDescending ? "amount-header-desc" : "amount-header"}`}
+                        >
                             Amount
                         </th>
                         <th>Category</th>

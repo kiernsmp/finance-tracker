@@ -12,3 +12,7 @@ export function calculateTransactionTotals(transactions: Transaction[]) {
         totalOut
     };
 }
+
+export function sortByTransactionAmountDesc(transactions: Transaction[]) {
+    return [...transactions].sort((a,b) => Math.abs(b.amount) - Math.abs(a.amount));
+}

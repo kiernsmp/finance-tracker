@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import TransactionFilter from "@/components/TransactionFilter";
 import TransactionSummary from "@/features/transactions/components/TransactionSummary";
 import TransactionTable from "@/features/transactions/components/TransactionTable";
-import { calculateTransactionTotals } from "@/utils/calculateTransactionTotals";
+import { calculateTransactionTotals } from "@/utils/transactionUtils";
 import { useCategories } from "@/features/transactions/hooks/useCategories";
 import { useTransactionData } from "@/features/transactions/hooks/useTransactionData";
 import { useTransactionFilters } from "@/features/transactions/hooks/useTransactionFilters";

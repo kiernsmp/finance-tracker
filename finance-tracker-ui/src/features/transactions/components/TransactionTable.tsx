@@ -6,6 +6,7 @@ import TransactionRow from "./TransactionRow";
 import MonthDivider from "./MonthDivider";
 import DayDivider from "./DayDivider";
 import type { DisplayTransaction } from "@/types/DisplayTransaction";
+import { sortByTransactionAmountDesc } from "@/utils/transactionUtils";
 
 interface TransactionTableProps {
     transactions: Transaction[];
@@ -46,6 +47,7 @@ export default function TransactionTable({
     updateTransactionNotes,
 }: TransactionTableProps) {
     const [expandedGroupIds, setExpandedGroupIds] = useState<number[]>([]);
+    const [sortDescending, setSortDescending] = useState(false);
 
     const toggleGroupExpansion = (transaction: DisplayTransaction) => {
         if (!isGroupedTransaction(transaction)) {
@@ -58,10 +60,19 @@ export default function TransactionTable({
         );
     };
 
+    const sortedTransactions = sortDescending
+        ? sortByTransactionAmountDesc(transactions)
+        : transactions;
+
     const displayedTransactions: DisplayTransaction[] =
         isGrouped
-            ? groupTransactions(transactions)
-            : transactions;
+            ? groupTransactions(sortedTransactions)
+            : sortedTransactions;
+
+    const handleAmountClick = () => {
+        setSortDescending(prev => !prev);
+        };
+    
 
     const dailyNegativeTotals = useMemo(() => {
         const totals = new Map<string, number>();
@@ -93,7 +104,9 @@ export default function TransactionTable({
                         <th>Approved</th>
                         <th>Date</th>
                         <th>Description</th>
-                        <th>Amount</th>
+                        <th onClick={handleAmountClick}>
+                            Amount
+                        </th>
                         <th>Category</th>
                         <th>Locked</th>
                         <th>Notes</th>
@@ -115,14 +128,14 @@ export default function TransactionTable({
 
                         return (
                             <Fragment key={isGrouped ? `group-${transaction.id}` : transaction.id}>
-                                {showMonthDivider && (
+                                {!sortDescending && showMonthDivider && (
                                     <MonthDivider
                                         label={monthLabel}
                                         columnCount={TABLE_COLUMN_COUNT}
                                     />
                                 )}
 
-                                {showDayDivider && (
+                                {!sortDescending && showDayDivider && (
                                     <DayDivider
                                         label={transaction.date}
                                         columnCount={TABLE_COLUMN_COUNT}

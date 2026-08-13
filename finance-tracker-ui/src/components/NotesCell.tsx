@@ -46,7 +46,7 @@ export default function NotesCell({
                 }}
                 autoFocus
                 disabled={saving}
-                rows={5}
+                rows={2}
             />
         );
     }
@@ -64,7 +64,7 @@ export default function NotesCell({
                 }
             }}
         >
-            {value || " "}
+            {value || "\u00A0"}
         </div>
     );
 }

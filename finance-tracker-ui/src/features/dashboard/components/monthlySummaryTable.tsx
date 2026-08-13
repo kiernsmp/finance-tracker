@@ -14,12 +14,10 @@ export default function MonthlySummaryTable({
         <div className="dashboard-month-list">
             {monthlySummary.months.map((month) => (
                 <div className="dashboard-month-row" key={month.monthYear}>
-                    <div className="dashboard-month-card">
-                        <MonthSummarySection
-                            month={month}
-                            updateDashboardCategoryNotes={updateDashboardCategoryNotes}
-                        />
-                    </div>
+                    <MonthSummarySection
+                        month={month}
+                        updateDashboardCategoryNotes={updateDashboardCategoryNotes}
+                    />
                 </div>
             ))}
         </div>

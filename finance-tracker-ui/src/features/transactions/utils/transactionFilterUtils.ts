@@ -8,6 +8,7 @@ export interface TransactionFilterDraft {
     includeHidden?: boolean;
     groupTransactions?: boolean;
     approved: boolean | null;
+    metaNotes: boolean;
 }
 
 export function createFilterDraft(appliedFilter: TransactionFilter): TransactionFilterDraft {
@@ -19,6 +20,7 @@ export function createFilterDraft(appliedFilter: TransactionFilter): Transaction
         includeHidden: appliedFilter.includeHidden === true,
         groupTransactions: appliedFilter.groupTransactions === true,
         approved: appliedFilter.approved ?? null,
+        metaNotes: appliedFilter.metaNotes ?? false,
     };
 }
 
@@ -33,6 +35,7 @@ export function toAppliedFilter(draft: TransactionFilterDraft): TransactionFilte
         keyword: keyword || undefined,
         includeHidden: draft.includeHidden === true,
         groupTransactions: draft.groupTransactions === true,
+        metaNotes: draft.metaNotes === true,
     };
 }
 
@@ -42,6 +45,7 @@ export function buildInitialFilterFromSearchParams(searchParams: URLSearchParams
     const nextFilter: TransactionFilter = {
         includeHidden: false,
         groupTransactions: false,
+        metaNotes: false,
     };
 
     if (month) {

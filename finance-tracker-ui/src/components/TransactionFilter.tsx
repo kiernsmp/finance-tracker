@@ -119,6 +119,17 @@ export default function TransactionFilter({
                         }}
                     />
                 </label>
+
+                <label className="filter-flag">
+                    <span>Show Meta-Notes</span>
+                    <input
+                        type="checkbox"
+                        checked={draftFilter.metaNotes === true}
+                        onChange={(e) => {
+                            applyWithDraftUpdates({ metaNotes: e.target.checked ? true : false });
+                        }}
+                    />
+                </label>
             </div>
 
             <button className="ghost-button clear-filters-button" type="button" onClick={clearFilters}>

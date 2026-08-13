@@ -6,4 +6,5 @@ export interface TransactionFilter {
     includeHidden: boolean;
     groupTransactions: boolean;
     approved?: boolean | null;
+    metaNotes: boolean;
 }

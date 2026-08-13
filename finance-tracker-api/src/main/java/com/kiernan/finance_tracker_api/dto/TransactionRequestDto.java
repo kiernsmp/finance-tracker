@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import lombok.Getter;
 
+@Getter
 public class TransactionRequestDto {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -12,28 +14,13 @@ public class TransactionRequestDto {
     private LocalDate date;
     private BigDecimal amount;
     private String description;
-    private String notes;
+    private String metaNotes;
 
-    public TransactionRequestDto(String date, String transaction, String description, String notes) {
+    public TransactionRequestDto(String date, String transaction, String description, String metaNotes) {
         this.date = LocalDate.parse(date, DATE_FORMATTER);
         this.amount = new BigDecimal(transaction.replace(",", ""));
         this.description = description;
-        this.notes = notes;
+        this.metaNotes = metaNotes;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
 }

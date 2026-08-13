@@ -88,6 +88,7 @@ export default function TransactionsPage() {
                     updateTransactionNotes={updateTransactionNotes}
                     sortDescending={sortDescending}
                     onToggleSortDescending={() => setSortDescending((prev) => !prev)}
+                    showMetaNotes={appliedFilter.metaNotes}
                 />
             </div>
         </div>

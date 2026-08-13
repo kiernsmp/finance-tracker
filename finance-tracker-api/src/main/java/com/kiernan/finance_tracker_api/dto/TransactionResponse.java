@@ -17,6 +17,7 @@ public class TransactionResponse {
     private BigDecimal amount;
     private String description;
     private String notes;
+    private String metaNotes;
     private CategoryEntity category;
     private Boolean approved;
     private Boolean locked;

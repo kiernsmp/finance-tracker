@@ -19,6 +19,7 @@ interface TransactionTableProps {
     updateTransactionNotes: (id: number, note: string) => void;
     sortDescending: boolean;
     onToggleSortDescending: () => void;
+    showMetaNotes: boolean;
 }
 
 const TABLE_COLUMN_COUNT = 7;
@@ -49,6 +50,7 @@ export default function TransactionTable({
     updateTransactionNotes,
     sortDescending,
     onToggleSortDescending,
+    showMetaNotes
 }: TransactionTableProps) {
     const [expandedGroupIds, setExpandedGroupIds] = useState<number[]>([]);
 
@@ -99,7 +101,7 @@ export default function TransactionTable({
             <table className="transactions-table">
                 <thead>
                     <tr>
-                        <th>Approved</th>
+                        <th>✓</th>
                         <th>Date</th>
                         <th>Description</th>
                         <th
@@ -109,8 +111,11 @@ export default function TransactionTable({
                             Amount
                         </th>
                         <th>Category</th>
-                        <th>Locked</th>
+                        <th>🔒</th>
                         <th>Notes</th>
+                        {showMetaNotes && (
+                            <th>MetaNotes</th> 
+                        )}
                     </tr>
                 </thead>
 
@@ -161,6 +166,7 @@ export default function TransactionTable({
                                             ? () => toggleGroupExpansion(transaction)
                                             : undefined
                                     }
+                                    showMetaNotes={showMetaNotes}
                                 />
 
                                 {isGroupedTransaction(transaction) &&
@@ -176,6 +182,7 @@ export default function TransactionTable({
                                         onLockTransaction={onLockTransaction}
                                         updateTransactionNotes={updateTransactionNotes}
                                         className="grouped-transaction-child-row"
+                                        showMetaNotes={showMetaNotes}
                                     />
                                 ))}
                             </Fragment>

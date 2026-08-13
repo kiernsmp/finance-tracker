@@ -9,6 +9,7 @@ import {
 export function useTransactionFilters(initialFilter: TransactionFilter = {
     includeHidden: false,
     groupTransactions: false,
+    metaNotes: false,
 }) {
     const [appliedFilter, setAppliedFilter] = useState<TransactionFilter>(initialFilter);
     const [draftFilter, setDraftFilter] = useState<TransactionFilterDraft>(() => createFilterDraft(initialFilter));
@@ -32,6 +33,7 @@ export function useTransactionFilters(initialFilter: TransactionFilter = {
         const emptyDraft = createFilterDraft({
             includeHidden: false,
             groupTransactions: false,
+            metaNotes: false,
         });
         setDraftFilter(emptyDraft);
         applyFilter(emptyDraft);

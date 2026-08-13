@@ -25,7 +25,7 @@ public class TransactionMapper {
             dto.getDate(),
             dto.getAmount(),
             dto.getDescription(),
-            dto.getNotes()
+            dto.getMetaNotes()
         );
     }
 
@@ -48,6 +48,7 @@ public class TransactionMapper {
             entity.getAmount(),
             entity.getDescription(),
             entity.getNotes(),
+            entity.getMetaNotes(),
             entity.getCategory(),
             entity.isApproved(),
             entity.isLocked()

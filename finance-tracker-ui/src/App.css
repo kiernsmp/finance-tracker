@@ -386,18 +386,24 @@ header nav a:hover {
 
 .month-divider-label,
 .day-divider-label {
-  display: inline-block;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-  background: rgba(96, 165, 250, 0.16);
-  color: #bfdbfe;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(96, 165, 250, 0.16);
+    color: #bfdbfe;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.month-divider-label {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
 }
 
 .transaction-notes-cell {
-  max-width: 220px;
+  max-width: 300px;
+  min-width: 175px;
   white-space: normal;
   overflow: hidden;
   display: -webkit-box;
@@ -406,12 +412,23 @@ header nav a:hover {
   line-clamp: 2;
 }
 
+.transaction-description-cell,
 .notes-cell-content {
+  min-width: 175px;
   width: 100%;
-  min-height: 1.6rem;
-  cursor: pointer;
+  height: 3.2rem;
+  line-height: 1.6rem;
   display: flex;
   align-items: center;
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.notes-cell-content {
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

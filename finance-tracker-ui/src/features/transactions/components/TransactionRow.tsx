@@ -15,6 +15,7 @@ interface TransactionRowProps {
     onClick?: () => void;
     className?: string;
     updateTransactionNotes: (id: number, note: string) => void;
+    showMetaNotes: boolean;
 }
 
 export default function TransactionRow({
@@ -27,6 +28,7 @@ export default function TransactionRow({
     onClick,
     className,
     updateTransactionNotes,
+    showMetaNotes,
 }: TransactionRowProps) {
 
     return (
@@ -72,6 +74,13 @@ export default function TransactionRow({
                     }}
                 />
             </td>
+            {showMetaNotes && (
+                <td className="transactions-notes-cell">
+                    <div className="transaction-notes-cell">
+                        {transaction.metaNotes ?? ""}
+                    </div>
+                </td>
+            )}
         </tr>
     )
 }

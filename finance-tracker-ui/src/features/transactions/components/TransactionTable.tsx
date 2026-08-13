@@ -19,6 +19,7 @@ interface TransactionTableProps {
     updateTransactionNotes: (id: number, note: string) => void;
     sortDescending: boolean;
     onToggleSortDescending: () => void;
+    showMetaNotes: boolean;
 }
 
 const TABLE_COLUMN_COUNT = 7;
@@ -49,6 +50,7 @@ export default function TransactionTable({
     updateTransactionNotes,
     sortDescending,
     onToggleSortDescending,
+    showMetaNotes
 }: TransactionTableProps) {
     const [expandedGroupIds, setExpandedGroupIds] = useState<number[]>([]);
 
@@ -111,6 +113,9 @@ export default function TransactionTable({
                         <th>Category</th>
                         <th>🔒</th>
                         <th>Notes</th>
+                        {showMetaNotes && (
+                            <th>MetaNotes</th> 
+                        )}
                     </tr>
                 </thead>
 
@@ -161,6 +166,7 @@ export default function TransactionTable({
                                             ? () => toggleGroupExpansion(transaction)
                                             : undefined
                                     }
+                                    showMetaNotes={showMetaNotes}
                                 />
 
                                 {isGroupedTransaction(transaction) &&
@@ -176,6 +182,7 @@ export default function TransactionTable({
                                         onLockTransaction={onLockTransaction}
                                         updateTransactionNotes={updateTransactionNotes}
                                         className="grouped-transaction-child-row"
+                                        showMetaNotes={showMetaNotes}
                                     />
                                 ))}
                             </Fragment>

@@ -1,7 +1,5 @@
 package com.kiernan.finance_tracker_api.dto;
 
-import java.time.LocalDate;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

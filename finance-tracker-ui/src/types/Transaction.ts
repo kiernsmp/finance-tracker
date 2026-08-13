@@ -5,6 +5,7 @@ export interface Transaction {
     date: string;
     category: Category;
     notes: string;
+    metaNotes: string;
     approved: boolean;
     locked: boolean;
 }

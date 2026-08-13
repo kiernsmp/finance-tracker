@@ -3,6 +3,7 @@ package com.kiernan.finance_tracker_api.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +31,8 @@ public class TransactionEntity {
     private String description;
     private BigDecimal amount;
     private String notes;
+    @Column(name = "meta_notes")
+    private String metaNotes;
     private LocalDate date;
     private boolean approved;
     private boolean locked;
@@ -42,12 +45,12 @@ public class TransactionEntity {
         LocalDate date,
         BigDecimal amount,
         String description,
-        String notes
+        String metaNotes
     ) {
         this.date = date;
         this.amount = amount;
         this.description = description;
-        this.notes = notes;
+        this.metaNotes = metaNotes;
         this.approved = false;
         this.locked = false;
     }

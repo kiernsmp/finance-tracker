@@ -45,7 +45,9 @@ export default function TransactionRow({
                 />
             </td>
             <td>{formatTransactionDate(transaction.date)}</td>
-            <td>{getDescription(transaction)}</td>
+            <td className="transaction-description-cell">
+                {getDescription(transaction)}
+            </td>
             <td>{formatAuditorAmountWithSigns(transaction.amount)}</td>
             <td onClick={(e) => e.stopPropagation()}>
                 <TransactionCategoryCell

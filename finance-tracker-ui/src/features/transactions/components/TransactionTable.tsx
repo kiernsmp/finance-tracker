@@ -99,7 +99,7 @@ export default function TransactionTable({
             <table className="transactions-table">
                 <thead>
                     <tr>
-                        <th>Approved</th>
+                        <th>✓</th>
                         <th>Date</th>
                         <th>Description</th>
                         <th
@@ -109,7 +109,7 @@ export default function TransactionTable({
                             Amount
                         </th>
                         <th>Category</th>
-                        <th>Locked</th>
+                        <th>🔒</th>
                         <th>Notes</th>
                     </tr>
                 </thead>

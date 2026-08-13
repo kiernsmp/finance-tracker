@@ -31,17 +31,19 @@ export default function NotesCell({
 
     if (editing) {
         return (
-            <input
+            <textarea
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 onBlur={handleSave}
                 onKeyDown={(e) => {
-                    if (e.key === "Enter") {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
                         handleSave();
                     }
                 }}
                 autoFocus
                 disabled={saving}
+                rows={5}
             />
         );
     }

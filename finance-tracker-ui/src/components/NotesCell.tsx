@@ -34,6 +34,7 @@ export default function NotesCell({
     if (editing) {
         return (
             <textarea
+                className="notes-cell-textarea"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 onBlur={handleSave}

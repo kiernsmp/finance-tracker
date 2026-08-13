@@ -3,11 +3,13 @@ import { useState } from "react";
 interface NotesCellProps {
     value: string;
     onSave: (note: string) => void;
+    className?: string;
 }
 
 export default function NotesCell({
     value,
     onSave,
+    className,
 }: NotesCellProps) {
     const [editing, setEditing] = useState(false);
     const [note, setNote] = useState(value ?? "");
@@ -32,6 +34,7 @@ export default function NotesCell({
     if (editing) {
         return (
             <textarea
+                className="notes-cell-textarea"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 onBlur={handleSave}
@@ -43,14 +46,14 @@ export default function NotesCell({
                 }}
                 autoFocus
                 disabled={saving}
-                rows={5}
+                rows={2}
             />
         );
     }
 
     return (
         <div
-            className="notes-cell-content"
+            className={`notes-cell-content ${className ?? ""}`.trim()}
             onClick={() => setEditing(true)}
             role="button"
             tabIndex={0}
@@ -61,7 +64,7 @@ export default function NotesCell({
                 }
             }}
         >
-            {value || " "}
+            {value || "\u00A0"}
         </div>
     );
 }

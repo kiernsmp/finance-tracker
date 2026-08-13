@@ -17,6 +17,8 @@ interface TransactionTableProps {
     groupTransactions: (transactions: Transaction[]) => GroupedTransaction[];
     isGrouped: boolean;
     updateTransactionNotes: (id: number, note: string) => void;
+    sortDescending: boolean;
+    onToggleSortDescending: () => void;
 }
 
 const TABLE_COLUMN_COUNT = 7;
@@ -45,9 +47,10 @@ export default function TransactionTable({
     groupTransactions,
     isGrouped,
     updateTransactionNotes,
+    sortDescending,
+    onToggleSortDescending,
 }: TransactionTableProps) {
     const [expandedGroupIds, setExpandedGroupIds] = useState<number[]>([]);
-    const [sortDescending, setSortDescending] = useState(false);
 
     const toggleGroupExpansion = (transaction: DisplayTransaction) => {
         if (!isGroupedTransaction(transaction)) {
@@ -68,11 +71,6 @@ export default function TransactionTable({
         isGrouped
             ? groupTransactions(sortedTransactions)
             : sortedTransactions;
-
-    const handleAmountClick = () => {
-        setSortDescending(prev => !prev);
-        };
-    
 
     const dailyNegativeTotals = useMemo(() => {
         const totals = new Map<string, number>();
@@ -105,7 +103,7 @@ export default function TransactionTable({
                         <th>Date</th>
                         <th>Description</th>
                         <th
-                            onClick={handleAmountClick}
+                            onClick={onToggleSortDescending}
                             className={`amount-header ${sortDescending ? "amount-header-desc" : "amount-header"}`}
                         >
                             Amount

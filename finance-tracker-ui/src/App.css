@@ -402,10 +402,10 @@ header nav a:hover {
 }
 
 .transaction-notes-cell {
-  max-width: 300px;
-  min-width: 175px;
+  max-width: 400px;
+  min-width: 300px;
   white-space: normal;
-  overflow: hidden;
+  overflow: auto;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -435,7 +435,7 @@ header nav a:hover {
   border: 1px solid #374151;
   border-radius: 0.5rem;
   padding: 0.4rem 0.55rem;
-  font: inherit;
+  font: i/*  */nherit;
   resize: vertical;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }

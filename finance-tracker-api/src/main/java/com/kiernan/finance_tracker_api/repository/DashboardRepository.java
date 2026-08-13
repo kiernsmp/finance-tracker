@@ -46,6 +46,10 @@ public interface DashboardRepository extends JpaRepository<TransactionEntity, In
 
             ORDER BY
                 month DESC,
+                CASE
+                    WHEN c.name = 'Income' THEN 0
+                    ELSE 1
+                END,
                 GREATEST(
                     SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END),
                     SUM(CASE WHEN t.amount < 0 THEN ABS(t.amount) ELSE 0 END)

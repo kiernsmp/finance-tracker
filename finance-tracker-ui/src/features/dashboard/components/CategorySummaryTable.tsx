@@ -29,8 +29,25 @@ export default function CategorySummaryTable({
                             onClick={() => onCategoryClick(category.categoryId)}
                         >
                             <td>{category.categoryName}</td>
-                            <td>{category.totalOut !== 0 ? formatAuditorAmount(category.totalOut) : "-"}</td>
-                            <td>{category.totalIn !== 0 ? formatAuditorAmount(category.totalIn) : "-"}</td>
+                            <td>{
+                                <div className="total-out-cell">
+                                    <div className="adjusted-total-out">
+                                        {( category.totalOut !== 0 && category.totalOut > category.totalIn ) ? formatAuditorAmount(category.totalOut-category.totalIn) : "-"}
+                                    </div>
+                                    <div className="raw-total-out">
+                                        {(category.totalIn !== 0 && category.totalOut !== 0) ? formatAuditorAmount(category.totalOut) : null}
+                                    </div>
+
+                                </div>
+                                }
+                            </td>
+                            <td>{
+                                <div className="total-in-cell">
+                                    {category.totalIn !== 0 ? formatAuditorAmount(category.totalIn) : "-"}
+                                </div>
+                                }
+                            </td>
+
                         </tr>
                     ))}
                 </tbody>

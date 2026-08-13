@@ -125,7 +125,7 @@
 }
 
 .dashboard-summary-table {
-  --dashboard-summary-grid-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+  --dashboard-summary-grid-columns: minmax(0, 0.4fr) minmax(0, 0.3fr) minmax(0, 0.3fr);
 }
 
 .dashboard-notes-table {
@@ -176,6 +176,32 @@
 
 .dashboard-summary-category-row:hover {
   background: rgba(255, 255, 255, 0.05);
+}
+
+.total-out-cell {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.total-in-cell {
+  display: flex;
+  align-items: baseline;
+  justify-content: left;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.adjusted-total-out {
+  width: 4.5rem;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.raw-total-out {
+  font-size: 0.7em;
+  color: #9ca3af;
+  justify-content:right;
 }
 
 .dashboard-notes-table td {

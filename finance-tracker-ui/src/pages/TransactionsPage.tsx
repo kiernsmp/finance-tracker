@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import TransactionFilter from "@/components/TransactionFilter";
 import TransactionSummary from "@/features/transactions/components/TransactionSummary";
 import TransactionTable from "@/features/transactions/components/TransactionTable";
-import { calculateTransactionTotals } from "@/utils/calculateTransactionTotals";
+import { calculateTransactionTotals } from "@/utils/transactionUtils";
 import { useCategories } from "@/features/transactions/hooks/useCategories";
 import { useTransactionData } from "@/features/transactions/hooks/useTransactionData";
 import { useTransactionFilters } from "@/features/transactions/hooks/useTransactionFilters";
@@ -41,6 +41,13 @@ export default function TransactionsPage() {
     } = useTransactionData(appliedFilter);
     const { totalIn, totalOut } = calculateTransactionTotals(transactions);
 
+    const [sortDescending, setSortDescending] = useState(false);
+
+    const handleClearFilters = () => {
+        clearFilters();
+        setSortDescending(false);
+    };
+
     return (
         <div className="transactions-page">
             <div className="page-header">
@@ -55,7 +62,7 @@ export default function TransactionsPage() {
                 updateDraftFilter={updateDraftFilter}
                 applyFilter={applyFilter}
                 applyWithDraftUpdates={applyWithDraftUpdates}
-                clearFilters={clearFilters}
+                clearFilters={handleClearFilters}
                 categoryList={categoryList}
             />
 
@@ -79,6 +86,8 @@ export default function TransactionsPage() {
                     isGrouped={appliedFilter.groupTransactions}
                     groupTransactions={groupTransactions}
                     updateTransactionNotes={updateTransactionNotes}
+                    sortDescending={sortDescending}
+                    onToggleSortDescending={() => setSortDescending((prev) => !prev)}
                 />
             </div>
         </div>

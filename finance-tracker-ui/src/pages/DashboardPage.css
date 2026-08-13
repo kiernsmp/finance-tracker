@@ -36,27 +36,19 @@
   --dashboard-month-layout-padding: 0.75rem;
 }
 
-.dashboard-month-card {
+.dashboard-month-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
   background: #111827;
   border: 1px solid #374151;
   border-radius: 1rem;
   padding: 0.75rem;
   box-shadow: 0 10px 30px rgba(2, 6, 23, 0.35);
-  position: relative;
-  width: 100%;
-  flex: 1 1 auto;
 }
 
-.dashboard-month-card + .dashboard-month-card {
+.dashboard-month-row + .dashboard-month-row {
   margin-top: 1rem;
-  border-top: none;
-  padding-top: 0;
-}
-
-.dashboard-month-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0;
 }
 
 .dashboard-month-section {

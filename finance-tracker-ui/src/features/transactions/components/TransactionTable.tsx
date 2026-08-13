@@ -6,6 +6,7 @@ import TransactionRow from "./TransactionRow";
 import MonthDivider from "./MonthDivider";
 import DayDivider from "./DayDivider";
 import type { DisplayTransaction } from "@/types/DisplayTransaction";
+import { sortByTransactionAmountDesc } from "@/utils/transactionUtils";
 
 interface TransactionTableProps {
     transactions: Transaction[];
@@ -16,6 +17,8 @@ interface TransactionTableProps {
     groupTransactions: (transactions: Transaction[]) => GroupedTransaction[];
     isGrouped: boolean;
     updateTransactionNotes: (id: number, note: string) => void;
+    sortDescending: boolean;
+    onToggleSortDescending: () => void;
 }
 
 const TABLE_COLUMN_COUNT = 7;
@@ -44,6 +47,8 @@ export default function TransactionTable({
     groupTransactions,
     isGrouped,
     updateTransactionNotes,
+    sortDescending,
+    onToggleSortDescending,
 }: TransactionTableProps) {
     const [expandedGroupIds, setExpandedGroupIds] = useState<number[]>([]);
 
@@ -58,10 +63,14 @@ export default function TransactionTable({
         );
     };
 
+    const sortedTransactions = sortDescending
+        ? sortByTransactionAmountDesc(transactions)
+        : transactions;
+
     const displayedTransactions: DisplayTransaction[] =
         isGrouped
-            ? groupTransactions(transactions)
-            : transactions;
+            ? groupTransactions(sortedTransactions)
+            : sortedTransactions;
 
     const dailyNegativeTotals = useMemo(() => {
         const totals = new Map<string, number>();
@@ -93,7 +102,12 @@ export default function TransactionTable({
                         <th>Approved</th>
                         <th>Date</th>
                         <th>Description</th>
-                        <th>Amount</th>
+                        <th
+                            onClick={onToggleSortDescending}
+                            className={`amount-header ${sortDescending ? "amount-header-desc" : "amount-header"}`}
+                        >
+                            Amount
+                        </th>
                         <th>Category</th>
                         <th>Locked</th>
                         <th>Notes</th>
@@ -115,14 +129,14 @@ export default function TransactionTable({
 
                         return (
                             <Fragment key={isGrouped ? `group-${transaction.id}` : transaction.id}>
-                                {showMonthDivider && (
+                                {!sortDescending && showMonthDivider && (
                                     <MonthDivider
                                         label={monthLabel}
                                         columnCount={TABLE_COLUMN_COUNT}
                                     />
                                 )}
 
-                                {showDayDivider && (
+                                {!sortDescending && showDayDivider && (
                                     <DayDivider
                                         label={transaction.date}
                                         columnCount={TABLE_COLUMN_COUNT}

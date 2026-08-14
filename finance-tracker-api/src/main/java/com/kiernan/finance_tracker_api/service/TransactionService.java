@@ -115,9 +115,15 @@ public class TransactionService {
         }
         if (keyword != null) {
             spec = spec.and((root, query, cb) ->
-                cb.like(
-                    cb.lower(root.get("description")),
-                    "%" + keyword.toLowerCase() + "%"
+                cb.or(
+                    cb.like(
+                        cb.lower(root.get("description")),
+                        "%" + keyword.toLowerCase() + "%"
+                    ),                
+                    cb.like(
+                        cb.lower(root.get("notes")),
+                        "%" + keyword.toLowerCase() + "%"
+                    )
                 )
             );
         }

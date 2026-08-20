@@ -130,6 +130,9 @@ export default function TransactionTable({
                         const showDayDivider =
                             index === 0 ||
                             transaction.date !== (previousTransaction?.date ?? "");
+                        const transactionCount =  showDayDivider
+                            ? displayedTransactions.filter(t => t.date === transaction.date).length
+                            : 0;
                         const dayTotal = dailyNegativeTotals.get(transaction.date) ?? 0;
 
                         return (
@@ -146,6 +149,7 @@ export default function TransactionTable({
                                         label={transaction.date}
                                         columnCount={TABLE_COLUMN_COUNT}
                                         dayTotal={dayTotal}
+                                        count={transactionCount}
                                     />
                                 )}
                                     

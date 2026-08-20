@@ -171,7 +171,7 @@ public class TransactionService {
         
         Map<String, Long> existingTransactionsMap = transactionRepository.findAllByDescriptionInAndDateBetween(newDescriptions, minDate, maxDate).stream()
             .collect(Collectors.groupingBy(
-                t -> t.getDate() + "|" + t.getDescription() + "|" + t.getCategory().getId(),
+                t -> t.getDate() + "|" + t.getDescription(),
                 Collectors.counting()
             ));
 
@@ -192,8 +192,7 @@ public class TransactionService {
             TransactionEntity newTransaction = iterator.next();
 
             String newKey = newTransaction.getDate() + "|" 
-                    + newTransaction.getDescription() + "|" 
-                    + newTransaction.getCategory().getId();
+                    + newTransaction.getDescription();
 
             if (existingTransactionsMap.containsKey(newKey)) {
                 existingTransactionsMap.put(newKey, existingTransactionsMap.get(newKey) - 1);
